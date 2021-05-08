@@ -5,8 +5,9 @@ import * as pie from './create-pie-language';
 import * as radar from './create-radar-contrib';
 import * as type from './type';
 
+const bgcolor = '#ffffff';
 const width = 1280;
-const height = 1024;
+const height = 850;
 
 export const createSvg = (userInfo: type.UserInfo): string => {
     const fakeDom = new JSDOM(
@@ -30,15 +31,19 @@ export const createSvg = (userInfo: type.UserInfo): string => {
         .attr('y', 0)
         .attr('width', width)
         .attr('height', height)
-        .attr('fill', '#eeddaa');
+        .attr('fill', bgcolor);
 
     contrib.create3DContrib(svg, userInfo, 0, 0, width, height);
 
     // radar chart
-    radar.createRadarContrib(svg, userInfo, 800, 50, 400, 300);
+    const radarWidth = 400 * 1.3;
+    const radarHeight = radarWidth * 3 / 4;
+    radar.createRadarContrib(svg, userInfo, width - radarWidth - 20, 20, radarWidth, radarHeight);
 
     // pie chart
-    pie.createPieLanguage(svg, userInfo, 50, 800, 400, 200);
+    const pieHeight = 200 * 1.3;
+    const pieWidth = pieHeight * 2;
+    pie.createPieLanguage(svg, userInfo, 20, height - pieHeight - 20, pieWidth, pieHeight);
 
     // TODO
     return container.html();

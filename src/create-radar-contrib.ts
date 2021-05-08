@@ -1,10 +1,9 @@
 import * as d3 from 'd3';
 import * as type from './type';
 
-const bgcolor = '#ffffff';
 const levels = 5;
 const radians = 2 * Math.PI;
-const radarColor = '#60e020';
+const radarColor = '#47a042';
 
 const toLevel = (value: number): number => {
     if (value < 1) {
@@ -54,14 +53,6 @@ export const createRadarContrib = (
 
     const group = svg.append('g').attr('transform', `translate(${x}, ${y})`);
 
-    group
-        .append('rect')
-        .attr('x', 0)
-        .attr('y', 0)
-        .attr('width', width)
-        .attr('height', height)
-        .attr('fill', bgcolor); // TODO
-
     const groupCenter = group
         .append('g')
         .attr('transform', `translate(${cx}, ${cy})`);
@@ -89,7 +80,6 @@ export const createRadarContrib = (
             .attr('class', 'line')
             .style('stroke', 'grey')
             .style('stroke-dasharray', '4 4')
-            // .style("stroke-opacity", "0.75")
             .style('stroke-width', '1px');
     }
 
@@ -109,8 +99,6 @@ export const createRadarContrib = (
             'y1',
             (d, i) => (radius / levels) * -Math.cos((i * radians) / total)
         )
-        // .attr("x1", 0)
-        // .attr("y1", 0)
         .attr('x2', (d, i) => radius * Math.sin((i * radians) / total))
         .attr('y2', (d, i) => radius * -Math.cos((i * radians) / total))
         .attr('class', 'line')
@@ -121,11 +109,11 @@ export const createRadarContrib = (
     axis.append('text')
         .attr('class', 'legend')
         .text((d) => d)
-        .style('font-size', '16px')
+        .style('font-size', `${radius / 7.5}px`)
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'middle')
-        .attr('x', (d, i) => (radius + 30) * Math.sin((i * radians) / total))
-        .attr('y', (d, i) => (radius + 20) * -Math.cos((i * radians) / total));
+        .attr('x', (d, i) => (radius * 1.25) * Math.sin((i * radians) / total))
+        .attr('y', (d, i) => (radius * 1.17) * -Math.cos((i * radians) / total));
 
     const dataValues = data.flatMap((d, i) => [
         radius * ((d.value / levels) * Math.sin((i * radians) / total)),

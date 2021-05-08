@@ -10,7 +10,7 @@ export const main = (): void => {
 
     const svgString = create.createSvg(userInfo);
 
-    console.log(svgString);
+    // console.log(svgString);
     f.writeFile('test', 'test.svg', svgString);
 };
 

@@ -45,14 +45,6 @@ export const createPieLanguage = (
 
     const group = svg.append('g').attr('transform', `translate(${x}, ${y})`);
 
-    group
-        .append('rect')
-        .attr('x', 0)
-        .attr('y', 0)
-        .attr('width', width)
-        .attr('height', height)
-        .attr('fill', bgcolor); // TODO
-
     const groupLabel = group
         .append('g')
         .attr('transform', `translate(${radius * 2.1}, ${0})`);
