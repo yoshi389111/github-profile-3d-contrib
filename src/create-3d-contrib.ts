@@ -7,7 +7,7 @@ export const create3DContrib = (
     x: number,
     y: number,
     width: number,
-    height: number,
-) => {
+    height: number
+): void => {
     // TODO
 };

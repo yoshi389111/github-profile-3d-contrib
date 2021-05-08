@@ -9,8 +9,9 @@ const width = 1280;
 const height = 1024;
 
 export const createSvg = (userInfo: type.UserInfo): string => {
-
-    const fakeDom = new JSDOM('<!DOCTYPE html><html><body><div class="container"></div></body></html>');
+    const fakeDom = new JSDOM(
+        '<!DOCTYPE html><html><body><div class="container"></div></body></html>'
+    );
     const container = d3.select(fakeDom.window.document).select('.container');
     const svg = container
         .append('svg')
@@ -19,7 +20,9 @@ export const createSvg = (userInfo: type.UserInfo): string => {
         .attr('height', height)
         .attr('viewBox', `0 0 ${width} ${height}`);
 
-    svg.append('style').html('* { font-family: "Ubuntu", "Helvetica", "Arial", sans-serif; }');
+    svg.append('style').html(
+        '* { font-family: "Ubuntu", "Helvetica", "Arial", sans-serif; }'
+    );
 
     // background
     svg.append('rect')
@@ -27,7 +30,7 @@ export const createSvg = (userInfo: type.UserInfo): string => {
         .attr('y', 0)
         .attr('width', width)
         .attr('height', height)
-        .attr('fill', "#eeddaa");
+        .attr('fill', '#eeddaa');
 
     contrib.create3DContrib(svg, userInfo, 0, 0, width, height);
 
@@ -39,4 +42,4 @@ export const createSvg = (userInfo: type.UserInfo): string => {
 
     // TODO
     return container.html();
-}
+};

@@ -1,13 +1,13 @@
 export interface CalendarInfo {
-    contributionCount: number,
-    contributionLevel: number,
-    date: Date,
+    contributionCount: number;
+    contributionLevel: number;
+    date: Date;
 }
 
 export interface LangInfo {
-    language: string,
-    color: string,
-    contributions: number,
+    language: string;
+    color: string;
+    contributions: number;
 }
 
 export interface UserInfo {
@@ -19,6 +19,6 @@ export interface UserInfo {
     totalPullRequestContributions: number;
     totalPullRequestReviewContributions: number;
     totalRepositoryContributions: number;
-    totalForkCount: number,
-    totalStargazerCount: number,
-};
+    totalForkCount: number;
+    totalStargazerCount: number;
+}

@@ -4,9 +4,7 @@ import * as create from './create-svg';
 import * as f from './file-writer';
 import { dummyData as response } from './dummy-data-temp'; // TODO
 
-
-
-export const main = async () => {
+export const main = (): void => {
     // const response = client.fetchData(token);
     const userInfo = aggregate.aggregateUserInfo(response);
 
