@@ -1,0 +1,17 @@
+name: GitHub-Profile-3D-Contrib
+description: Generate profile 3D Contributions
+author: yoshi389111
+
+inputs:
+  USERNAME:
+    required: true
+    description: 'GitHub username'
+    default: ${{ github.repository_owner }}
+
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
+
+branding:
+  icon: 'box'
+  color: 'green'
