@@ -88,7 +88,7 @@ export const create3DContrib = (
     const dyy = dy * 0.9;
 
     const offsetX = dx * 7;
-    const offsetY = height - (weekcount + 6) * dy;
+    const offsetY = height - (weekcount + 7) * dy;
 
     const group = svg.append('g');
 

@@ -14,6 +14,10 @@ export const createPieLanguage = (
     width: number,
     height: number
 ): void => {
+    if (userInfo.totalContributions === 0) {
+        return;
+    }
+
     const languages: Array<type.LangInfo> = userInfo.contributesLanguage.slice(
         0,
         5
