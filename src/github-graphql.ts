@@ -111,10 +111,7 @@ export const fetchData = async (
         `.replace(/\s+/g, ' '),
     };
 
-    const response = await axios.post<ResponseType>(URL, {
-        headers: headers,
-        data: req,
-    });
+    const response = await axios.post<ResponseType>(URL, req, { headers: headers });
 
     return response.data;
 };
