@@ -2,15 +2,21 @@ import * as d3 from 'd3';
 import * as type from './type';
 
 const colors = [
-    ["#efefef", "rgb(255, 231, 255)", "#edaeda", "rgb(228, 146, 202)", "rgb(186, 122, 173)"], // spring
-    ["#efefef", "#d8e887", "#8cc569", "#47a042", "#1d6a23"], // summer
-    ["#efefef", "#ffed4a", "#ffc402", "#fe9400", "#fa6100"], // autumn
-    ["#efefef", "#666666", "#999999", "#bbbbbb", "#eeeeee"] // winter
+    [
+        '#efefef',
+        'rgb(255, 231, 255)',
+        '#edaeda',
+        'rgb(228, 146, 202)',
+        'rgb(186, 122, 173)',
+    ], // spring
+    ['#efefef', '#d8e887', '#8cc569', '#47a042', '#1d6a23'], // summer
+    ['#efefef', '#ffed4a', '#ffc402', '#fe9400', '#fa6100'], // autumn
+    ['#efefef', '#666666', '#999999', '#bbbbbb', '#eeeeee'], // winter
 ];
 
 const diffDate = (beforeDate: number, afterDate: number): number => {
     return Math.floor((afterDate - beforeDate) / (24 * 60 * 60 * 1000));
-}
+};
 
 const getSeason = (month: number): number => {
     switch (month + 1) {
@@ -35,9 +41,15 @@ const getSeason = (month: number): number => {
         default:
             return 1; // summer
     }
-}
+};
 
-const createLeftPanelPath = (baseX: number , baseY: number, calHeight: number, dx: number, dy: number): string => {
+const createLeftPanelPath = (
+    baseX: number,
+    baseY: number,
+    calHeight: number,
+    dx: number,
+    dy: number
+): string => {
     const plainLeft = d3.path();
     plainLeft.moveTo(baseX, baseY);
     plainLeft.lineTo(baseX + dx, baseY + dy);
@@ -45,9 +57,15 @@ const createLeftPanelPath = (baseX: number , baseY: number, calHeight: number, d
     plainLeft.lineTo(baseX, baseY - calHeight);
     plainLeft.closePath();
     return plainLeft.toString();
-}
+};
 
-const createRightPanelPath = (baseX: number , baseY: number, calHeight: number, dx: number, dy: number): string => {
+const createRightPanelPath = (
+    baseX: number,
+    baseY: number,
+    calHeight: number,
+    dx: number,
+    dy: number
+): string => {
     const plainRigth = d3.path();
     plainRigth.moveTo(baseX + dx, baseY + dy);
     plainRigth.lineTo(baseX + dx * 2, baseY);
@@ -55,9 +73,15 @@ const createRightPanelPath = (baseX: number , baseY: number, calHeight: number, 
     plainRigth.lineTo(baseX + dx, baseY + dy - calHeight);
     plainRigth.closePath();
     return plainRigth.toString();
-}
+};
 
-const createTopPanelPath = (baseX: number , baseY: number, calHeight: number, dx: number, dy: number): string => {
+const createTopPanelPath = (
+    baseX: number,
+    baseY: number,
+    calHeight: number,
+    dx: number,
+    dy: number
+): string => {
     const plainTop = d3.path();
     plainTop.moveTo(baseX, baseY - calHeight);
     plainTop.lineTo(baseX + dx, baseY + dy - calHeight);
@@ -65,7 +89,7 @@ const createTopPanelPath = (baseX: number , baseY: number, calHeight: number, dx
     plainTop.lineTo(baseX + dx, baseY - dy - calHeight);
     plainTop.closePath();
     return plainTop.toString();
-}
+};
 
 export const create3DContrib = (
     svg: d3.Selection<SVGSVGElement, unknown, null, unknown>,
@@ -75,7 +99,6 @@ export const create3DContrib = (
     width: number,
     height: number
 ): void => {
-
     if (userInfo.contributionCalendar.length === 0) {
         return;
     }
@@ -94,7 +117,6 @@ export const create3DContrib = (
 
     userInfo.contributionCalendar.forEach((cal) => {
         const dayOfWeek = cal.date.getUTCDay(); // sun = 0, mnn = 1, ...
-        const date = cal.date.getUTCDate();
         const month = cal.date.getUTCMonth();
         const week = Math.floor(diffDate(startTime, cal.date.getTime()) / 7);
 
@@ -109,13 +131,20 @@ export const create3DContrib = (
         const colorLeft = d3.rgb(colorBase).darker(1);
 
         const plainLeft0 = createRightPanelPath(baseX, baseY, 3, dxx, dyy);
-        const plainLeft = createRightPanelPath(baseX, baseY, calHeight, dxx, dyy);
-        group.append("path")
-            .attr("d", plainLeft)
+        const plainLeft = createRightPanelPath(
+            baseX,
+            baseY,
+            calHeight,
+            dxx,
+            dyy
+        );
+        group
+            .append('path')
+            .attr('d', plainLeft)
             .attr('stroke', colorLeft.toString())
-            .attr('stroke-width', "0px")
+            .attr('stroke-width', '0px')
             .attr('fill', colorLeft.toString())
-            .append("animate")
+            .append('animate')
             .attr('attributeName', 'd')
             .attr('attributeName', 'd')
             .attr('values', `${plainLeft0};${plainLeft}`)
@@ -123,13 +152,20 @@ export const create3DContrib = (
             .attr('repeatCount', '1');
 
         const plainRigth0 = createLeftPanelPath(baseX, baseY, 3, dxx, dyy);
-        const plainRigth = createLeftPanelPath(baseX, baseY, calHeight, dxx, dyy);
-        group.append("path")
-            .attr("d", plainRigth)
+        const plainRigth = createLeftPanelPath(
+            baseX,
+            baseY,
+            calHeight,
+            dxx,
+            dyy
+        );
+        group
+            .append('path')
+            .attr('d', plainRigth)
             .attr('stroke', colorRight.toString())
-            .attr('stroke-width', "0px")
+            .attr('stroke-width', '0px')
             .attr('fill', colorRight.toString())
-            .append("animate")
+            .append('animate')
             .attr('attributeName', 'd')
             .attr('attributeName', 'd')
             .attr('values', `${plainRigth0};${plainRigth}`)
@@ -138,12 +174,13 @@ export const create3DContrib = (
 
         const plainTop0 = createTopPanelPath(baseX, baseY, 3, dxx, dyy);
         const plainTop = createTopPanelPath(baseX, baseY, calHeight, dxx, dyy);
-        group.append("path")
-            .attr("d", plainTop)
+        group
+            .append('path')
+            .attr('d', plainTop)
             .attr('stroke', colorTop.toString())
-            .attr('stroke-width', "0px")
+            .attr('stroke-width', '0px')
             .attr('fill', colorTop.toString())
-            .append("animate")
+            .append('animate')
             .attr('attributeName', 'd')
             .attr('attributeName', 'd')
             .attr('values', `${plainTop0};${plainTop}`)

@@ -112,8 +112,8 @@ export const createRadarContrib = (
         .style('font-size', `${radius / 7.5}px`)
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'middle')
-        .attr('x', (d, i) => (radius * 1.25) * Math.sin((i * radians) / total))
-        .attr('y', (d, i) => (radius * 1.17) * -Math.cos((i * radians) / total));
+        .attr('x', (d, i) => radius * 1.25 * Math.sin((i * radians) / total))
+        .attr('y', (d, i) => radius * 1.17 * -Math.cos((i * radians) / total));
 
     const dataValues = data.flatMap((d, i) => [
         radius * ((d.value / levels) * Math.sin((i * radians) / total)),
