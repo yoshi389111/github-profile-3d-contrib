@@ -2,6 +2,8 @@
 
 ![svg](https://raw.githubusercontent.com/yoshi389111/yoshi389111/main/profile-3d-contrib/profile-green-animate.svg)
 
+[日本語](./docs/README.ja-jp.md)
+
 ## Overview
 
 This GitHub Action creates a GitHub contribution calendar on a 3D profile image.
