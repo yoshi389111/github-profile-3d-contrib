@@ -39,7 +39,7 @@ export const aggregateUserInfo = (
         }
     }
 
-    const user = response.data.viewer;
+    const user = response.data.user;
     const calendar = user.contributionsCollection.contributionCalendar.weeks
         .flatMap((week) => week.contributionDays)
         .map((week) => ({

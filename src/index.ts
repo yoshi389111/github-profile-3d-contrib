@@ -10,8 +10,12 @@ export const main = async (): Promise<void> => {
         if (!token) {
             return;
         }
+        const userName = process.env.USERNAME;
+        if (!userName) {
+            return;
+        }
 
-        const response = await client.fetchData(token);
+        const response = await client.fetchData(token, userName);
         const userInfo = aggregate.aggregateUserInfo(response);
 
         const svgString1 = create.createSvg(userInfo, true, true);

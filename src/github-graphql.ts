@@ -12,7 +12,7 @@ export type ContributionLevel =
 /** Response of GraphQL */
 export type ResponseType = {
     data?: {
-        viewer: {
+        user: {
             contributionsCollection: {
                 commitContributionsByRepository: Array<{
                     contributions: {
@@ -60,14 +60,17 @@ export type ResponseType = {
 };
 
 /** Fetch data from GitHub GraphQL */
-export const fetchData = async (token: string): Promise<ResponseType> => {
+export const fetchData = async (
+    token: string,
+    userName: string,
+): Promise<ResponseType> => {
     const headers = {
         Authorization: `bearer ${token}`,
     };
     const req = {
         query: `
-            query {
-                viewer {
+            query($login: String!) {
+                user(login: $login) {
                     contributionsCollection {
                         contributionCalendar {
                             totalContributions
@@ -104,7 +107,7 @@ export const fetchData = async (token: string): Promise<ResponseType> => {
                     }
                 }
             },
-            variables: {}
+            variables: { "login": "${userName}"}
         `.replace(/\s+/, ' '),
     };
 
