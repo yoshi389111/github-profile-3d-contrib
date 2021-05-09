@@ -107,7 +107,7 @@ export const fetchData = async (
                     }
                 }
             }
-            variables { "login": "userName" }
+            variables { "login": "${userName}" }
         `.replace(/\s+/g, ' '),
     };
 
