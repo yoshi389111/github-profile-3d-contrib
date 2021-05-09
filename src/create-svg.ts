@@ -11,7 +11,11 @@ const strongColor = '#111133';
 const width = 1280;
 const height = 850;
 
-export const createSvg = (userInfo: type.UserInfo): string => {
+export const createSvg = (
+    userInfo: type.UserInfo,
+    isSeason: boolean,
+    isAnimate: boolean
+): string => {
     const fakeDom = new JSDOM(
         '<!DOCTYPE html><html><body><div class="container"></div></body></html>'
     );
@@ -35,7 +39,16 @@ export const createSvg = (userInfo: type.UserInfo): string => {
         .attr('height', height)
         .attr('fill', bgcolor);
 
-    contrib.create3DContrib(svg, userInfo, 0, 0, width, height);
+    contrib.create3DContrib(
+        svg,
+        userInfo,
+        0,
+        0,
+        width,
+        height,
+        isSeason,
+        isAnimate
+    );
 
     // radar chart
     const radarWidth = 400 * 1.3;

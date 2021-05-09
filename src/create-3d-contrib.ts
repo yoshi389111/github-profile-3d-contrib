@@ -2,13 +2,7 @@ import * as d3 from 'd3';
 import * as type from './type';
 
 const colors = [
-    [
-        '#efefef',
-        'rgb(255, 231, 255)',
-        '#edaeda',
-        'rgb(228, 146, 202)',
-        'rgb(186, 122, 173)',
-    ], // spring
+    ['#efefef', '#ffe7ff', '#edaeda', '#e492ca', '#ba7aad'], // spring
     ['#efefef', '#d8e887', '#8cc569', '#47a042', '#1d6a23'], // summer
     ['#efefef', '#ffed4a', '#ffc402', '#fe9400', '#fa6100'], // autumn
     ['#efefef', '#666666', '#999999', '#bbbbbb', '#eeeeee'], // winter
@@ -18,7 +12,10 @@ const diffDate = (beforeDate: number, afterDate: number): number => {
     return Math.floor((afterDate - beforeDate) / (24 * 60 * 60 * 1000));
 };
 
-const getSeason = (month: number): number => {
+const getSeason = (month: number, isSeason: boolean): number => {
+    if (!isSeason) {
+        return 1; // summer (as normal)
+    }
     switch (month + 1) {
         case 9:
         case 10:
@@ -97,7 +94,9 @@ export const create3DContrib = (
     x: number,
     y: number,
     width: number,
-    height: number
+    height: number,
+    isSeason: boolean,
+    isAnimate: boolean
 ): void => {
     if (userInfo.contributionCalendar.length === 0) {
         return;
@@ -124,7 +123,7 @@ export const create3DContrib = (
         const baseY = offsetY + (week + dayOfWeek) * dy;
         const calHeight = Math.min(50, cal.contributionCount) * 3 + 3; // TODO 仮実装
 
-        const season = getSeason(month);
+        const season = getSeason(month, isSeason);
         const colorBase = colors[season][cal.contributionLevel];
         const colorTop = d3.rgb(colorBase);
         const colorRight = d3.rgb(colorBase).darker(0.5);
@@ -138,53 +137,62 @@ export const create3DContrib = (
             dxx,
             dyy
         );
-        group
+        const pathLeft = group
             .append('path')
             .attr('d', plainLeft)
             .attr('stroke', colorLeft.toString())
             .attr('stroke-width', '0px')
-            .attr('fill', colorLeft.toString())
-            .append('animate')
-            .attr('attributeName', 'd')
-            .attr('attributeName', 'd')
-            .attr('values', `${plainLeft0};${plainLeft}`)
-            .attr('dur', '3s')
-            .attr('repeatCount', '1');
+            .attr('fill', colorLeft.toString());
+        if (isAnimate) {
+            pathLeft
+                .append('animate')
+                .attr('attributeName', 'd')
+                .attr('attributeName', 'd')
+                .attr('values', `${plainLeft0};${plainLeft}`)
+                .attr('dur', '3s')
+                .attr('repeatCount', '1');
+        }
 
         const plainRigth0 = createLeftPanelPath(baseX, baseY, 3, dxx, dyy);
-        const plainRigth = createLeftPanelPath(
+        const plainRight = createLeftPanelPath(
             baseX,
             baseY,
             calHeight,
             dxx,
             dyy
         );
-        group
+        const pathRight = group
             .append('path')
-            .attr('d', plainRigth)
+            .attr('d', plainRight)
             .attr('stroke', colorRight.toString())
             .attr('stroke-width', '0px')
-            .attr('fill', colorRight.toString())
-            .append('animate')
-            .attr('attributeName', 'd')
-            .attr('attributeName', 'd')
-            .attr('values', `${plainRigth0};${plainRigth}`)
-            .attr('dur', '3s')
-            .attr('repeatCount', '1');
+            .attr('fill', colorRight.toString());
+        if (isAnimate) {
+            pathRight
+                .append('animate')
+                .attr('attributeName', 'd')
+                .attr('attributeName', 'd')
+                .attr('values', `${plainRigth0};${plainRight}`)
+                .attr('dur', '3s')
+                .attr('repeatCount', '1');
+        }
 
         const plainTop0 = createTopPanelPath(baseX, baseY, 3, dxx, dyy);
         const plainTop = createTopPanelPath(baseX, baseY, calHeight, dxx, dyy);
-        group
+        const pathTop = group
             .append('path')
             .attr('d', plainTop)
             .attr('stroke', colorTop.toString())
             .attr('stroke-width', '0px')
             .attr('fill', colorTop.toString())
-            .append('animate')
-            .attr('attributeName', 'd')
-            .attr('attributeName', 'd')
-            .attr('values', `${plainTop0};${plainTop}`)
-            .attr('dur', '3s')
-            .attr('repeatCount', '1');
+            .append('animate');
+        if (isAnimate) {
+            pathTop
+                .attr('attributeName', 'd')
+                .attr('attributeName', 'd')
+                .attr('values', `${plainTop0};${plainTop}`)
+                .attr('dur', '3s')
+                .attr('repeatCount', '1');
+        }
     });
 };
