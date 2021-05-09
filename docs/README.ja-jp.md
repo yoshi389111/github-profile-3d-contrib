@@ -17,6 +17,7 @@
 ユーザー名と同じ名前で GitHub にリポジトリを作成してください。
 
 * 例：ユーザー名が `octocat`の場合は、`octocat/octocat` という名前のリポジトリを作成します。
+* 参考：[プロフィールの README を管理する](https://docs.github.com/ja/github/setting-up-and-managing-your-github-profile/managing-your-profile-readme)
 
 このリポジトリで、以降の手順を実行します。
 

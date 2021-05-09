@@ -18,6 +18,7 @@ You can also trigger action by yourself after add this action.
 Create a repository on GitHub with the same name as your user name.
 
 * e.g. If the user name is `octocat`, create a repository named `octocat/octocat`.
+* ref. [Managing your profile README](https://docs.github.com/en/github/setting-up-and-managing-your-github-profile/managing-your-profile-readme)
 
 In this repository, do the following.
 
