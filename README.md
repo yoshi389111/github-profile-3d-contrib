@@ -84,6 +84,11 @@ e.g.
 ![](./profile-3d-contrib/profile-green-animate.svg)
 ```
 
+## Limitations
+
+The target repositories are aggregated up to 100.
+If there are more repositories, the remaining repositories will not be aggregated.
+
 ## Licence
 
 MIT License
