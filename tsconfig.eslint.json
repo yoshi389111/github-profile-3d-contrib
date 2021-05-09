@@ -7,6 +7,7 @@
   ],
   "exclude": [
     "node_modules",
-    "dist"
+    "dist0",
+    "dist",
   ]
 }
