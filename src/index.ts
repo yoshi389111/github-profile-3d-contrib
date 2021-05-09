@@ -8,10 +8,12 @@ export const main = async (): Promise<void> => {
     try {
         const token = process.env.GITHUB_TOKEN;
         if (!token) {
+            core.setFailed('GITHUB_TOKEN is empty');
             return;
         }
         const userName = process.env.USERNAME;
         if (!userName) {
+            core.setFailed('USERNAME is empty');
             return;
         }
 
