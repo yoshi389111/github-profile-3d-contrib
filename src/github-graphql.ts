@@ -107,8 +107,8 @@ export const fetchData = async (
                     }
                 }
             },
-            variables: { "login": "${userName}"}
         `.replace(/\s+/g, ' '),
+        variables: { login: "${userName}"},
     };
 
     const response = await axios.post<ResponseType>(URL, {
