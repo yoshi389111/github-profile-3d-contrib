@@ -83,6 +83,19 @@ export const createRadarContrib = (
             .style('stroke-width', '1px');
     }
 
+    groupCenter
+        .selectAll(null)
+        .data(['1-', '10', '100', '1K', '10K+'])
+        .enter()
+        .append('text')
+        .text((d) => d)
+        .style('font-size', `${radius / 10}px`)
+        .attr('text-anchor', 'start')
+        .attr('dominant-baseline', 'auto')
+        .attr('x', radius / 50)
+        .attr('y', (d, i) => -radius * ((i + 1) / levels))
+        .attr('fill', 'gray');
+
     const axis = groupCenter
         .selectAll('.axis')
         .data(allAxis)
