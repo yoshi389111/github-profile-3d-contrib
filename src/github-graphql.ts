@@ -99,7 +99,7 @@ export const fetchData = async (
                         totalPullRequestReviewContributions
                         totalRepositoryContributions
                     }
-                    repositories(first: 100) {
+                    repositories(first: 100, ownerAffiliations: OWNER) {
                         nodes {
                             forkCount
                             stargazerCount
