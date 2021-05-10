@@ -181,7 +181,7 @@ export const create3DContrib = (
 
         const baseX = offsetX + (week - dayOfWeek) * dx;
         const baseY = offsetY + (week + dayOfWeek) * dy;
-        const calHeight = Math.min(50, cal.contributionCount) * 3 + 3; // TODO 仮実装
+        const calHeight = Math.min(50, cal.contributionCount) * 3 + 3;
 
         const colorBase = decideColor(cal.date, cal.contributionLevel, isSeason);
         const colorTop = d3.rgb(colorBase);
