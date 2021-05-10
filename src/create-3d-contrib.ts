@@ -176,7 +176,7 @@ export const create3DContrib = (
     const group = svg.append('g');
 
     userInfo.contributionCalendar.forEach((cal) => {
-        const dayOfWeek = cal.date.getUTCDay(); // sun = 0, mnn = 1, ...
+        const dayOfWeek = cal.date.getUTCDay(); // sun = 0, mon = 1, ...
         const week = Math.floor(diffDate(startTime, cal.date.getTime()) / 7);
 
         const baseX = offsetX + (week - dayOfWeek) * dx;
