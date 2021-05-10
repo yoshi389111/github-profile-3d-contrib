@@ -5,7 +5,7 @@ const colors = [
     ['#efefef', '#ffe7ff', '#edaeda', '#e492ca', '#ba7aad'], // spring
     ['#efefef', '#d8e887', '#8cc569', '#47a042', '#1d6a23'], // summer
     ['#efefef', '#ffed4a', '#ffc402', '#fe9400', '#fa6100'], // autumn
-    ['#efefef', '#666666', '#999999', '#bbbbbb', '#eeeeee'], // winter
+    ['#efefef', '#999999', '#cccccc', '#dddddd', '#eeeeee'], // winter
 ];
 
 const diffDate = (beforeDate: number, afterDate: number): number => {
