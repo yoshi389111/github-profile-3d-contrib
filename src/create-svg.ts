@@ -11,6 +11,8 @@ const strongColor = '#111133';
 const width = 1280;
 const height = 850;
 
+const toIsoDate = (date: Date) => date.toISOString().substring(0, 10);
+
 export const createSvg = (
     userInfo: type.UserInfo,
     isSeason: boolean,
@@ -164,9 +166,7 @@ export const createSvg = (
     const endDate =
         userInfo.contributionCalendar[userInfo.contributionCalendar.length - 1]
             .date;
-    const period = `${startDate
-        .toISOString()
-        .substring(0, 10)}/${endDate.toISOString().substring(0, 10)}`;
+    const period = `${toIsoDate(startDate)}/${toIsoDate(endDate)}`;
 
     group
         .append('text')
