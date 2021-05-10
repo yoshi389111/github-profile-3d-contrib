@@ -166,7 +166,7 @@ export const createSvg = (
     const endDate =
         userInfo.contributionCalendar[userInfo.contributionCalendar.length - 1]
             .date;
-    const period = `${toIsoDate(startDate)}/${toIsoDate(endDate)}`;
+    const period = `${toIsoDate(startDate)} / ${toIsoDate(endDate)}`;
 
     group
         .append('text')
