@@ -89,7 +89,7 @@ export type ResponseNestType = {
 export const fetchData = async (
     token: string,
     userName: string,
-    maxRepos: number,
+    maxRepos: number
 ): Promise<ResponseType> => {
     const maxReposOneQuery = 100;
     const headers = {
@@ -142,7 +142,9 @@ export const fetchData = async (
         variables: { login: userName },
     };
 
-    const response = await axios.post<ResponseType>(URL, req, { headers: headers });
+    const response = await axios.post<ResponseType>(URL, req, {
+        headers: headers,
+    });
     const result = response.data.data;
     if (result) {
         const repos1 = result.user.repositories;
@@ -166,10 +168,12 @@ export const fetchData = async (
                 `.replace(/\s+/g, ' '),
                 variables: {
                     login: userName,
-                    cursor: cursor
+                    cursor: cursor,
                 },
             };
-            const res2 = await axios.post<ResponseType>(URL, req2, { headers: headers });
+            const res2 = await axios.post<ResponseType>(URL, req2, {
+                headers: headers,
+            });
             if (res2.data.data) {
                 const repos2 = res2.data.data.user.repositories;
                 repos1.nodes.push(...repos2.nodes);
