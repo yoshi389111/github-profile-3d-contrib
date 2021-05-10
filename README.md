@@ -13,7 +13,7 @@ This GitHub Action creates a GitHub contribution calendar on a 3D profile image.
 This action generate your github profile 3d contribute calendar and make a commit to your repo.
 You can also trigger action by yourself after add this action.
 
-### 1. Create special repository.
+### step 1. Create special repository.
 
 Create a repository on GitHub with the same name as your user name.
 
@@ -22,7 +22,7 @@ Create a repository on GitHub with the same name as your user name.
 
 In this repository, do the following.
 
-### 2. Create workflow file.
+### step 2. Create workflow file.
 
 Create a workflow file like the one below.
 
@@ -62,7 +62,13 @@ Note: If you also want to include the private repository, register the "personal
 
 This will add the action to the repository.
 
-### 3. Manually launch the action
+#### Environment variables
+
+* `GITHUB_TOKEN` : (required) access token
+* `USERNAME` : (required) target user name
+* `MAX_REPOS` : (optional) max repositories, default 100 - since ver. 0.2.0
+
+### step 3. Manually launch the action
 
 Launch the added action.
 
@@ -75,7 +81,7 @@ The profile image is generated with the following paths.
 * `profile-3d-contrib/profile-season-animate.svg`
 * `profile-3d-contrib/profile-season.svg`
 
-### 4. Add image to README.md
+### step 4. Add image to README.md
 
 Add the path of the generated image to the readme file.
 
@@ -84,11 +90,6 @@ e.g.
 ```md
 ![](./profile-3d-contrib/profile-green-animate.svg)
 ```
-
-## Limitations
-
-The target repositories are aggregated up to 100.
-If there are more repositories, the remaining repositories will not be aggregated.
 
 ## Licence
 

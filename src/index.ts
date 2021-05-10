@@ -16,8 +16,15 @@ export const main = async (): Promise<void> => {
             core.setFailed('USERNAME is empty');
             return;
         }
+        const maxRepos = (process.env.MAX_REPOS)
+            ? Number(process.env.MAX_REPOS)
+            : 100;
+        if (Number.isNaN(maxRepos)) {
+            core.setFailed('MAX_REPOS is NaN');
+            return;
+        }
 
-        const response = await client.fetchData(token, userName);
+        const response = await client.fetchData(token, userName, maxRepos);
         const userInfo = aggregate.aggregateUserInfo(response);
 
         const svgString1 = create.createSvg(userInfo, true, true);
