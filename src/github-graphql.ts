@@ -9,7 +9,7 @@ export type ContributionLevel =
     | 'THIRD_QUARTILE'
     | 'FOURTH_QUARTILE';
 
-/** Response of GraphQL */
+/** Response(first) of GraphQL */
 export type ResponseType = {
     data?: {
         user: {
@@ -44,6 +44,32 @@ export type ResponseType = {
                 totalRepositoryContributions: number;
             };
             repositories: {
+                edges: Array<{
+                    cursor: string;
+                }>;
+                nodes: Array<{
+                    forkCount: number;
+                    stargazerCount: number;
+                }>;
+            };
+        };
+    };
+    errors?: [
+        {
+            message: string;
+            // snip
+        }
+    ];
+};
+
+/** Response(next) of GraphQL */
+export type ResponseNestType = {
+    data?: {
+        user: {
+            repositories: {
+                edges: Array<{
+                    cursor: string;
+                }>;
                 nodes: Array<{
                     forkCount: number;
                     stargazerCount: number;
@@ -63,7 +89,9 @@ export type ResponseType = {
 export const fetchData = async (
     token: string,
     userName: string,
+    maxRepos: number
 ): Promise<ResponseType> => {
+    const maxReposOneQuery = 100;
     const headers = {
         Authorization: `bearer ${token}`,
     };
@@ -82,7 +110,7 @@ export const fetchData = async (
                                 }
                             }
                         }
-                        commitContributionsByRepository(maxRepositories: 100) {
+                        commitContributionsByRepository(maxRepositories: ${maxReposOneQuery}) {
                             repository {
                                 primaryLanguage {
                                     name
@@ -99,7 +127,10 @@ export const fetchData = async (
                         totalPullRequestReviewContributions
                         totalRepositoryContributions
                     }
-                    repositories(first: 100, ownerAffiliations: OWNER) {
+                    repositories(first: ${maxReposOneQuery}, ownerAffiliations: OWNER) {
+                        edges {
+                            cursor
+                        }
                         nodes {
                             forkCount
                             stargazerCount
@@ -111,7 +142,50 @@ export const fetchData = async (
         variables: { login: userName },
     };
 
-    const response = await axios.post<ResponseType>(URL, req, { headers: headers });
+    const response = await axios.post<ResponseType>(URL, req, {
+        headers: headers,
+    });
+    const result = response.data.data;
+    if (result) {
+        const repos1 = result.user.repositories;
+        let cursor = repos1.edges[repos1.edges.length - 1].cursor;
+        while (repos1.nodes.length < maxRepos) {
+            const req2 = {
+                query: `
+                    query($login: String!, $cursor: String!) {
+                        user(login: $login) {
+                            repositories(after: $cursor, first: ${maxReposOneQuery}, ownerAffiliations: OWNER) {
+                                edges {
+                                    cursor
+                                }
+                                nodes {
+                                    forkCount
+                                    stargazerCount
+                                }
+                            }
+                        }
+                    }
+                `.replace(/\s+/g, ' '),
+                variables: {
+                    login: userName,
+                    cursor: cursor,
+                },
+            };
+            const res2 = await axios.post<ResponseType>(URL, req2, {
+                headers: headers,
+            });
+            if (res2.data.data) {
+                const repos2 = res2.data.data.user.repositories;
+                repos1.nodes.push(...repos2.nodes);
+                if (repos2.nodes.length !== maxReposOneQuery) {
+                    break;
+                }
+                cursor = repos2.edges[repos2.edges.length - 1].cursor;
+            } else {
+                break;
+            }
+        }
+    }
 
     return response.data;
 };
