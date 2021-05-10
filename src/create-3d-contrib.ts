@@ -206,7 +206,6 @@ export const create3DContrib = (
             pathLeft
                 .append('animate')
                 .attr('attributeName', 'd')
-                .attr('attributeName', 'd')
                 .attr('values', `${plainLeft0};${plainLeft}`)
                 .attr('dur', '3s')
                 .attr('repeatCount', '1');
@@ -230,7 +229,6 @@ export const create3DContrib = (
             pathRight
                 .append('animate')
                 .attr('attributeName', 'd')
-                .attr('attributeName', 'd')
                 .attr('values', `${plainRigth0};${plainRight}`)
                 .attr('dur', '3s')
                 .attr('repeatCount', '1');
@@ -247,7 +245,6 @@ export const create3DContrib = (
             .append('animate');
         if (isAnimate) {
             pathTop
-                .attr('attributeName', 'd')
                 .attr('attributeName', 'd')
                 .attr('values', `${plainTop0};${plainTop}`)
                 .attr('dur', '3s')
