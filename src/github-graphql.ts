@@ -1,13 +1,7 @@
 import axios from 'axios';
+import * as type from './type';
 
 export const URL = 'https://api.github.com/graphql';
-
-export type ContributionLevel =
-    | 'NONE'
-    | 'FIRST_QUARTILE'
-    | 'SECOND_QUARTILE'
-    | 'THIRD_QUARTILE'
-    | 'FOURTH_QUARTILE';
 
 /** Response(first) of GraphQL */
 export type ResponseType = {
@@ -31,7 +25,7 @@ export type ResponseType = {
                     weeks: Array<{
                         contributionDays: Array<{
                             contributionCount: number;
-                            contributionLevel: ContributionLevel;
+                            contributionLevel: type.ContributionLevel;
                             /** "YYYY-MM-DD hh:mm:ss.SSS+00:00" */
                             date: string;
                         }>;

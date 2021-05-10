@@ -3,7 +3,7 @@ import * as type from './type';
 
 const OTHER_COLOR = '#444444';
 
-const toNumberContributionLevel = (level: client.ContributionLevel): number => {
+const toNumberContributionLevel = (level: type.ContributionLevel): number => {
     switch (level) {
         case 'NONE':
             return 0;
