@@ -12,33 +12,94 @@ const diffDate = (beforeDate: number, afterDate: number): number => {
     return Math.floor((afterDate - beforeDate) / (24 * 60 * 60 * 1000));
 };
 
-const getSeason = (month: number, isSeason: boolean): number => {
-    if (!isSeason) {
-        return 1; // summer (as normal)
+const createGradation = (
+    dayOfMonth: number,
+    color1: string,
+    color2: string,
+): string => {
+    let ratio;
+    if (dayOfMonth <= 7) {
+        ratio = 0.2;
+    } else if (dayOfMonth <= 14) {
+        ratio = 0.4;
+    } else if (dayOfMonth <= 21) {
+        ratio = 0.6;
+    } else if (dayOfMonth <= 28) {
+        ratio = 0.8;
+    } else {
+        return color2;
     }
+    const color = d3.interpolate(color1, color2);
+    return color(ratio);
+}
+
+const decideColor = (
+    date: Date,
+    contributionLevel: number,
+    isSeason: boolean
+): string => {
+    if (!isSeason) {
+        // summer (as normal)
+        return colors[1][contributionLevel];
+    }
+
+    const sunday = new Date(date.getTime());
+    sunday.setDate(sunday.getDate() - sunday.getDay());
+
+    const month = sunday.getUTCMonth();
+    const dayOfMonth = sunday.getUTCDate();
+
     switch (month + 1) {
         case 9:
+            // summer -> autumn
+            return createGradation(
+                dayOfMonth,
+                colors[1][contributionLevel],
+                colors[2][contributionLevel]
+            );
         case 10:
         case 11:
-            return 2; // autumn
+            // autumn
+            return colors[2][contributionLevel];
 
         case 12:
+            // autumn -> winter
+            return createGradation(
+                dayOfMonth,
+                colors[2][contributionLevel],
+                colors[3][contributionLevel]
+            );
         case 1:
         case 2:
-            return 3; // winter
+            // winter
+            return colors[3][contributionLevel];
 
         case 3:
+            // winter -> spring
+            return createGradation(
+                dayOfMonth,
+                colors[3][contributionLevel],
+                colors[0][contributionLevel]
+            );
         case 4:
         case 5:
-            return 0; // spring
+            // spring
+            return colors[0][contributionLevel];
 
         case 6:
+            // spring -> summer
+            return createGradation(
+                dayOfMonth,
+                colors[0][contributionLevel],
+                colors[1][contributionLevel]
+            );
         case 7:
         case 8:
         default:
-            return 1; // summer
+            // summer
+            return colors[1][contributionLevel];
     }
-};
+}
 
 const createLeftPanelPath = (
     baseX: number,
@@ -116,15 +177,13 @@ export const create3DContrib = (
 
     userInfo.contributionCalendar.forEach((cal) => {
         const dayOfWeek = cal.date.getUTCDay(); // sun = 0, mnn = 1, ...
-        const month = cal.date.getUTCMonth();
         const week = Math.floor(diffDate(startTime, cal.date.getTime()) / 7);
 
         const baseX = offsetX + (week - dayOfWeek) * dx;
         const baseY = offsetY + (week + dayOfWeek) * dy;
         const calHeight = Math.min(50, cal.contributionCount) * 3 + 3; // TODO 仮実装
 
-        const season = getSeason(month, isSeason);
-        const colorBase = colors[season][cal.contributionLevel];
+        const colorBase = decideColor(cal.date, cal.contributionLevel, isSeason);
         const colorTop = d3.rgb(colorBase);
         const colorRight = d3.rgb(colorBase).darker(0.5);
         const colorLeft = d3.rgb(colorBase).darker(1);
