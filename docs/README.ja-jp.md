@@ -77,8 +77,13 @@ jobs:
 
 * `profile-3d-contrib/profile-green-animate.svg`
 * `profile-3d-contrib/profile-green.svg`
+
+![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-green-animate.svg)
+
 * `profile-3d-contrib/profile-season-animate.svg`
 * `profile-3d-contrib/profile-season.svg`
+
+![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-season-animate.svg)
 
 ### 手順 4. README.md を追加
 
