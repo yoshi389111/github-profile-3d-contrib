@@ -15,7 +15,7 @@ const diffDate = (beforeDate: number, afterDate: number): number => {
 const createGradation = (
     dayOfMonth: number,
     color1: string,
-    color2: string,
+    color2: string
 ): string => {
     let ratio;
     if (dayOfMonth <= 7) {
@@ -31,16 +31,19 @@ const createGradation = (
     }
     const color = d3.interpolate(color1, color2);
     return color(ratio);
-}
+};
 
 const decideColor = (
     date: Date,
     contributionLevel: number,
-    isSeason: boolean
+    seasonMode: type.SeasonMode
 ): string => {
-    if (!isSeason) {
+    if (seasonMode === 'green') {
         // summer (as normal)
         return colors[1][contributionLevel];
+    } else if (seasonMode === 'halloween') {
+        // autumn (as halloween)
+        return colors[2][contributionLevel];
     }
 
     const sunday = new Date(date.getTime());
@@ -99,7 +102,7 @@ const decideColor = (
             // summer
             return colors[1][contributionLevel];
     }
-}
+};
 
 const createLeftPanelPath = (
     baseX: number,
@@ -156,7 +159,7 @@ export const create3DContrib = (
     y: number,
     width: number,
     height: number,
-    isSeason: boolean,
+    seasonMode: type.SeasonMode,
     isAnimate: boolean
 ): void => {
     if (userInfo.contributionCalendar.length === 0) {
@@ -183,7 +186,11 @@ export const create3DContrib = (
         const baseY = offsetY + (week + dayOfWeek) * dy;
         const calHeight = Math.min(50, cal.contributionCount) * 3 + 3;
 
-        const colorBase = decideColor(cal.date, cal.contributionLevel, isSeason);
+        const colorBase = decideColor(
+            cal.date,
+            cal.contributionLevel,
+            seasonMode
+        );
         const colorTop = d3.rgb(colorBase);
         const colorRight = d3.rgb(colorBase).darker(0.5);
         const colorLeft = d3.rgb(colorBase).darker(1);

@@ -79,6 +79,8 @@ export const aggregateUserInfo = (
         .map((node) => node.stargazerCount)
         .reduce((num1, num2) => num1 + num2, 0);
     const userInfo: type.UserInfo = {
+        isHalloween:
+            user.contributionsCollection.contributionCalendar.isHalloween,
         contributionCalendar: calendar,
         contributesLanguage: languages,
         totalContributions:
