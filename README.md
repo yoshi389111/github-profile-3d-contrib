@@ -65,7 +65,7 @@ This will add the action to the repository.
 #### Environment variables
 
 * `GITHUB_TOKEN` : (required) access token
-* `USERNAME` : (required) target user name
+* `USERNAME` : (required) target user name (or specify with an argument).
 * `MAX_REPOS` : (optional) max repositories, default 100 - since ver. 0.2.0
 
 ### step 3. Manually launch the action
