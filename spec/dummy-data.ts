@@ -2,9 +2,10 @@ import * as client from '../src/github-graphql';
 
 export const dummyData: client.ResponseType = {
     "data": {
-        "viewer": {
+        "user": {
             "contributionsCollection": {
                 "contributionCalendar": {
+                    "isHalloween": false,
                     "totalContributions": 366,
                     "weeks": [
                         {
@@ -2236,6 +2237,56 @@ export const dummyData: client.ResponseType = {
                 "totalRepositoryContributions": 6
             },
             "repositories": {
+                "edges": [
+                    {
+                        "cursor": "a",
+                    },
+                    {
+                        "cursor": "b",
+                    },
+                    {
+                        "cursor": "c",
+                    },
+                    {
+                        "cursor": "d",
+                    },
+                    {
+                        "cursor": "e",
+                    },
+                    {
+                        "cursor": "f",
+                    },
+                    {
+                        "cursor": "g",
+                    },
+                    {
+                        "cursor": "h",
+                    },
+                    {
+                        "cursor": "i",
+                    },
+                    {
+                        "cursor": "j",
+                    },
+                    {
+                        "cursor": "k",
+                    },
+                    {
+                        "cursor": "l",
+                    },
+                    {
+                        "cursor": "m",
+                    },
+                    {
+                        "cursor": "n",
+                    },
+                    {
+                        "cursor": "o",
+                    },
+                    {
+                        "cursor": "p",
+                    }
+                ],
                 "nodes": [
                     {
                         "forkCount": 0,
