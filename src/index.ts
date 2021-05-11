@@ -27,16 +27,18 @@ export const main = async (): Promise<void> => {
         const response = await client.fetchData(token, userName, maxRepos);
         const userInfo = aggregate.aggregateUserInfo(response);
 
-        const svgString1 = create.createSvg(userInfo, true, true);
+        const seasonMode = userInfo.isHalloween ? 'halloween' : 'green';
+
+        const svgString1 = create.createSvg(userInfo, 'season', true);
         f.writeFile('profile-season-animate.svg', svgString1);
 
-        const svgString2 = create.createSvg(userInfo, false, true);
+        const svgString2 = create.createSvg(userInfo, seasonMode, true);
         f.writeFile('profile-green-animate.svg', svgString2);
 
-        const svgString3 = create.createSvg(userInfo, true, false);
+        const svgString3 = create.createSvg(userInfo, 'season', false);
         f.writeFile('profile-season.svg', svgString3);
 
-        const svgString4 = create.createSvg(userInfo, false, false);
+        const svgString4 = create.createSvg(userInfo, seasonMode, false);
         f.writeFile('profile-green.svg', svgString4);
     } catch (error) {
         console.error(error);

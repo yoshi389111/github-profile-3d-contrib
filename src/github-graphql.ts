@@ -21,6 +21,7 @@ export type ResponseType = {
                     };
                 }>;
                 contributionCalendar: {
+                    isHalloween: boolean;
                     totalContributions: number;
                     weeks: Array<{
                         contributionDays: Array<{
@@ -95,6 +96,7 @@ export const fetchData = async (
                 user(login: $login) {
                     contributionsCollection {
                         contributionCalendar {
+                            isHalloween
                             totalContributions
                             weeks {
                                 contributionDays {

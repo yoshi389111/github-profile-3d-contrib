@@ -15,7 +15,7 @@ const toIsoDate = (date: Date) => date.toISOString().substring(0, 10);
 
 export const createSvg = (
     userInfo: type.UserInfo,
-    isSeason: boolean,
+    seasonMode: type.SeasonMode,
     isAnimate: boolean
 ): string => {
     const fakeDom = new JSDOM(
@@ -48,7 +48,7 @@ export const createSvg = (
         0,
         width,
         height,
-        isSeason,
+        seasonMode,
         isAnimate
     );
 

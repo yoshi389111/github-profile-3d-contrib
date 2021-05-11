@@ -11,6 +11,7 @@ export interface LangInfo {
 }
 
 export interface UserInfo {
+    isHalloween: boolean;
     contributionCalendar: Array<CalendarInfo>;
     contributesLanguage: Array<LangInfo>;
     totalContributions: number;
@@ -29,3 +30,5 @@ export type ContributionLevel =
     | 'SECOND_QUARTILE'
     | 'THIRD_QUARTILE'
     | 'FOURTH_QUARTILE';
+
+export type SeasonMode = 'season' | 'green' | 'halloween';
