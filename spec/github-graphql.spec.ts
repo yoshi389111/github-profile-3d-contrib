@@ -12,8 +12,7 @@ afterEach(() => {
 describe('github-graphql', () => {
     it('fetchData', async () => {
         mock.onPost(client.URL).reply(200, dummyData);
-        const res = await client.fetchData("dummy");
-
+        const res = await client.fetchData("dummy", "username", 100);
         expect(res).toEqual(dummyData);
     });
 });

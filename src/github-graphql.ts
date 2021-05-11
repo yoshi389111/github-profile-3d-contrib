@@ -142,7 +142,7 @@ export const fetchData = async (
         headers: headers,
     });
     const result = response.data.data;
-    if (result) {
+    if (result && result.user.repositories.nodes.length === maxReposOneQuery) {
         const repos1 = result.user.repositories;
         let cursor = repos1.edges[repos1.edges.length - 1].cursor;
         while (repos1.nodes.length < maxRepos) {
