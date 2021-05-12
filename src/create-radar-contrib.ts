@@ -117,7 +117,9 @@ export const createRadarContrib = (
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'middle')
         .attr('x', (d, i) => radius * 1.25 * Math.sin((i / total) * radians))
-        .attr('y', (d, i) => radius * 1.17 * -Math.cos((i / total) * radians));
+        .attr('y', (d, i) => radius * 1.17 * -Math.cos((i / total) * radians))
+        .append('title')
+        .text((d) => d.value);
 
     const dataValues = data
         .map((d) => toLevel(d.value))

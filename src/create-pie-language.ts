@@ -93,5 +93,7 @@ export const createPieLanguage = (
         .attr('d', arc)
         .style('fill', (d) => d.data.color)
         .attr('stroke', bgcolor)
-        .attr('stroke-width', '2px');
+        .attr('stroke-width', '2px')
+        .append('title')
+        .text((d) => `${d.data.language} ${d.data.contributions}`);
 };
