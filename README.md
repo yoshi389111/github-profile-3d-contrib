@@ -78,11 +78,14 @@ The profile image is generated with the following paths.
 
 * `profile-3d-contrib/profile-green-animate.svg`
 * `profile-3d-contrib/profile-green.svg`
+* `profile-3d-contrib/profile-season-animate.svg`
+* `profile-3d-contrib/profile-season.svg`
+
+example: green version
 
 ![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-green-animate.svg)
 
-* `profile-3d-contrib/profile-season-animate.svg`
-* `profile-3d-contrib/profile-season.svg`
+example: season version
 
 ![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-season-animate.svg)
 
