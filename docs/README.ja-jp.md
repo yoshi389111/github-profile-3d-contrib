@@ -2,6 +2,8 @@
 
 ![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-season-animate.svg)
 
+![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-green-animate.svg)
+
 ## 概要
 
 この GitHub Action は GitHub のコントリビュートカレンダーの 3D 版を SVG で作成します。
