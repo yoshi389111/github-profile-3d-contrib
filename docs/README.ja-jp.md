@@ -100,11 +100,6 @@ jobs:
 ![](./profile-3d-contrib/profile-green-animate.svg)
 ```
 
-## 制限事項
-
-対象のリポジトリは最大100件まで集計します。
-それ以上のリポジトリがある場合には、残りのリポジトリは集計されません。
-
 ## Licence
 
 MIT License
