@@ -106,6 +106,7 @@ export const createSvg = (
     const positionXStar = (width * 5) / 10;
     const positionYStar = positionYContrib;
 
+    // icon of star
     group
         .append('g')
         .attr(
@@ -137,6 +138,7 @@ export const createSvg = (
     const positionXFork = (width * 6) / 10;
     const positionYFork = positionYContrib;
 
+    // icon of fork
     group
         .append('g')
         .attr(
