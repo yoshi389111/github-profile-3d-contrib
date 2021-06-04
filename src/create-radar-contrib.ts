@@ -49,28 +49,25 @@ export const createRadarContrib = (
         },
     ];
     const total = data.length;
+    const posX = (level: number, num: number) =>
+        radius * (level / levels) * Math.sin((num / total) * radians);
+    const posY = (level: number, num: number) =>
+        radius * (level / levels) * -Math.cos((num / total) * radians);
 
     const group = svg
         .append('g')
         .attr('transform', `translate(${x + cx}, ${y + cy})`);
 
     for (let j = 0; j < levels; j++) {
-        const length = radius * ((j + 1) / levels);
         group
             .selectAll(null)
             .data(data)
             .enter()
             .append('line')
-            .attr('x1', (d, i) => length * Math.sin((i / total) * radians))
-            .attr('y1', (d, i) => length * -Math.cos((i / total) * radians))
-            .attr(
-                'x2',
-                (d, i) => length * Math.sin(((i + 1) / total) * radians)
-            )
-            .attr(
-                'y2',
-                (d, i) => length * -Math.cos(((i + 1) / total) * radians)
-            )
+            .attr('x1', (d, i) => posX(j + 1, i))
+            .attr('y1', (d, i) => posY(j + 1, i))
+            .attr('x2', (d, i) => posX(j + 1, i + 1))
+            .attr('y2', (d, i) => posY(j + 1, i + 1))
             .style('stroke', 'grey')
             .style('stroke-dasharray', '4 4')
             .style('stroke-width', '1px');
@@ -82,7 +79,7 @@ export const createRadarContrib = (
         .enter()
         .append('text')
         .text((d) => d)
-        .style('font-size', `${radius / 10}px`)
+        .style('font-size', `${radius / 12}px`)
         .attr('text-anchor', 'start')
         .attr('dominant-baseline', 'auto')
         .attr('x', radius / 50)
@@ -97,16 +94,10 @@ export const createRadarContrib = (
         .attr('class', 'axis');
 
     axis.append('line')
-        .attr(
-            'x1',
-            (d, i) => (radius / levels) * Math.sin((i / total) * radians)
-        )
-        .attr(
-            'y1',
-            (d, i) => (radius / levels) * -Math.cos((i / total) * radians)
-        )
-        .attr('x2', (d, i) => radius * Math.sin((i / total) * radians))
-        .attr('y2', (d, i) => radius * -Math.cos((i / total) * radians))
+        .attr('x1', (d, i) => posX(1, i))
+        .attr('y1', (d, i) => posY(1, i))
+        .attr('x2', (d, i) => posX(levels, i))
+        .attr('y2', (d, i) => posY(levels, i))
         .style('stroke', 'grey')
         .style('stroke-dasharray', '4 4')
         .style('stroke-width', '1px');
@@ -116,28 +107,21 @@ export const createRadarContrib = (
         .style('font-size', `${radius / 7.5}px`)
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'middle')
-        .attr('x', (d, i) => radius * 1.25 * Math.sin((i / total) * radians))
-        .attr('y', (d, i) => radius * 1.17 * -Math.cos((i / total) * radians))
+        .attr('x', (d, i) => posX(1.25 * levels, i))
+        .attr('y', (d, i) => posY(1.17 * levels, i))
         .append('title')
         .text((d) => d.value);
 
-    const dataValues = data
+    const points = data
         .map((d) => toLevel(d.value))
-        .map(
-            (d, i) =>
-                `${radius * ((d / levels) * Math.sin((i / total) * radians))},${
-                    radius * ((-d / levels) * Math.cos((i / total) * radians))
-                }`
-        );
+        .map((level, i) => `${posX(level, i)},${posY(level, i)}`)
+        .join(' ');
 
     group
-        .selectAll(null)
-        .data([dataValues])
-        .enter()
         .append('polygon')
         .style('stroke-width', '4px')
         .style('stroke', radarColor)
-        .attr('points', (d) => d.join(' '))
+        .attr('points', points)
         .style('fill', radarColor)
         .style('fill-opacity', 0.5);
 };
