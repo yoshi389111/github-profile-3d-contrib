@@ -248,10 +248,10 @@ export const create3DContrib = (
             .attr('d', plainTop)
             .attr('stroke', colorTop.toString())
             .attr('stroke-width', '0px')
-            .attr('fill', colorTop.toString())
-            .append('animate');
+            .attr('fill', colorTop.toString());
         if (isAnimate) {
             pathTop
+                .append('animate')
                 .attr('attributeName', 'd')
                 .attr('values', `${plainTop0};${plainTop}`)
                 .attr('dur', '3s')
