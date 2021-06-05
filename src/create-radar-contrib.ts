@@ -20,7 +20,8 @@ export const createRadarContrib = (
     x: number,
     y: number,
     width: number,
-    height: number
+    height: number,
+    isAnimate: boolean
 ): void => {
     const radius = (height / 2) * 0.8;
     const cx = width / 2;
@@ -117,11 +118,22 @@ export const createRadarContrib = (
         .map((level, i) => `${posX(level, i)},${posY(level, i)}`)
         .join(' ');
 
-    group
+    const radar = group
         .append('polygon')
         .style('stroke-width', '4px')
         .style('stroke', radarColor)
         .attr('points', points)
         .style('fill', radarColor)
         .style('fill-opacity', 0.5);
+    if (isAnimate) {
+        const points0 = data
+            .map((d, i) => `${posX(1, i)},${posY(1, i)}`)
+            .join(' ');
+        radar
+            .append('animate')
+            .attr('attributeName', 'points')
+            .attr('values', `${points0};${points}`)
+            .attr('dur', '3s')
+            .attr('repeatCount', '1');
+    }
 };
