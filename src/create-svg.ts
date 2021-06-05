@@ -62,7 +62,8 @@ export const createSvg = (
         radarX,
         70,
         radarWidth,
-        radarHeight
+        radarHeight,
+        isAnimate
     );
 
     // pie chart
