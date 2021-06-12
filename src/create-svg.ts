@@ -75,7 +75,8 @@ export const createSvg = (
         40,
         height - pieHeight - 70,
         pieWidth,
-        pieHeight
+        pieHeight,
+        isAnimate
     );
 
     const group = svg.append('g');

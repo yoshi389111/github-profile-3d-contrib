@@ -12,7 +12,8 @@ export const createPieLanguage = (
     x: number,
     y: number,
     width: number,
-    height: number
+    height: number,
+    isAnimate: boolean
 ): void => {
     if (userInfo.totalContributions === 0) {
         return;
@@ -30,6 +31,13 @@ export const createPieLanguage = (
             contributions: otherContributions,
         });
     }
+
+    const animeSteps = 5;
+    const animateOpacity = (num: number) =>
+        Array<string>(languages.length + animeSteps)
+            .fill('')
+            .map((d, i) => (i < num ? 0 : Math.min((i - num) / animeSteps, 1)))
+            .join(';');
 
     const radius = height / 2;
     const margin = radius / 10;
@@ -51,7 +59,7 @@ export const createPieLanguage = (
         .attr('transform', `translate(${radius * 2.1}, ${0})`);
 
     // markers for label
-    groupLabel
+    const markers = groupLabel
         .selectAll(null)
         .data(pieData)
         .enter()
@@ -63,9 +71,17 @@ export const createPieLanguage = (
         .attr('fill', (d) => d.data.color)
         .attr('stroke', bgcolor)
         .attr('stroke-width', '1px');
+    if (isAnimate) {
+        markers
+            .append('animate')
+            .attr('attributeName', 'fill-opacity')
+            .attr('values', (d, i) => animateOpacity(i))
+            .attr('dur', '3s')
+            .attr('repeatCount', '1');
+    }
 
     // labels
-    groupLabel
+    const labels = groupLabel
         .selectAll(null)
         .data(pieData)
         .enter()
@@ -76,14 +92,22 @@ export const createPieLanguage = (
         .attr('y', (d) => (d.index + offset) * (height / row))
         .attr('fill', fgcolor)
         .attr('font-size', `${fontSize}px`);
-
+        if (isAnimate) {
+            labels
+                .append('animate')
+                .attr('attributeName', 'fill-opacity')
+                .attr('values', (d, i) => animateOpacity(i))
+                .attr('dur', '3s')
+                .attr('repeatCount', '1');
+        }
+    
     const arc = d3
         .arc<d3.PieArcDatum<type.LangInfo>>()
         .outerRadius(radius - margin)
         .innerRadius(radius / 2);
 
     // pie chart
-    group
+    const paths = group
         .append('g')
         .attr('transform', `translate(${radius}, ${radius})`)
         .selectAll(null)
@@ -93,7 +117,16 @@ export const createPieLanguage = (
         .attr('d', arc)
         .style('fill', (d) => d.data.color)
         .attr('stroke', bgcolor)
-        .attr('stroke-width', '2px')
+        .attr('stroke-width', '2px');
+    paths
         .append('title')
         .text((d) => `${d.data.language} ${d.data.contributions}`);
+    if (isAnimate) {
+        paths
+            .append('animate')
+            .attr('attributeName', 'fill-opacity')
+            .attr('values', (d, i) => animateOpacity(i))
+            .attr('dur', '3s')
+            .attr('repeatCount', '1');
+    }
 };
