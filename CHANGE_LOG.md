@@ -1,5 +1,11 @@
 # Change Log
 
+## 2021-12-22, 0.3.0 release
+
+* Added season version for the Southern Hemisphere.
+* Added night view version.
+* Added night rainbow version.
+
 ## 2021-05-11, 0.2.0 release
 
 * The repositories to be aggregated are only those owned by the user.

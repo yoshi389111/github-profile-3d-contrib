@@ -3,8 +3,6 @@ import * as type from './type';
 
 const OTHER_NAME = 'other';
 const OTHER_COLOR = '#444444';
-const bgcolor = '#ffffff';
-const fgcolor = '#00000f';
 
 export const createPieLanguage = (
     svg: d3.Selection<SVGSVGElement, unknown, null, unknown>,
@@ -13,6 +11,7 @@ export const createPieLanguage = (
     y: number,
     width: number,
     height: number,
+    settings: type.Settings,
     isAnimate: boolean
 ): void => {
     if (userInfo.totalContributions === 0) {
@@ -69,7 +68,7 @@ export const createPieLanguage = (
         .attr('width', fontSize)
         .attr('height', fontSize)
         .attr('fill', (d) => d.data.color)
-        .attr('stroke', bgcolor)
+        .attr('stroke', settings.backgroundColor)
         .attr('stroke-width', '1px');
     if (isAnimate) {
         markers
@@ -90,17 +89,17 @@ export const createPieLanguage = (
         .text((d) => d.data.language)
         .attr('x', fontSize * 1.2)
         .attr('y', (d) => (d.index + offset) * (height / row))
-        .attr('fill', fgcolor)
+        .attr('fill', settings.foregroundColor)
         .attr('font-size', `${fontSize}px`);
-        if (isAnimate) {
-            labels
-                .append('animate')
-                .attr('attributeName', 'fill-opacity')
-                .attr('values', (d, i) => animateOpacity(i))
-                .attr('dur', '3s')
-                .attr('repeatCount', '1');
-        }
-    
+    if (isAnimate) {
+        labels
+            .append('animate')
+            .attr('attributeName', 'fill-opacity')
+            .attr('values', (d, i) => animateOpacity(i))
+            .attr('dur', '3s')
+            .attr('repeatCount', '1');
+    }
+
     const arc = d3
         .arc<d3.PieArcDatum<type.LangInfo>>()
         .outerRadius(radius - margin)
@@ -116,7 +115,7 @@ export const createPieLanguage = (
         .append('path')
         .attr('d', arc)
         .style('fill', (d) => d.data.color)
-        .attr('stroke', bgcolor)
+        .attr('stroke', settings.backgroundColor)
         .attr('stroke-width', '2px');
     paths
         .append('title')

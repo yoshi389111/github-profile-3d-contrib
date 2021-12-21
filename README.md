@@ -4,6 +4,10 @@
 
 ![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-green-animate.svg)
 
+![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-night-view.svg)
+
+![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-night-rainbow.svg)
+
 [日本語](./docs/README.ja-jp.md)
 
 ## Overview
@@ -47,7 +51,7 @@ jobs:
     name: generate-github-profile-3d-contrib
     steps:
       - uses: actions/checkout@v2
-      - uses: yoshi389111/github-profile-3d-contrib@0.2.0
+      - uses: yoshi389111/github-profile-3d-contrib@0.3.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           USERNAME: ${{ github.repository_owner }}
@@ -82,14 +86,30 @@ The profile image is generated with the following paths.
 * `profile-3d-contrib/profile-green.svg`
 * `profile-3d-contrib/profile-season-animate.svg`
 * `profile-3d-contrib/profile-season.svg`
+* `profile-3d-contrib/profile-south-season-animate.svg`
+* `profile-3d-contrib/profile-south-season.svg`
+* `profile-3d-contrib/profile-night-view.svg`
+* `profile-3d-contrib/profile-night-rainbow.svg`
 
 example: green version
 
 ![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-green-animate.svg)
 
-example: season version
+example: season version (Northern Hemisphere.)
 
 ![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-season-animate.svg)
+
+example: season version (Southern Hemisphere.)
+
+![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-south-season-animate.svg)
+
+example: night view version
+
+![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-night-view.svg)
+
+example: night reinbow version
+
+![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-night-rainbow.svg)
 
 ### step 4. Add image to README.md
 

@@ -1,16 +1,12 @@
 import * as d3 from 'd3';
 import * as type from './type';
 
-const colors = [
-    ['#efefef', '#ffe7ff', '#edaeda', '#e492ca', '#ba7aad'], // spring
-    ['#efefef', '#d8e887', '#8cc569', '#47a042', '#1d6a23'], // summer
-    ['#efefef', '#ffed4a', '#ffc402', '#fe9400', '#fa6100'], // autumn
-    ['#efefef', '#999999', '#cccccc', '#dddddd', '#eeeeee'], // winter
-];
+const darkerLeft = 1;
+const darkerRight = 0.5;
+const darkerTop = 0;
 
-const diffDate = (beforeDate: number, afterDate: number): number => {
-    return Math.floor((afterDate - beforeDate) / (24 * 60 * 60 * 1000));
-};
+const diffDate = (beforeDate: number, afterDate: number): number =>
+    Math.floor((afterDate - beforeDate) / (24 * 60 * 60 * 1000));
 
 const createGradation = (
     dayOfMonth: number,
@@ -33,19 +29,11 @@ const createGradation = (
     return color(ratio);
 };
 
-const decideColor = (
-    date: Date,
+const decideSeasonColor = (
     contributionLevel: number,
-    seasonMode: type.SeasonMode
+    settings: type.SeasonColorSettings,
+    date: Date
 ): string => {
-    if (seasonMode === 'green') {
-        // summer (as normal)
-        return colors[1][contributionLevel];
-    } else if (seasonMode === 'halloween') {
-        // autumn (as halloween)
-        return colors[2][contributionLevel];
-    }
-
     const sunday = new Date(date.getTime());
     sunday.setDate(sunday.getDate() - sunday.getDay());
 
@@ -57,50 +45,50 @@ const decideColor = (
             // summer -> autumn
             return createGradation(
                 dayOfMonth,
-                colors[1][contributionLevel],
-                colors[2][contributionLevel]
+                settings.contribColors2[contributionLevel],
+                settings.contribColors3[contributionLevel]
             );
         case 10:
         case 11:
             // autumn
-            return colors[2][contributionLevel];
+            return settings.contribColors3[contributionLevel];
 
         case 12:
             // autumn -> winter
             return createGradation(
                 dayOfMonth,
-                colors[2][contributionLevel],
-                colors[3][contributionLevel]
+                settings.contribColors3[contributionLevel],
+                settings.contribColors4[contributionLevel]
             );
         case 1:
         case 2:
             // winter
-            return colors[3][contributionLevel];
+            return settings.contribColors4[contributionLevel];
 
         case 3:
             // winter -> spring
             return createGradation(
                 dayOfMonth,
-                colors[3][contributionLevel],
-                colors[0][contributionLevel]
+                settings.contribColors4[contributionLevel],
+                settings.contribColors1[contributionLevel]
             );
         case 4:
         case 5:
             // spring
-            return colors[0][contributionLevel];
+            return settings.contribColors1[contributionLevel];
 
         case 6:
             // spring -> summer
             return createGradation(
                 dayOfMonth,
-                colors[0][contributionLevel],
-                colors[1][contributionLevel]
+                settings.contribColors1[contributionLevel],
+                settings.contribColors2[contributionLevel]
             );
         case 7:
         case 8:
         default:
             // summer
-            return colors[1][contributionLevel];
+            return settings.contribColors2[contributionLevel];
     }
 };
 
@@ -152,6 +140,50 @@ const createTopPanelPath = (
     return plainTop.toString();
 };
 
+const addNormalColor = (
+    path: d3.Selection<SVGPathElement, unknown, null, unknown>,
+    contributionLevel: number,
+    settings: type.NormalColorSettings,
+    darker: number
+): void => {
+    const color = settings.contribColors[contributionLevel];
+    path.attr('fill', d3.rgb(color).darker(darker).toString());
+};
+
+const addSeasonColor = (
+    path: d3.Selection<SVGPathElement, unknown, null, unknown>,
+    contributionLevel: number,
+    settings: type.SeasonColorSettings,
+    darker: number,
+    date: Date
+): void => {
+    const color = decideSeasonColor(contributionLevel, settings, date);
+    path.attr('fill', d3.rgb(color).darker(darker).toString());
+};
+
+const addRainbowColor = (
+    path: d3.Selection<SVGPathElement, unknown, null, unknown>,
+    contributionLevel: number,
+    settings: type.RainbowColorSettings,
+    darker: number,
+    week: number
+): void => {
+    const offsetHue = week * settings.hueRatio;
+    const saturation = settings.saturation;
+    const lightness = settings.contribLightness[contributionLevel];
+    const values = [...Array<undefined>(7)]
+        .map((_, i) => (i * 60 + offsetHue) % 360)
+        .map((hue) => `hsl(${hue},${saturation}%,${lightness})`)
+        .map((c) => d3.rgb(c).darker(darker).toString())
+        .join(';');
+
+    path.append('animate')
+        .attr('attributeName', 'fill')
+        .attr('values', values)
+        .attr('dur', settings.duration)
+        .attr('repeatCount', 'indefinite');
+};
+
 export const create3DContrib = (
     svg: d3.Selection<SVGSVGElement, unknown, null, unknown>,
     userInfo: type.UserInfo,
@@ -159,7 +191,7 @@ export const create3DContrib = (
     y: number,
     width: number,
     height: number,
-    seasonMode: type.SeasonMode,
+    settings: type.Settings,
     isAnimate: boolean
 ): void => {
     if (userInfo.contributionCalendar.length === 0) {
@@ -186,16 +218,6 @@ export const create3DContrib = (
         const baseY = offsetY + (week + dayOfWeek) * dy;
         const calHeight = Math.min(50, cal.contributionCount) * 3 + 3;
 
-        const colorBase = decideColor(
-            cal.date,
-            cal.contributionLevel,
-            seasonMode
-        );
-        const colorTop = d3.rgb(colorBase);
-        const colorRight = d3.rgb(colorBase).darker(0.5);
-        const colorLeft = d3.rgb(colorBase).darker(1);
-
-        const plainLeft0 = createRightPanelPath(baseX, baseY, 3, dxx, dyy);
         const plainLeft = createRightPanelPath(
             baseX,
             baseY,
@@ -206,10 +228,33 @@ export const create3DContrib = (
         const pathLeft = group
             .append('path')
             .attr('d', plainLeft)
-            .attr('stroke', colorLeft.toString())
-            .attr('stroke-width', '0px')
-            .attr('fill', colorLeft.toString());
+            .attr('stroke-width', '0px');
+        if (settings.type === 'normal') {
+            addNormalColor(
+                pathLeft,
+                cal.contributionLevel,
+                settings,
+                darkerLeft
+            );
+        } else if (settings.type === 'season') {
+            addSeasonColor(
+                pathLeft,
+                cal.contributionLevel,
+                settings,
+                darkerLeft,
+                cal.date
+            );
+        } else if (settings.type === 'rainbow') {
+            addRainbowColor(
+                pathLeft,
+                cal.contributionLevel,
+                settings,
+                darkerLeft,
+                week
+            );
+        }
         if (isAnimate) {
+            const plainLeft0 = createRightPanelPath(baseX, baseY, 3, dxx, dyy);
             pathLeft
                 .append('animate')
                 .attr('attributeName', 'd')
@@ -218,7 +263,6 @@ export const create3DContrib = (
                 .attr('repeatCount', '1');
         }
 
-        const plainRigth0 = createLeftPanelPath(baseX, baseY, 3, dxx, dyy);
         const plainRight = createLeftPanelPath(
             baseX,
             baseY,
@@ -229,10 +273,33 @@ export const create3DContrib = (
         const pathRight = group
             .append('path')
             .attr('d', plainRight)
-            .attr('stroke', colorRight.toString())
-            .attr('stroke-width', '0px')
-            .attr('fill', colorRight.toString());
+            .attr('stroke-width', '0px');
+        if (settings.type === 'normal') {
+            addNormalColor(
+                pathRight,
+                cal.contributionLevel,
+                settings,
+                darkerRight
+            );
+        } else if (settings.type === 'season') {
+            addSeasonColor(
+                pathRight,
+                cal.contributionLevel,
+                settings,
+                darkerRight,
+                cal.date
+            );
+        } else if (settings.type === 'rainbow') {
+            addRainbowColor(
+                pathRight,
+                cal.contributionLevel,
+                settings,
+                darkerRight,
+                week
+            );
+        }
         if (isAnimate) {
+            const plainRigth0 = createLeftPanelPath(baseX, baseY, 3, dxx, dyy);
             pathRight
                 .append('animate')
                 .attr('attributeName', 'd')
@@ -241,15 +308,32 @@ export const create3DContrib = (
                 .attr('repeatCount', '1');
         }
 
-        const plainTop0 = createTopPanelPath(baseX, baseY, 3, dxx, dyy);
         const plainTop = createTopPanelPath(baseX, baseY, calHeight, dxx, dyy);
         const pathTop = group
             .append('path')
             .attr('d', plainTop)
-            .attr('stroke', colorTop.toString())
-            .attr('stroke-width', '0px')
-            .attr('fill', colorTop.toString());
+            .attr('stroke-width', '0px');
+        if (settings.type === 'normal') {
+            addNormalColor(pathTop, cal.contributionLevel, settings, darkerTop);
+        } else if (settings.type === 'season') {
+            addSeasonColor(
+                pathTop,
+                cal.contributionLevel,
+                settings,
+                darkerTop,
+                cal.date
+            );
+        } else if (settings.type === 'rainbow') {
+            addRainbowColor(
+                pathTop,
+                cal.contributionLevel,
+                settings,
+                darkerTop,
+                week
+            );
+        }
         if (isAnimate) {
+            const plainTop0 = createTopPanelPath(baseX, baseY, 3, dxx, dyy);
             pathTop
                 .append('animate')
                 .attr('attributeName', 'd')

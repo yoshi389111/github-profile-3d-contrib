@@ -4,7 +4,6 @@ import * as type from './type';
 const rangeLabels: ReadonlyArray<string> = ['1-', '10', '100', '1K', '10K+'];
 const levels = rangeLabels.length;
 const radians = 2 * Math.PI;
-const radarColor = '#47a042';
 
 const toLevel = (value: number): number => {
     if (value < 1) {
@@ -21,6 +20,7 @@ export const createRadarContrib = (
     y: number,
     width: number,
     height: number,
+    settings: type.Settings,
     isAnimate: boolean
 ): void => {
     const radius = (height / 2) * 0.8;
@@ -69,7 +69,7 @@ export const createRadarContrib = (
             .attr('y1', (d, i) => posY(j + 1, i))
             .attr('x2', (d, i) => posX(j + 1, i + 1))
             .attr('y2', (d, i) => posY(j + 1, i + 1))
-            .style('stroke', 'grey')
+            .style('stroke', settings.weakColor)
             .style('stroke-dasharray', '4 4')
             .style('stroke-width', '1px');
     }
@@ -85,7 +85,7 @@ export const createRadarContrib = (
         .attr('dominant-baseline', 'auto')
         .attr('x', radius / 50)
         .attr('y', (d, i) => -radius * ((i + 1) / levels))
-        .attr('fill', 'gray');
+        .attr('fill', settings.weakColor);
 
     const axis = group
         .selectAll(null)
@@ -99,7 +99,7 @@ export const createRadarContrib = (
         .attr('y1', (d, i) => posY(1, i))
         .attr('x2', (d, i) => posX(levels, i))
         .attr('y2', (d, i) => posY(levels, i))
-        .style('stroke', 'grey')
+        .style('stroke', settings.weakColor)
         .style('stroke-dasharray', '4 4')
         .style('stroke-width', '1px');
 
@@ -110,6 +110,7 @@ export const createRadarContrib = (
         .attr('dominant-baseline', 'middle')
         .attr('x', (d, i) => posX(1.25 * levels, i))
         .attr('y', (d, i) => posY(1.17 * levels, i))
+        .attr('fill', settings.foregroundColor)
         .append('title')
         .text((d) => d.value);
 
@@ -121,9 +122,9 @@ export const createRadarContrib = (
     const radar = group
         .append('polygon')
         .style('stroke-width', '4px')
-        .style('stroke', radarColor)
+        .style('stroke', settings.radarColor)
         .attr('points', points)
-        .style('fill', radarColor)
+        .style('fill', settings.radarColor)
         .style('fill-opacity', 0.5);
     if (isAnimate) {
         const points0 = data

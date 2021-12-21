@@ -4,6 +4,10 @@
 
 ![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-green-animate.svg)
 
+![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-night-view.svg)
+
+![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-night-rainbow.svg)
+
 ## 概要
 
 この GitHub Action は GitHub のコントリビュートカレンダーの 3D 版を SVG で作成します。
@@ -46,7 +50,7 @@ jobs:
     name: generate-github-profile-3d-contrib
     steps:
       - uses: actions/checkout@v2
-      - uses: yoshi389111/github-profile-3d-contrib@0.2.0
+      - uses: yoshi389111/github-profile-3d-contrib@0.3.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           USERNAME: ${{ github.repository_owner }}
@@ -81,14 +85,31 @@ jobs:
 * `profile-3d-contrib/profile-green.svg`
 * `profile-3d-contrib/profile-season-animate.svg`
 * `profile-3d-contrib/profile-season.svg`
+* `profile-3d-contrib/profile-south-season-animate.svg`
+* `profile-3d-contrib/profile-south-season.svg`
+* `profile-3d-contrib/profile-night-view.svg`
+* `profile-3d-contrib/profile-night-rainbow.svg`
 
 例：green バージョン
 
 ![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-green-animate.svg)
 
-例：season バージョン
+例：season バージョン（北半球）
 
 ![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-season-animate.svg)
+
+例：season バージョン（南半球）
+
+![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-south-season-animate.svg)
+
+例：night view バージョン
+
+![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-night-view.svg)
+
+例：night reinbow バージョン
+
+![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-night-rainbow.svg)
+
 
 ### 手順 4. README.md を追加
 
