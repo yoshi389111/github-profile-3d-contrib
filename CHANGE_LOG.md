@@ -1,5 +1,9 @@
 # Change Log
 
+## 2021-12-22, 0.3.1 release
+
+* Changed the maximum number of contributors to 9999
+
 ## 2021-12-22, 0.3.0 release
 
 * Added season version for the Southern Hemisphere.
