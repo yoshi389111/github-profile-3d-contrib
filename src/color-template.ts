@@ -71,7 +71,7 @@ export const NightGreenSettings: type.NormalColorSettings = {
     strongColor: 'rgb(255,200,55)',
     weakColor: '#aaaaaa',
     radarColor: '#47a042',
-    contribColors: ['#efefef', '#d8e887', '#8cc569', '#47a042', '#1d6a23'],
+    contribColors: ['#444444', '#1B7D28', '#24A736', '#2DD143', '#57DA69'],
 };
 
 export const NightRainbowSettings: type.RainbowColorSettings = {
