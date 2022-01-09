@@ -6,6 +6,8 @@
 
 ![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-night-view.svg)
 
+![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-night-green.svg)
+
 ![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-night-rainbow.svg)
 
 [日本語](./docs/README.ja-jp.md)
@@ -89,6 +91,7 @@ The profile image is generated with the following paths.
 * `profile-3d-contrib/profile-south-season-animate.svg`
 * `profile-3d-contrib/profile-south-season.svg`
 * `profile-3d-contrib/profile-night-view.svg`
+* `profile-3d-contrib/profile-night-green.svg`
 * `profile-3d-contrib/profile-night-rainbow.svg`
 
 example: green version
@@ -106,6 +109,10 @@ example: season version (Southern Hemisphere.)
 example: night view version
 
 ![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-night-view.svg)
+
+example: night green version
+
+![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-night-green.svg)
 
 example: night reinbow version
 
