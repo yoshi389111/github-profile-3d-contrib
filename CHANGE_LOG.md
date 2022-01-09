@@ -1,5 +1,9 @@
 # Change Log
 
+## 2022-01-09, 0.4.0 release
+
+* Added night green version.
+
 ## 2021-12-22, 0.3.1 release
 
 * Changed the maximum number of contributors to 9999
