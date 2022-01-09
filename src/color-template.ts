@@ -50,7 +50,7 @@ export const SouthSeasonSettings: type.SeasonColorSettings = {
 
 export const NightViewSettings: type.NormalColorSettings = {
     type: 'normal',
-    backgroundColor: 'black',
+    backgroundColor: '#00000f',
     foregroundColor: '#eeeeff',
     strongColor: 'rgb(255,200,55)',
     weakColor: '#aaaaaa',
@@ -66,7 +66,7 @@ export const NightViewSettings: type.NormalColorSettings = {
 
 export const NightGreenSettings: type.NormalColorSettings = {
     type: 'normal',
-    backgroundColor: 'black',
+    backgroundColor: '#00000f',
     foregroundColor: '#eeeeff',
     strongColor: 'rgb(255,200,55)',
     weakColor: '#aaaaaa',
@@ -76,7 +76,7 @@ export const NightGreenSettings: type.NormalColorSettings = {
 
 export const NightRainbowSettings: type.RainbowColorSettings = {
     type: 'rainbow',
-    backgroundColor: 'black',
+    backgroundColor: '#00000f',
     foregroundColor: '#eeeeff',
     strongColor: 'rgb(255,200,55)',
     weakColor: '#aaaaaa',
