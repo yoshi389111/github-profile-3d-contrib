@@ -1,9 +1,9 @@
 import * as core from '@actions/core';
-import * as client from './github-graphql';
 import * as aggregate from './aggregate-user-info';
+import * as template from './color-template';
 import * as create from './create-svg';
 import * as f from './file-writer';
-import * as template from './color-template';
+import * as client from './github-graphql';
 
 export const main = async (): Promise<void> => {
     try {
@@ -66,6 +66,11 @@ export const main = async (): Promise<void> => {
         f.writeFile(
             'profile-night-view.svg',
             create.createSvg(userInfo, template.NightViewSettings, true)
+        );
+
+        f.writeFile(
+            'profile-night-green.svg',
+            create.createSvg(userInfo, template.NightGreenSettings, true)
         );
 
         f.writeFile(

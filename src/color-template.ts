@@ -64,6 +64,16 @@ export const NightViewSettings: type.NormalColorSettings = {
     ],
 };
 
+export const NightGreenSettings: type.NormalColorSettings = {
+    type: 'normal',
+    backgroundColor: 'black',
+    foregroundColor: '#eeeeff',
+    strongColor: 'rgb(255,200,55)',
+    weakColor: '#aaaaaa',
+    radarColor: '#47a042',
+    contribColors: ['#efefef', '#d8e887', '#8cc569', '#47a042', '#1d6a23'],
+};
+
 export const NightRainbowSettings: type.RainbowColorSettings = {
     type: 'rainbow',
     backgroundColor: 'black',
