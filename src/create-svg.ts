@@ -10,6 +10,26 @@ const height = 850;
 
 const toIsoDate = (date: Date) => date.toISOString().substring(0, 10);
 
+// Separate every three digits with a space (SI format)
+const inertThousandSeparator = (value: number) =>
+    value.toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1 ');
+
+// Rounding large numbers
+const toScale = (value: number) => {
+    if (value < 1_000) {
+        // 0 - 999
+        return value.toFixed(0);
+    } else if (value < 10_000) {
+        // 1.0K - 9.9K
+        return Math.floor(value / 1_000).toFixed(1) + 'K';
+    } else if (value < 1_000_000) {
+        // 10K - 999K
+        return Math.floor(value / 1_000).toFixed(0) + 'K';
+    } else {
+        return '1.0M+';
+    }
+};
+
 export const createSvg = (
     userInfo: type.UserInfo,
     settings: type.Settings,
@@ -90,14 +110,8 @@ export const createSvg = (
         .attr('x', positionXContrib)
         .attr('y', positionYContrib)
         .attr('text-anchor', 'end')
-        .text(
-            userInfo.totalContributions < 10000
-                ? userInfo.totalContributions
-                : '9999+'
-        )
-        .attr('fill', settings.strongColor)
-        .append('title')
-        .text(userInfo.totalContributions);
+        .text(inertThousandSeparator(userInfo.totalContributions))
+        .attr('fill', settings.strongColor);
 
     group
         .append('text')
@@ -134,11 +148,7 @@ export const createSvg = (
         .attr('x', positionXStar + 10)
         .attr('y', positionYStar)
         .attr('text-anchor', 'start')
-        .text(
-            userInfo.totalStargazerCount < 1000
-                ? userInfo.totalStargazerCount
-                : '999+'
-        )
+        .text(toScale(userInfo.totalStargazerCount))
         .attr('fill', settings.foregroundColor)
         .append('title')
         .text(userInfo.totalStargazerCount);
@@ -168,7 +178,7 @@ export const createSvg = (
         .attr('x', positionXFork + 4)
         .attr('y', positionYFork)
         .attr('text-anchor', 'start')
-        .text(userInfo.totalForkCount < 1000 ? userInfo.totalForkCount : '999+')
+        .text(toScale(userInfo.totalForkCount))
         .attr('fill', settings.foregroundColor)
         .append('title')
         .text(userInfo.totalForkCount);

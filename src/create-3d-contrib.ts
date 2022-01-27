@@ -216,7 +216,7 @@ export const create3DContrib = (
 
         const baseX = offsetX + (week - dayOfWeek) * dx;
         const baseY = offsetY + (week + dayOfWeek) * dy;
-        const calHeight = Math.min(50, cal.contributionCount) * 3 + 3;
+        const calHeight = Math.log10(cal.contributionCount / 20 + 1) * 144 + 3;
 
         const plainLeft = createRightPanelPath(
             baseX,
