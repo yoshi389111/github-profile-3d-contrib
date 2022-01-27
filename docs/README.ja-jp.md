@@ -128,6 +128,27 @@ jobs:
 ![](./profile-3d-contrib/profile-green-animate.svg)
 ```
 
+## 使い方 (ローカル)
+
+環境変数 `GITHUB_TOKEN` には「personal access token」を指定してください。
+
+```shell-session
+export GITHUB_TOKEN=XXXXXXXXXXXXXXXXXXXXX
+```
+
+GitHubのユーザを指定して実行してください。
+
+```shell-session
+node_modules/.bin/ts-node src/index.ts USER_NAME
+```
+
+あるいは
+
+```shell-session
+npm run build
+node . USER_NAME
+```
+
 ## Licence
 
 MIT License

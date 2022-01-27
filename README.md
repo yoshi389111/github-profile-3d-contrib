@@ -128,6 +128,27 @@ e.g.
 ![](./profile-3d-contrib/profile-green-animate.svg)
 ```
 
+## How to use (local)
+
+Set the `GITHUB_TOKEN` environment variable to the value of "personal access token".
+
+```shell-session
+export GITHUB_TOKEN=XXXXXXXXXXXXXXXXXXXXX
+```
+
+Run it with your GitHub user specified.
+
+```shell-session
+node_modules/.bin/ts-node src/index.ts USER_NAME
+```
+
+or
+
+```shell-session
+npm run build
+node . USER_NAME
+```
+
 ## Licence
 
 MIT License
