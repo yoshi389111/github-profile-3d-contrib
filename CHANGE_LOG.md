@@ -1,5 +1,9 @@
 # Change Log
 
+## 2022-01-29, 0.5.0 release
+
+* Use logarithm to calculate the height of the bars.
+
 ## 2022-01-09, 0.4.0 release
 
 * Added night green version.
