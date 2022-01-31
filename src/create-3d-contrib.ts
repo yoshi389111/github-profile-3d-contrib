@@ -1,9 +1,9 @@
 import * as d3 from 'd3';
 import * as type from './type';
 
-const darkerLeft = 1;
-const darkerRight = 0.5;
-const darkerTop = 0;
+const DARKER_RIGHT = 1;
+const DARKER_LEFT = 0.5;
+const DARKER_TOP = 0;
 
 const diffDate = (beforeDate: number, afterDate: number): number =>
     Math.floor((afterDate - beforeDate) / (24 * 60 * 60 * 1000));
@@ -99,13 +99,13 @@ const createLeftPanelPath = (
     dx: number,
     dy: number
 ): string => {
-    const plainLeft = d3.path();
-    plainLeft.moveTo(baseX, baseY);
-    plainLeft.lineTo(baseX + dx, baseY + dy);
-    plainLeft.lineTo(baseX + dx, baseY + dy - calHeight);
-    plainLeft.lineTo(baseX, baseY - calHeight);
-    plainLeft.closePath();
-    return plainLeft.toString();
+    const path = d3.path();
+    path.moveTo(baseX, baseY);
+    path.lineTo(baseX + dx, baseY + dy);
+    path.lineTo(baseX + dx, baseY + dy - calHeight);
+    path.lineTo(baseX, baseY - calHeight);
+    path.closePath();
+    return path.toString();
 };
 
 const createRightPanelPath = (
@@ -115,13 +115,13 @@ const createRightPanelPath = (
     dx: number,
     dy: number
 ): string => {
-    const plainRigth = d3.path();
-    plainRigth.moveTo(baseX + dx, baseY + dy);
-    plainRigth.lineTo(baseX + dx * 2, baseY);
-    plainRigth.lineTo(baseX + dx * 2, baseY - calHeight);
-    plainRigth.lineTo(baseX + dx, baseY + dy - calHeight);
-    plainRigth.closePath();
-    return plainRigth.toString();
+    const path = d3.path();
+    path.moveTo(baseX + dx, baseY + dy);
+    path.lineTo(baseX + dx * 2, baseY);
+    path.lineTo(baseX + dx * 2, baseY - calHeight);
+    path.lineTo(baseX + dx, baseY + dy - calHeight);
+    path.closePath();
+    return path.toString();
 };
 
 const createTopPanelPath = (
@@ -131,13 +131,13 @@ const createTopPanelPath = (
     dx: number,
     dy: number
 ): string => {
-    const plainTop = d3.path();
-    plainTop.moveTo(baseX, baseY - calHeight);
-    plainTop.lineTo(baseX + dx, baseY + dy - calHeight);
-    plainTop.lineTo(baseX + dx * 2, baseY - calHeight);
-    plainTop.lineTo(baseX + dx, baseY - dy - calHeight);
-    plainTop.closePath();
-    return plainTop.toString();
+    const path = d3.path();
+    path.moveTo(baseX, baseY - calHeight);
+    path.lineTo(baseX + dx, baseY + dy - calHeight);
+    path.lineTo(baseX + dx * 2, baseY - calHeight);
+    path.lineTo(baseX + dx, baseY - dy - calHeight);
+    path.closePath();
+    return path.toString();
 };
 
 const addNormalColor = (
@@ -218,52 +218,7 @@ export const create3DContrib = (
         const baseY = offsetY + (week + dayOfWeek) * dy;
         const calHeight = Math.log10(cal.contributionCount / 20 + 1) * 144 + 3;
 
-        const plainLeft = createRightPanelPath(
-            baseX,
-            baseY,
-            calHeight,
-            dxx,
-            dyy
-        );
-        const pathLeft = group
-            .append('path')
-            .attr('d', plainLeft)
-            .attr('stroke-width', '0px');
-        if (settings.type === 'normal') {
-            addNormalColor(
-                pathLeft,
-                cal.contributionLevel,
-                settings,
-                darkerLeft
-            );
-        } else if (settings.type === 'season') {
-            addSeasonColor(
-                pathLeft,
-                cal.contributionLevel,
-                settings,
-                darkerLeft,
-                cal.date
-            );
-        } else if (settings.type === 'rainbow') {
-            addRainbowColor(
-                pathLeft,
-                cal.contributionLevel,
-                settings,
-                darkerLeft,
-                week
-            );
-        }
-        if (isAnimate) {
-            const plainLeft0 = createRightPanelPath(baseX, baseY, 3, dxx, dyy);
-            pathLeft
-                .append('animate')
-                .attr('attributeName', 'd')
-                .attr('values', `${plainLeft0};${plainLeft}`)
-                .attr('dur', '3s')
-                .attr('repeatCount', '1');
-        }
-
-        const plainRight = createLeftPanelPath(
+        const rightPanel = createRightPanelPath(
             baseX,
             baseY,
             calHeight,
@@ -272,21 +227,21 @@ export const create3DContrib = (
         );
         const pathRight = group
             .append('path')
-            .attr('d', plainRight)
+            .attr('d', rightPanel)
             .attr('stroke-width', '0px');
         if (settings.type === 'normal') {
             addNormalColor(
                 pathRight,
                 cal.contributionLevel,
                 settings,
-                darkerRight
+                DARKER_RIGHT
             );
         } else if (settings.type === 'season') {
             addSeasonColor(
                 pathRight,
                 cal.contributionLevel,
                 settings,
-                darkerRight,
+                DARKER_RIGHT,
                 cal.date
             );
         } else if (settings.type === 'rainbow') {
@@ -294,33 +249,83 @@ export const create3DContrib = (
                 pathRight,
                 cal.contributionLevel,
                 settings,
-                darkerRight,
+                DARKER_RIGHT,
                 week
             );
         }
         if (isAnimate) {
-            const plainRigth0 = createLeftPanelPath(baseX, baseY, 3, dxx, dyy);
+            const rightPanel0 = createRightPanelPath(baseX, baseY, 3, dxx, dyy);
             pathRight
                 .append('animate')
                 .attr('attributeName', 'd')
-                .attr('values', `${plainRigth0};${plainRight}`)
+                .attr('values', `${rightPanel0};${rightPanel}`)
                 .attr('dur', '3s')
                 .attr('repeatCount', '1');
         }
 
-        const plainTop = createTopPanelPath(baseX, baseY, calHeight, dxx, dyy);
-        const pathTop = group
+        const leftPanel = createLeftPanelPath(
+            baseX,
+            baseY,
+            calHeight,
+            dxx,
+            dyy
+        );
+        const pathLeft = group
             .append('path')
-            .attr('d', plainTop)
+            .attr('d', leftPanel)
             .attr('stroke-width', '0px');
         if (settings.type === 'normal') {
-            addNormalColor(pathTop, cal.contributionLevel, settings, darkerTop);
+            addNormalColor(
+                pathLeft,
+                cal.contributionLevel,
+                settings,
+                DARKER_LEFT
+            );
+        } else if (settings.type === 'season') {
+            addSeasonColor(
+                pathLeft,
+                cal.contributionLevel,
+                settings,
+                DARKER_LEFT,
+                cal.date
+            );
+        } else if (settings.type === 'rainbow') {
+            addRainbowColor(
+                pathLeft,
+                cal.contributionLevel,
+                settings,
+                DARKER_LEFT,
+                week
+            );
+        }
+        if (isAnimate) {
+            const leftPanel0 = createLeftPanelPath(baseX, baseY, 3, dxx, dyy);
+            pathLeft
+                .append('animate')
+                .attr('attributeName', 'd')
+                .attr('values', `${leftPanel0};${leftPanel}`)
+                .attr('dur', '3s')
+                .attr('repeatCount', '1');
+        }
+
+        const topPanel = createTopPanelPath(baseX, baseY, calHeight, dxx, dyy);
+        const pathTop = group
+            .append('path')
+            .attr('d', topPanel)
+            .attr('stroke-width', '0px');
+        if (settings.type === 'normal') {
+            addNormalColor(
+                pathTop,
+                cal.contributionLevel,
+                settings,
+                DARKER_TOP
+            );
         } else if (settings.type === 'season') {
             addSeasonColor(
                 pathTop,
                 cal.contributionLevel,
                 settings,
-                darkerTop,
+                DARKER_TOP,
                 cal.date
             );
         } else if (settings.type === 'rainbow') {
@@ -328,16 +333,16 @@ export const create3DContrib = (
                 pathTop,
                 cal.contributionLevel,
                 settings,
-                darkerTop,
+                DARKER_TOP,
                 week
             );
         }
         if (isAnimate) {
-            const plainTop0 = createTopPanelPath(baseX, baseY, 3, dxx, dyy);
+            const topPanel0 = createTopPanelPath(baseX, baseY, 3, dxx, dyy);
             pathTop
                 .append('animate')
                 .attr('attributeName', 'd')
-                .attr('values', `${plainTop0};${plainTop}`)
+                .attr('values', `${topPanel0};${topPanel}`)
                 .attr('dur', '3s')
                 .attr('repeatCount', '1');
         }
