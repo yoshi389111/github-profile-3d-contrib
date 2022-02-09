@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 import * as type from './type';
 
+const ANGLE = 30;
 const DARKER_RIGHT = 1;
 const DARKER_LEFT = 0.5;
 const DARKER_TOP = 0;
@@ -92,56 +93,8 @@ const decideSeasonColor = (
     }
 };
 
-const createLeftPanelPath = (
-    baseX: number,
-    baseY: number,
-    calHeight: number,
-    dx: number,
-    dy: number
-): string => {
-    const path = d3.path();
-    path.moveTo(baseX, baseY);
-    path.lineTo(baseX + dx, baseY + dy);
-    path.lineTo(baseX + dx, baseY + dy - calHeight);
-    path.lineTo(baseX, baseY - calHeight);
-    path.closePath();
-    return path.toString();
-};
-
-const createRightPanelPath = (
-    baseX: number,
-    baseY: number,
-    calHeight: number,
-    dx: number,
-    dy: number
-): string => {
-    const path = d3.path();
-    path.moveTo(baseX + dx, baseY + dy);
-    path.lineTo(baseX + dx * 2, baseY);
-    path.lineTo(baseX + dx * 2, baseY - calHeight);
-    path.lineTo(baseX + dx, baseY + dy - calHeight);
-    path.closePath();
-    return path.toString();
-};
-
-const createTopPanelPath = (
-    baseX: number,
-    baseY: number,
-    calHeight: number,
-    dx: number,
-    dy: number
-): string => {
-    const path = d3.path();
-    path.moveTo(baseX, baseY - calHeight);
-    path.lineTo(baseX + dx, baseY + dy - calHeight);
-    path.lineTo(baseX + dx * 2, baseY - calHeight);
-    path.lineTo(baseX + dx, baseY - dy - calHeight);
-    path.closePath();
-    return path.toString();
-};
-
 const addNormalColor = (
-    path: d3.Selection<SVGPathElement, unknown, null, unknown>,
+    path: d3.Selection<SVGRectElement, unknown, null, unknown>,
     contributionLevel: number,
     settings: type.NormalColorSettings,
     darker: number
@@ -151,7 +104,7 @@ const addNormalColor = (
 };
 
 const addSeasonColor = (
-    path: d3.Selection<SVGPathElement, unknown, null, unknown>,
+    path: d3.Selection<SVGRectElement, unknown, null, unknown>,
     contributionLevel: number,
     settings: type.SeasonColorSettings,
     darker: number,
@@ -162,7 +115,7 @@ const addSeasonColor = (
 };
 
 const addRainbowColor = (
-    path: d3.Selection<SVGPathElement, unknown, null, unknown>,
+    path: d3.Selection<SVGRectElement, unknown, null, unknown>,
     contributionLevel: number,
     settings: type.RainbowColorSettings,
     darker: number,
@@ -184,6 +137,112 @@ const addRainbowColor = (
         .attr('repeatCount', 'indefinite');
 };
 
+type PanelType = 'top' | 'left' | 'right';
+
+const addBitmapPattern = (
+    path: d3.Selection<SVGRectElement, unknown, null, unknown>,
+    contributionLevel: number,
+    panel: PanelType
+): void => {
+    path.attr('fill', `url(#pattern_${contributionLevel}_${panel})`);
+};
+
+const atan = (value: number) => (Math.atan(value) * 360) / 2 / Math.PI;
+
+const addPatternForBitmap = (
+    defs: d3.Selection<SVGDefsElement, unknown, null, unknown>,
+    panelPattern: type.PanelPattern,
+    contributionLevel: number,
+    panel: PanelType,
+    backgroundColor: string,
+    foregroundColor: string
+): void => {
+    const width = Math.max(1, panelPattern.width);
+    const height = Math.max(1, panelPattern.bitmap.length);
+    const pattern = defs
+        .append('pattern')
+        .attr('id', `pattern_${contributionLevel}_${panel}`)
+        .attr('x', 0)
+        .attr('y', 0)
+        .attr('width', width)
+        .attr('height', height)
+        .attr('patternUnits', 'userSpaceOnUse');
+    pattern
+        .append('rect')
+        .attr('x', 0)
+        .attr('y', 0)
+        .attr('width', width)
+        .attr('height', height)
+        .attr('fill', backgroundColor);
+    for (const [y, bitmap] of panelPattern.bitmap.entries()) {
+        for (let x = 0; x < width; x++) {
+            if ((bitmap & (1 << (width - x - 1))) !== 0) {
+                pattern
+                    .append('rect')
+                    .attr('x', x)
+                    .attr('y', y)
+                    .attr('width', 1)
+                    .attr('height', 1)
+                    .attr('fill', foregroundColor);
+            }
+        }
+    }
+};
+
+export const addDefines = (
+    svg: d3.Selection<SVGSVGElement, unknown, null, unknown>,
+    settings: type.Settings
+): void => {
+    if (settings.type === 'bitmap') {
+        const defs = svg.append('defs');
+
+        for (const [contribLevel, info] of settings.contribPatterns.entries()) {
+            addPatternForBitmap(
+                defs,
+                info.top,
+                contribLevel,
+                'top',
+                info.top.backgroundColor,
+                info.top.foregroundColor
+            );
+
+            addPatternForBitmap(
+                defs,
+                info.left,
+                contribLevel,
+                'left',
+                info.left.backgroundColor ||
+                    d3
+                        .rgb(info.top.backgroundColor)
+                        .darker(DARKER_LEFT)
+                        .toString(),
+                info.left.foregroundColor ||
+                    d3
+                        .rgb(info.top.foregroundColor)
+                        .darker(DARKER_LEFT)
+                        .toString()
+            );
+
+            addPatternForBitmap(
+                defs,
+                info.right,
+                contribLevel,
+                'right',
+                info.right.backgroundColor ||
+                    d3
+                        .rgb(info.top.backgroundColor)
+                        .darker(DARKER_RIGHT)
+                        .toString(),
+                info.right.foregroundColor ||
+                    d3
+                        .rgb(info.top.foregroundColor)
+                        .darker(DARKER_RIGHT)
+                        .toString()
+            );
+        }
+    }
+};
+
 export const create3DContrib = (
     svg: d3.Selection<SVGSVGElement, unknown, null, unknown>,
     userInfo: type.UserInfo,
@@ -200,7 +259,7 @@ export const create3DContrib = (
 
     const startTime = userInfo.contributionCalendar[0].date.getTime();
     const dx = width / 64;
-    const dy = dx / Math.sqrt(3);
+    const dy = dx * Math.tan(ANGLE * ((2 * Math.PI) / 360));
     const weekcount = Math.ceil(userInfo.contributionCalendar.length / 7.0);
     const dxx = dx * 0.9;
     const dyy = dy * 0.9;
@@ -217,132 +276,154 @@ export const create3DContrib = (
         const baseX = offsetX + (week - dayOfWeek) * dx;
         const baseY = offsetY + (week + dayOfWeek) * dy;
         const calHeight = Math.log10(cal.contributionCount / 20 + 1) * 144 + 3;
+        const contribLevel = cal.contributionLevel;
 
-        const rightPanel = createRightPanelPath(
-            baseX,
-            baseY,
-            calHeight,
-            dxx,
-            dyy
-        );
-        const pathRight = group
-            .append('path')
-            .attr('d', rightPanel)
-            .attr('stroke-width', '0px');
-        if (settings.type === 'normal') {
-            addNormalColor(
-                pathRight,
-                cal.contributionLevel,
-                settings,
-                DARKER_RIGHT
-            );
-        } else if (settings.type === 'season') {
-            addSeasonColor(
-                pathRight,
-                cal.contributionLevel,
-                settings,
-                DARKER_RIGHT,
-                cal.date
-            );
-        } else if (settings.type === 'rainbow') {
-            addRainbowColor(
-                pathRight,
-                cal.contributionLevel,
-                settings,
-                DARKER_RIGHT,
-                week
-            );
-        }
-        if (isAnimate) {
-            const rightPanel0 = createRightPanelPath(baseX, baseY, 3, dxx, dyy);
-            pathRight
-                .append('animate')
-                .attr('attributeName', 'd')
-                .attr('values', `${rightPanel0};${rightPanel}`)
+        const bar = group
+            .append('g')
+            .attr('transform', `translate(${baseX} ${baseY - calHeight})`);
+        if (isAnimate && contribLevel !== 0) {
+            bar.append('animateTransform')
+                .attr('attributeName', 'transform')
+                .attr('type', 'translate')
+                .attr(
+                    'values',
+                    `${baseX} ${baseY - 3};${baseX} ${baseY - calHeight}`
+                )
                 .attr('dur', '3s')
                 .attr('repeatCount', '1');
         }
 
-        const leftPanel = createLeftPanelPath(
-            baseX,
-            baseY,
-            calHeight,
-            dxx,
-            dyy
-        );
-        const pathLeft = group
-            .append('path')
-            .attr('d', leftPanel)
-            .attr('stroke-width', '0px');
-        if (settings.type === 'normal') {
-            addNormalColor(
-                pathLeft,
-                cal.contributionLevel,
-                settings,
-                DARKER_LEFT
+        const widthTop =
+            settings.type === 'bitmap'
+                ? Math.max(1, settings.contribPatterns[contribLevel].top.width)
+                : dxx;
+        const topPanel = bar
+            .append('rect')
+            .attr('stroke', 'none')
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('width', widthTop)
+            .attr('height', widthTop)
+            .attr(
+                'transform',
+                `skewY(${-ANGLE}) skewX(${atan(dxx / 2 / dyy)}) scale(${
+                    dxx / widthTop
+                } ${(2 * dyy) / widthTop})`
             );
+
+        if (settings.type === 'normal') {
+            addNormalColor(topPanel, contribLevel, settings, DARKER_TOP);
         } else if (settings.type === 'season') {
             addSeasonColor(
-                pathLeft,
-                cal.contributionLevel,
+                topPanel,
+                contribLevel,
+                settings,
+                DARKER_TOP,
+                cal.date
+            );
+        } else if (settings.type === 'rainbow') {
+            addRainbowColor(topPanel, contribLevel, settings, DARKER_TOP, week);
+        } else if (settings.type === 'bitmap') {
+            addBitmapPattern(topPanel, contribLevel, 'top');
+        }
+
+        const widthLeft =
+            settings.type === 'bitmap'
+                ? Math.max(1, settings.contribPatterns[contribLevel].left.width)
+                : dxx;
+        const scaleLeft = Math.sqrt(dxx ** 2 + dyy ** 2) / widthLeft;
+        const heightLeft = calHeight / scaleLeft;
+        const leftPanel = bar
+            .append('rect')
+            .attr('stroke', 'none')
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('width', widthLeft)
+            .attr('height', heightLeft)
+            .attr(
+                'transform',
+                `skewY(${ANGLE}) scale(${dxx / widthLeft} ${scaleLeft})`
+            );
+
+        if (settings.type === 'normal') {
+            addNormalColor(leftPanel, contribLevel, settings, DARKER_LEFT);
+        } else if (settings.type === 'season') {
+            addSeasonColor(
+                leftPanel,
+                contribLevel,
                 settings,
                 DARKER_LEFT,
                 cal.date
             );
         } else if (settings.type === 'rainbow') {
             addRainbowColor(
-                pathLeft,
-                cal.contributionLevel,
+                leftPanel,
+                contribLevel,
                 settings,
                 DARKER_LEFT,
                 week
             );
+        } else if (settings.type === 'bitmap') {
+            addBitmapPattern(leftPanel, contribLevel, 'left');
         }
-        if (isAnimate) {
-            const leftPanel0 = createLeftPanelPath(baseX, baseY, 3, dxx, dyy);
-            pathLeft
+        if (isAnimate && contribLevel !== 0) {
+            leftPanel
                 .append('animate')
-                .attr('attributeName', 'd')
-                .attr('values', `${leftPanel0};${leftPanel}`)
+                .attr('attributeName', 'height')
+                .attr('values', `${3 / scaleLeft};${heightLeft}`)
                 .attr('dur', '3s')
                 .attr('repeatCount', '1');
         }
 
-        const topPanel = createTopPanelPath(baseX, baseY, calHeight, dxx, dyy);
-        const pathTop = group
-            .append('path')
-            .attr('d', topPanel)
-            .attr('stroke-width', '0px');
-        if (settings.type === 'normal') {
-            addNormalColor(
-                pathTop,
-                cal.contributionLevel,
-                settings,
-                DARKER_TOP
+        const widthRight =
+            settings.type === 'bitmap'
+                ? Math.max(
+                      1,
+                      settings.contribPatterns[contribLevel].right.width
+                  )
+                : dxx;
+        const scaleRight = Math.sqrt(dxx ** 2 + dyy ** 2) / widthRight;
+        const heightRight = calHeight / scaleRight;
+        const rightPanel = bar
+            .append('rect')
+            .attr('stroke', 'none')
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('width', widthRight)
+            .attr('height', heightRight)
+            .attr(
+                'transform',
+                `translate(${dxx} ${dyy}) skewY(${-ANGLE}) scale(${
+                    dxx / widthRight
+                } ${scaleRight})`
             );
+
+        if (settings.type === 'normal') {
+            addNormalColor(rightPanel, contribLevel, settings, DARKER_RIGHT);
         } else if (settings.type === 'season') {
             addSeasonColor(
-                pathTop,
-                cal.contributionLevel,
+                rightPanel,
+                contribLevel,
                 settings,
-                DARKER_TOP,
+                DARKER_RIGHT,
                 cal.date
             );
         } else if (settings.type === 'rainbow') {
             addRainbowColor(
-                pathTop,
-                cal.contributionLevel,
+                rightPanel,
+                contribLevel,
                 settings,
-                DARKER_TOP,
+                DARKER_RIGHT,
                 week
             );
+        } else if (settings.type === 'bitmap') {
+            addBitmapPattern(rightPanel, contribLevel, 'right');
         }
-        if (isAnimate) {
-            const topPanel0 = createTopPanelPath(baseX, baseY, 3, dxx, dyy);
-            pathTop
+        if (isAnimate && contribLevel !== 0) {
+            rightPanel
                 .append('animate')
-                .attr('attributeName', 'd')
-                .attr('values', `${topPanel0};${topPanel}`)
+                .attr('attributeName', 'height')
+                .attr('values', `${3 / scaleRight};${heightRight}`)
                 .attr('dur', '3s')
                 .attr('repeatCount', '1');
         }

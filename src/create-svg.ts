@@ -3,32 +3,11 @@ import { JSDOM } from 'jsdom';
 import * as contrib from './create-3d-contrib';
 import * as pie from './create-pie-language';
 import * as radar from './create-radar-contrib';
+import * as util from './utils';
 import * as type from './type';
 
 const width = 1280;
 const height = 850;
-
-const toIsoDate = (date: Date) => date.toISOString().substring(0, 10);
-
-// Separate every three digits with a space (SI format)
-const inertThousandSeparator = (value: number) =>
-    value.toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1 ');
-
-// Rounding large numbers
-const toScale = (value: number) => {
-    if (value < 1_000) {
-        // 0 - 999
-        return value.toFixed(0);
-    } else if (value < 10_000) {
-        // 1.0K - 9.9K
-        return Math.floor(value / 1_000).toFixed(1) + 'K';
-    } else if (value < 1_000_000) {
-        // 10K - 999K
-        return Math.floor(value / 1_000).toFixed(0) + 'K';
-    } else {
-        return '1.0M+';
-    }
-};
 
 export const createSvg = (
     userInfo: type.UserInfo,
@@ -49,6 +28,8 @@ export const createSvg = (
     svg.append('style').html(
         '* { font-family: "Ubuntu", "Helvetica", "Arial", sans-serif; }'
     );
+
+    contrib.addDefines(svg, settings);
 
     // background
     svg.append('rect')
@@ -110,7 +91,7 @@ export const createSvg = (
         .attr('x', positionXContrib)
         .attr('y', positionYContrib)
         .attr('text-anchor', 'end')
-        .text(inertThousandSeparator(userInfo.totalContributions))
+        .text(util.inertThousandSeparator(userInfo.totalContributions))
         .attr('fill', settings.strongColor);
 
     group
@@ -148,7 +129,7 @@ export const createSvg = (
         .attr('x', positionXStar + 10)
         .attr('y', positionYStar)
         .attr('text-anchor', 'start')
-        .text(toScale(userInfo.totalStargazerCount))
+        .text(util.toScale(userInfo.totalStargazerCount))
         .attr('fill', settings.foregroundColor)
         .append('title')
         .text(userInfo.totalStargazerCount);
@@ -178,7 +159,7 @@ export const createSvg = (
         .attr('x', positionXFork + 4)
         .attr('y', positionYFork)
         .attr('text-anchor', 'start')
-        .text(toScale(userInfo.totalForkCount))
+        .text(util.toScale(userInfo.totalForkCount))
         .attr('fill', settings.foregroundColor)
         .append('title')
         .text(userInfo.totalForkCount);
@@ -188,7 +169,7 @@ export const createSvg = (
     const endDate =
         userInfo.contributionCalendar[userInfo.contributionCalendar.length - 1]
             .date;
-    const period = `${toIsoDate(startDate)} / ${toIsoDate(endDate)}`;
+    const period = `${util.toIsoDate(startDate)} / ${util.toIsoDate(endDate)}`;
 
     group
         .append('text')

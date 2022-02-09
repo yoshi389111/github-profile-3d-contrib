@@ -50,9 +50,13 @@ export interface SeasonColorSettings {
     weakColor: string;
     radarColor: string;
 
+    /** first season (Mar. - Jun.) */
     contribColors1: [string, string, string, string, string];
+    /** second season (Jun. - Sep.) */
     contribColors2: [string, string, string, string, string];
+    /** third season (Sep. - Dec.) */
     contribColors3: [string, string, string, string, string];
+    /** Fourth season (Dec. - Mar.) */
     contribColors4: [string, string, string, string, string];
 }
 
@@ -70,7 +74,48 @@ export interface RainbowColorSettings {
     hueRatio: number; // hue per weeks
 }
 
+export interface PanelPattern {
+    width: number;
+    bitmap: number[];
+}
+
+export interface TopPanelPattern extends PanelPattern {
+    backgroundColor: string;
+    foregroundColor: string;
+}
+
+export interface SidePanelPattern extends PanelPattern {
+    /** If omitted, calculate from the topPanel backgroundColor */
+    backgroundColor?: string;
+    /** If omitted, calculate from the topPanel foregroundColor */
+    foregroundColor?: string;
+}
+
+export interface ContribPattern {
+    top: TopPanelPattern;
+    left: SidePanelPattern;
+    right: SidePanelPattern;
+}
+
+export interface BitmapPatternSettings {
+    type: 'bitmap';
+    backgroundColor: string;
+    foregroundColor: string;
+    strongColor: string;
+    weakColor: string;
+    radarColor: string;
+
+    contribPatterns: [
+        ContribPattern,
+        ContribPattern,
+        ContribPattern,
+        ContribPattern,
+        ContribPattern
+    ];
+}
+
 export type Settings =
     | NormalColorSettings
     | SeasonColorSettings
-    | RainbowColorSettings;
+    | RainbowColorSettings
+    | BitmapPatternSettings;
