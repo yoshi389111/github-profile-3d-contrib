@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import * as type from './type';
 
-const rangeLabels: ReadonlyArray<string> = ['1-', '10', '100', '1K', '10K+'];
+const rangeLabels: ReadonlyArray<string> = ['0-1', '10', '100', '1K', '10K+'];
 const levels = rangeLabels.length;
 const radians = 2 * Math.PI;
 
