@@ -52,13 +52,20 @@ export const createRadarContrib = (
     ];
     const total = data.length;
     const posX = (level: number, num: number) =>
-        util.toFixed(radius * (level / levels) * Math.sin((num / total) * radians));
+        util.toFixed(
+            radius * (level / levels) * Math.sin((num / total) * radians)
+        );
     const posY = (level: number, num: number) =>
-        util.toFixed(radius * (level / levels) * -Math.cos((num / total) * radians));
+        util.toFixed(
+            radius * (level / levels) * -Math.cos((num / total) * radians)
+        );
 
     const group = svg
         .append('g')
-        .attr('transform', `translate(${util.toFixed(x + cx)}, ${util.toFixed(y + cy)})`);
+        .attr(
+            'transform',
+            `translate(${util.toFixed(x + cx)}, ${util.toFixed(y + cy)})`
+        );
 
     for (let j = 0; j < levels; j++) {
         group
