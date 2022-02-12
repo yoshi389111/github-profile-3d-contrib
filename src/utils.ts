@@ -12,7 +12,7 @@ export const inertThousandSeparator = (value: number): string => {
     return value.toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1 ');
 };
 
-// Round large numbers
+/** Round large numbers */
 export const toScale = (value: number): string => {
     if (value <= 9999) {
         // 0 - 9999
@@ -25,5 +25,5 @@ export const toScale = (value: number): string => {
     }
 };
 
-// Round to two decimal places.
+/** Round to two decimal places. */
 export const toFixed = (value: number): number => +value.toFixed(2);
