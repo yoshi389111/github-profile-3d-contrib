@@ -1,16 +1,17 @@
 import * as d3 from 'd3';
+import * as util from './utils';
 import * as type from './type';
 
-const rangeLabels: ReadonlyArray<string> = ['0-1', '10', '100', '1K', '10K+'];
+const rangeLabels: ReadonlyArray<string> = ['1', '10', '100', '1K', '10K'];
 const levels = rangeLabels.length;
 const radians = 2 * Math.PI;
 
 const toLevel = (value: number): number => {
     if (value < 1) {
-        return 1;
+        return 0.8;
     }
     const result = Math.log10(value);
-    return Math.min(result, 4) + 1;
+    return Math.min(result, 5) + 1;
 };
 
 export const createRadarContrib = (
@@ -51,13 +52,13 @@ export const createRadarContrib = (
     ];
     const total = data.length;
     const posX = (level: number, num: number) =>
-        radius * (level / levels) * Math.sin((num / total) * radians);
+        util.toFixed(radius * (level / levels) * Math.sin((num / total) * radians));
     const posY = (level: number, num: number) =>
-        radius * (level / levels) * -Math.cos((num / total) * radians);
+        util.toFixed(radius * (level / levels) * -Math.cos((num / total) * radians));
 
     const group = svg
         .append('g')
-        .attr('transform', `translate(${x + cx}, ${y + cy})`);
+        .attr('transform', `translate(${util.toFixed(x + cx)}, ${util.toFixed(y + cy)})`);
 
     for (let j = 0; j < levels; j++) {
         group
@@ -80,11 +81,11 @@ export const createRadarContrib = (
         .enter()
         .append('text')
         .text((d) => d)
-        .style('font-size', `${radius / 12}px`)
+        .style('font-size', `${util.toFixed(radius / 12)}px`)
         .attr('text-anchor', 'start')
         .attr('dominant-baseline', 'auto')
-        .attr('x', radius / 50)
-        .attr('y', (d, i) => -radius * ((i + 1) / levels))
+        .attr('x', util.toFixed(radius / 50))
+        .attr('y', (d, i) => util.toFixed(-radius * ((i + 1) / levels)))
         .attr('fill', settings.weakColor);
 
     const axis = group
@@ -105,7 +106,7 @@ export const createRadarContrib = (
 
     axis.append('text')
         .text((d) => d.name)
-        .style('font-size', `${radius / 7.5}px`)
+        .style('font-size', `${util.toFixed(radius / 7.5)}px`)
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'middle')
         .attr('x', (d, i) => posX(1.25 * levels, i))
@@ -127,8 +128,9 @@ export const createRadarContrib = (
         .style('fill', settings.radarColor)
         .style('fill-opacity', 0.5);
     if (isAnimate) {
+        const level0 = toLevel(0);
         const points0 = data
-            .map((d, i) => `${posX(1, i)},${posY(1, i)}`)
+            .map((d, i) => `${posX(level0, i)},${posY(level0, i)}`)
             .join(' ');
         radar
             .append('animate')
