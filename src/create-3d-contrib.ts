@@ -281,14 +281,23 @@ export const create3DContrib = (
 
         const bar = group
             .append('g')
-            .attr('transform', `translate(${util.toFixed(baseX)} ${util.toFixed(baseY - calHeight)})`);
+            .attr(
+                'transform',
+                `translate(${util.toFixed(baseX)} ${util.toFixed(
+                    baseY - calHeight
+                )})`
+            );
         if (isAnimate && contribLevel !== 0) {
             bar.append('animateTransform')
                 .attr('attributeName', 'transform')
                 .attr('type', 'translate')
                 .attr(
                     'values',
-                    `${util.toFixed(baseX)} ${util.toFixed(baseY - 3)};${util.toFixed(baseX)} ${util.toFixed(baseY - calHeight)}`
+                    `${util.toFixed(baseX)} ${util.toFixed(
+                        baseY - 3
+                    )};${util.toFixed(baseX)} ${util.toFixed(
+                        baseY - calHeight
+                    )}`
                 )
                 .attr('dur', '3s')
                 .attr('repeatCount', '1');
@@ -307,9 +316,11 @@ export const create3DContrib = (
             .attr('height', util.toFixed(widthTop))
             .attr(
                 'transform',
-                `skewY(${-ANGLE}) skewX(${util.toFixed(atan(dxx / 2 / dyy))}) scale(${
-                    util.toFixed(dxx / widthTop)
-                } ${util.toFixed((2 * dyy) / widthTop)})`
+                `skewY(${-ANGLE}) skewX(${util.toFixed(
+                    atan(dxx / 2 / dyy)
+                )}) scale(${util.toFixed(dxx / widthTop)} ${util.toFixed(
+                    (2 * dyy) / widthTop
+                )})`
             );
 
         if (settings.type === 'normal') {
@@ -343,7 +354,9 @@ export const create3DContrib = (
             .attr('height', util.toFixed(heightLeft))
             .attr(
                 'transform',
-                `skewY(${ANGLE}) scale(${util.toFixed(dxx / widthLeft)} ${util.toFixed(scaleLeft)})`
+                `skewY(${ANGLE}) scale(${util.toFixed(
+                    dxx / widthLeft
+                )} ${util.toFixed(scaleLeft)})`
             );
 
         if (settings.type === 'normal') {
@@ -371,7 +384,10 @@ export const create3DContrib = (
             leftPanel
                 .append('animate')
                 .attr('attributeName', 'height')
-                .attr('values', `${util.toFixed(3 / scaleLeft)};${util.toFixed(heightLeft)}`)
+                .attr(
+                    'values',
+                    `${util.toFixed(3 / scaleLeft)};${util.toFixed(heightLeft)}`
+                )
                 .attr('dur', '3s')
                 .attr('repeatCount', '1');
         }
@@ -394,9 +410,11 @@ export const create3DContrib = (
             .attr('height', util.toFixed(heightRight))
             .attr(
                 'transform',
-                `translate(${util.toFixed(dxx)} ${util.toFixed(dyy)}) skewY(${-ANGLE}) scale(${
-                    util.toFixed(dxx / widthRight)
-                } ${util.toFixed(scaleRight)})`
+                `translate(${util.toFixed(dxx)} ${util.toFixed(
+                    dyy
+                )}) skewY(${-ANGLE}) scale(${util.toFixed(
+                    dxx / widthRight
+                )} ${util.toFixed(scaleRight)})`
             );
 
         if (settings.type === 'normal') {
@@ -424,7 +442,12 @@ export const create3DContrib = (
             rightPanel
                 .append('animate')
                 .attr('attributeName', 'height')
-                .attr('values', `${util.toFixed(3 / scaleRight)};${util.toFixed(heightRight)}`)
+                .attr(
+                    'values',
+                    `${util.toFixed(3 / scaleRight)};${util.toFixed(
+                        heightRight
+                    )}`
+                )
                 .attr('dur', '3s')
                 .attr('repeatCount', '1');
         }
