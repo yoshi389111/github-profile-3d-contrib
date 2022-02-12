@@ -252,7 +252,7 @@ export const create3DContrib = (
     width: number,
     height: number,
     settings: type.Settings,
-    isAnimate: boolean
+    isForcedAnimation = false
 ): void => {
     if (userInfo.contributionCalendar.length === 0) {
         return;
@@ -278,6 +278,8 @@ export const create3DContrib = (
         const baseY = offsetY + (week + dayOfWeek) * dy;
         const calHeight = Math.log10(cal.contributionCount / 20 + 1) * 144 + 3;
         const contribLevel = cal.contributionLevel;
+
+        const isAnimate = settings.growingAnimation || isForcedAnimation;
 
         const bar = group
             .append('g')

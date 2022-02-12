@@ -38,6 +38,7 @@ export interface NormalColorSettings {
     strongColor: string;
     weakColor: string;
     radarColor: string;
+    growingAnimation?: boolean;
 
     contribColors: [string, string, string, string, string];
 }
@@ -49,6 +50,7 @@ export interface SeasonColorSettings {
     strongColor: string;
     weakColor: string;
     radarColor: string;
+    growingAnimation?: boolean;
 
     /** first season (Mar. - Jun.) */
     contribColors1: [string, string, string, string, string];
@@ -67,6 +69,7 @@ export interface RainbowColorSettings {
     strongColor: string;
     weakColor: string;
     radarColor: string;
+    growingAnimation?: boolean;
 
     saturation: string;
     contribLightness: [string, string, string, string, string];
@@ -104,6 +107,7 @@ export interface BitmapPatternSettings {
     strongColor: string;
     weakColor: string;
     radarColor: string;
+    growingAnimation?: boolean;
 
     contribPatterns: [
         ContribPattern,
