@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import * as util from './utils';
 import * as type from './type';
 
 const ANGLE = 30;
@@ -280,14 +281,14 @@ export const create3DContrib = (
 
         const bar = group
             .append('g')
-            .attr('transform', `translate(${baseX} ${baseY - calHeight})`);
+            .attr('transform', `translate(${util.toFixed(baseX)} ${util.toFixed(baseY - calHeight)})`);
         if (isAnimate && contribLevel !== 0) {
             bar.append('animateTransform')
                 .attr('attributeName', 'transform')
                 .attr('type', 'translate')
                 .attr(
                     'values',
-                    `${baseX} ${baseY - 3};${baseX} ${baseY - calHeight}`
+                    `${util.toFixed(baseX)} ${util.toFixed(baseY - 3)};${util.toFixed(baseX)} ${util.toFixed(baseY - calHeight)}`
                 )
                 .attr('dur', '3s')
                 .attr('repeatCount', '1');
@@ -302,13 +303,13 @@ export const create3DContrib = (
             .attr('stroke', 'none')
             .attr('x', 0)
             .attr('y', 0)
-            .attr('width', widthTop)
-            .attr('height', widthTop)
+            .attr('width', util.toFixed(widthTop))
+            .attr('height', util.toFixed(widthTop))
             .attr(
                 'transform',
-                `skewY(${-ANGLE}) skewX(${atan(dxx / 2 / dyy)}) scale(${
-                    dxx / widthTop
-                } ${(2 * dyy) / widthTop})`
+                `skewY(${-ANGLE}) skewX(${util.toFixed(atan(dxx / 2 / dyy))}) scale(${
+                    util.toFixed(dxx / widthTop)
+                } ${util.toFixed((2 * dyy) / widthTop)})`
             );
 
         if (settings.type === 'normal') {
@@ -338,11 +339,11 @@ export const create3DContrib = (
             .attr('stroke', 'none')
             .attr('x', 0)
             .attr('y', 0)
-            .attr('width', widthLeft)
-            .attr('height', heightLeft)
+            .attr('width', util.toFixed(widthLeft))
+            .attr('height', util.toFixed(heightLeft))
             .attr(
                 'transform',
-                `skewY(${ANGLE}) scale(${dxx / widthLeft} ${scaleLeft})`
+                `skewY(${ANGLE}) scale(${util.toFixed(dxx / widthLeft)} ${util.toFixed(scaleLeft)})`
             );
 
         if (settings.type === 'normal') {
@@ -370,7 +371,7 @@ export const create3DContrib = (
             leftPanel
                 .append('animate')
                 .attr('attributeName', 'height')
-                .attr('values', `${3 / scaleLeft};${heightLeft}`)
+                .attr('values', `${util.toFixed(3 / scaleLeft)};${util.toFixed(heightLeft)}`)
                 .attr('dur', '3s')
                 .attr('repeatCount', '1');
         }
@@ -389,13 +390,13 @@ export const create3DContrib = (
             .attr('stroke', 'none')
             .attr('x', 0)
             .attr('y', 0)
-            .attr('width', widthRight)
-            .attr('height', heightRight)
+            .attr('width', util.toFixed(widthRight))
+            .attr('height', util.toFixed(heightRight))
             .attr(
                 'transform',
-                `translate(${dxx} ${dyy}) skewY(${-ANGLE}) scale(${
-                    dxx / widthRight
-                } ${scaleRight})`
+                `translate(${util.toFixed(dxx)} ${util.toFixed(dyy)}) skewY(${-ANGLE}) scale(${
+                    util.toFixed(dxx / widthRight)
+                } ${util.toFixed(scaleRight)})`
             );
 
         if (settings.type === 'normal') {
@@ -423,7 +424,7 @@ export const create3DContrib = (
             rightPanel
                 .append('animate')
                 .attr('attributeName', 'height')
-                .attr('values', `${3 / scaleRight};${heightRight}`)
+                .attr('values', `${util.toFixed(3 / scaleRight)};${util.toFixed(heightRight)}`)
                 .attr('dur', '3s')
                 .attr('repeatCount', '1');
         }

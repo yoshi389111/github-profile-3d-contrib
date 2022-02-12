@@ -21,3 +21,6 @@ export const toScale = (value: number): string => {
         return '1M+';
     }
 };
+
+// Round to two decimal places.
+export const toFixed = (value: number): number => +value.toFixed(2);
