@@ -12,7 +12,7 @@ const height = 850;
 export const createSvg = (
     userInfo: type.UserInfo,
     settings: type.Settings,
-    isAnimate: boolean
+    isForcedAnimation: boolean
 ): string => {
     const fakeDom = new JSDOM(
         '<!DOCTYPE html><html><body><div class="container"></div></body></html>'
@@ -47,7 +47,7 @@ export const createSvg = (
         width,
         height,
         settings,
-        isAnimate
+        isForcedAnimation
     );
 
     // radar chart
@@ -62,7 +62,7 @@ export const createSvg = (
         radarWidth,
         radarHeight,
         settings,
-        isAnimate
+        isForcedAnimation
     );
 
     // pie chart
@@ -76,7 +76,7 @@ export const createSvg = (
         pieWidth,
         pieHeight,
         settings,
-        isAnimate
+        isForcedAnimation
     );
 
     const group = svg.append('g');
