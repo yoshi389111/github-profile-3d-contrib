@@ -68,7 +68,7 @@ export interface RainbowColorSettings {
     weakColor: string;
     radarColor: string;
 
-    saturation: number;
+    saturation: string;
     contribLightness: [string, string, string, string, string];
     duration: string; // ex. '10s'
     hueRatio: number; // hue per weeks

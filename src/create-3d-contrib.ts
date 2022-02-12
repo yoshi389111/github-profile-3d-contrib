@@ -126,7 +126,7 @@ const addRainbowColor = (
     const lightness = settings.contribLightness[contributionLevel];
     const values = [...Array<undefined>(7)]
         .map((_, i) => (i * 60 + offsetHue) % 360)
-        .map((hue) => `hsl(${hue},${saturation}%,${lightness})`)
+        .map((hue) => `hsl(${hue},${saturation},${lightness})`)
         .map((c) => d3.rgb(c).darker(darker).toString())
         .join(';');
 

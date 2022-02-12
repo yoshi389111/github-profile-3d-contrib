@@ -81,7 +81,7 @@ export const NightRainbowSettings: type.RainbowColorSettings = {
     strongColor: 'rgb(255,200,55)',
     weakColor: '#aaaaaa',
     radarColor: 'rgb(255,200,55)',
-    saturation: 50,
+    saturation: '50%',
     contribLightness: ['20%', '30%', '35%', '40%', '50%'],
     duration: '10s',
     hueRatio: -7,
