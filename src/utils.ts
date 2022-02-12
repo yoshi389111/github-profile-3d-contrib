@@ -3,18 +3,21 @@ export const toIsoDate = (date: Date): string =>
 
 export const inertThousandSeparator = (value: number): string => {
     if (value <= 9999) {
+        // 4 digits or less, do not need to be separated.
+        // e.g. "1234"
         return value.toFixed(0);
     }
-    // Separate every three digits with a space (SI format)
+    // 5 digits or more, separate each 3 digits with a space(SI format).
+    // e.g. "12 345"
     return value.toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1 ');
 };
 
-// Rounding large numbers
+// Round large numbers
 export const toScale = (value: number): string => {
-    if (value < 10_000) {
+    if (value <= 9999) {
         // 0 - 9999
         return value.toFixed(0);
-    } else if (value < 1_000_000) {
+    } else if (value <= 999999) {
         // 10K - 999K
         return Math.floor(value / 1_000).toFixed(0) + 'K';
     } else {
