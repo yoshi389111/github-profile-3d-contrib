@@ -79,7 +79,8 @@ export interface RainbowColorSettings {
 
 export interface PanelPattern {
     width: number;
-    bitmap: number[];
+    /** array of (number or hex-string) */
+    bitmap: (number | string)[];
 }
 
 export interface TopPanelPattern extends PanelPattern {

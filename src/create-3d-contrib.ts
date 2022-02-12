@@ -175,7 +175,11 @@ const addPatternForBitmap = (
         .attr('width', width)
         .attr('height', height)
         .attr('fill', backgroundColor);
-    for (const [y, bitmap] of panelPattern.bitmap.entries()) {
+    for (const [y, bitmapValue] of panelPattern.bitmap.entries()) {
+        const bitmap =
+            typeof bitmapValue === 'string'
+                ? parseInt(bitmapValue, 16)
+                : bitmapValue;
         for (let x = 0; x < width; x++) {
             if ((bitmap & (1 << (width - x - 1))) !== 0) {
                 pattern
