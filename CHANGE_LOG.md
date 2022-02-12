@@ -1,5 +1,10 @@
 # Change Log
 
+## 2022-02-12, 0.6.0 release
+
+* Added git block version.
+* New support for setting json file.
+
 ## 2022-01-29, 0.5.0 release
 
 * Use logarithm to calculate the height of the bars.

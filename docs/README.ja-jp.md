@@ -1,14 +1,6 @@
 # GitHub Profile 3D Contrib.
 
-![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-season-animate.svg)
-
-![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-green-animate.svg)
-
-![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-night-view.svg)
-
-![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-night-green.svg)
-
-![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-night-rainbow.svg)
+![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-gitblock.svg)
 
 ## 概要
 
@@ -52,7 +44,7 @@ jobs:
     name: generate-github-profile-3d-contrib
     steps:
       - uses: actions/checkout@v2
-      - uses: yoshi389111/github-profile-3d-contrib@0.5.0
+      - uses: yoshi389111/github-profile-3d-contrib@0.6.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           USERNAME: ${{ github.repository_owner }}
@@ -74,6 +66,7 @@ jobs:
 * `GITHUB_TOKEN` : (必須) アクセストークン
 * `USERNAME` : (必須) 対象のユーザー名. （あるいは引数で指定する）
 * `MAX_REPOS` : (任意) 最大のリポジトリ数。デフォルトは100 - バージョン 0.2.0 で追加
+* `SETTING_JSON` : (任意) 設定JSONファイルパス。詳細は `yoshi389111/github-profile-3d-contrib` リポジトリの `sample-settings/*.json` や `src/type.ts` を参照してください - バージョン 0.6.0 で追加
 
 ### 手順 3. アクションを手動起動する
 
@@ -92,6 +85,10 @@ jobs:
 * `profile-3d-contrib/profile-night-view.svg`
 * `profile-3d-contrib/profile-night-green.svg`
 * `profile-3d-contrib/profile-night-rainbow.svg`
+
+あるいは、`SETTING_JSON` を指定した場合は、以下のファイルが生成されます。
+
+* `profile-3d-contrib/profile-customize.svg`
 
 例：green バージョン
 
@@ -117,6 +114,9 @@ jobs:
 
 ![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-night-rainbow.svg)
 
+example: git block バージョン
+
+![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-gitblock.svg)
 
 ### 手順 4. README.md を追加
 
@@ -153,4 +153,4 @@ node . USER_NAME
 
 MIT License
 
-Copyright (C) 2021 SATO Yoshiyuki
+Copyright (C) 2021 SATO, Yoshiyuki

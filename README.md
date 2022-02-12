@@ -1,14 +1,6 @@
 # GitHub Profile 3D Contrib.
 
-![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-season-animate.svg)
-
-![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-green-animate.svg)
-
-![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-night-view.svg)
-
-![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-night-green.svg)
-
-![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-night-rainbow.svg)
+![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-gitblock.svg)
 
 [日本語](./docs/README.ja-jp.md)
 
@@ -53,7 +45,7 @@ jobs:
     name: generate-github-profile-3d-contrib
     steps:
       - uses: actions/checkout@v2
-      - uses: yoshi389111/github-profile-3d-contrib@0.5.0
+      - uses: yoshi389111/github-profile-3d-contrib@0.6.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           USERNAME: ${{ github.repository_owner }}
@@ -75,6 +67,7 @@ This will add the action to the repository.
 * `GITHUB_TOKEN` : (required) access token
 * `USERNAME` : (required) target user name (or specify with an argument).
 * `MAX_REPOS` : (optional) max repositories, default 100 - since ver. 0.2.0
+* `SETTING_JSON` : (optional) settings json file path. See `sample-settings/*.json` and `src/type.ts` in `yoshi389111/github-profile-3d-contrib` repository for details. - since ver. 0.6.0
 
 ### step 3. Manually launch the action
 
@@ -93,6 +86,11 @@ The profile image is generated with the following paths.
 * `profile-3d-contrib/profile-night-view.svg`
 * `profile-3d-contrib/profile-night-green.svg`
 * `profile-3d-contrib/profile-night-rainbow.svg`
+* `profile-3d-contrib/profile-gitblock.svg`
+
+Alternatively, if `SETTING_JSON` is specified, the following image will be generated.
+
+* `profile-3d-contrib/profile-customize.svg`
 
 example: green version
 
@@ -117,6 +115,10 @@ example: night green version
 example: night reinbow version
 
 ![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-night-rainbow.svg)
+
+example: git block version
+
+![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-gitblock.svg)
 
 ### step 4. Add image to README.md
 
@@ -153,4 +155,4 @@ node . USER_NAME
 
 MIT License
 
-Copyright (C) 2021 SATO Yoshiyuki
+Copyright (C) 2021 SATO, Yoshiyuki
