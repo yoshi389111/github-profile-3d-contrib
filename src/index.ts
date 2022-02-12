@@ -77,6 +77,11 @@ export const main = async (): Promise<void> => {
             'profile-night-rainbow.svg',
             create.createSvg(userInfo, template.NightRainbowSettings, true)
         );
+
+        f.writeFile(
+            'profile-gitblock.svg',
+            create.createSvg(userInfo, template.GitBlockSettings, true)
+        );
     } catch (error) {
         console.error(error);
         core.setFailed('error');
