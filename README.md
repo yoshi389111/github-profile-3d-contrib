@@ -155,4 +155,4 @@ node . USER_NAME
 
 MIT License
 
-Copyright (C) 2021 SATO, Yoshiyuki
+(C) 2021 SATO, Yoshiyuki
