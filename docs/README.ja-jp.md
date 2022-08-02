@@ -2,6 +2,8 @@
 
 ![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-gitblock.svg)
 
+[Español](./README.es-es.md) | [English](/README.md)
+
 ## 概要
 
 この GitHub Action は GitHub のコントリビュートカレンダーの 3D 版を SVG で作成します。
