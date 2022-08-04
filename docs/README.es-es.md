@@ -2,34 +2,34 @@
 
 ![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-gitblock.svg)
 
-[日本語](./docs/README.ja-jp.md) | [Español](./docs/README.es-es.md)
+[日本語](./README.ja-jp.md) | [English](/README.md)
 
-## Overview
+## Visión general
 
-This GitHub Action creates a GitHub contribution calendar on a 3D profile image.
+Esta acción de GitHub crea un calendario de contribuciones de GitHub en una imagen de perfil 3D.
 
-## How to use (GitHub Actions)
+## Cómo usar (Actions de GitHub)
 
-This action generate your github profile 3d contribute calendar and make a commit to your repo.
-You can also trigger action by yourself after add this action.
+Esta acción genera su calendario de contribución 3d de perfil de github y se compromete con la actualización de su repositorio.
+También puede activar manualmente la acción usted mismo después de agregar esta acción.
 
-### step 1. Create special repository.
+### paso 1. Crear un repositorio especial.
 
-Create a repository on GitHub with the same name as your user name.
+Cree un repositorio en GitHub con el mismo nombre que su nombre de usuario.
 
-* e.g. If the user name is `octocat`, create a repository named `octocat/octocat`.
-* ref. [Managing your profile README](https://docs.github.com/en/github/setting-up-and-managing-your-github-profile/managing-your-profile-readme)
+* ej. Si el nombre de usuario es `octocat`, crear un repositorio llamado `octocat/octocat`.
+* ref. [Gestión de su perfil README](https://docs.github.com/es/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/managing-your-profile-readme)
 
-In this repository, do the following.
+En este repositorio, haga lo siguiente.
 
-### step 2. Create workflow file.
+### paso 2. Crear archivo de workflow (flujo de trabajo).
 
-Create a workflow file like the one below.
+Cree un archivo de flujo de trabajo como el siguiente.
 
 * `.github/workflows/profile-3d.yml`
 
-The schedule is set to start once a day.
-Please correct the startup time to a convenient time.
+El horario está configurado para comenzar una vez al día.
+Corrija la hora de inicio a una hora conveniente.
 
 ```yaml:.github/workflows/profile-3d.yml
 name: GitHub-Profile-3D-Contrib
@@ -58,24 +58,24 @@ jobs:
           git push
 ```
 
-Note: If you also want to include the private repository, register the "personal access token" in the repository and set it to GITHUB_TOKEN specified in the workflow file.
+Nota: si también desea incluir el repositorio privado, registre el "token de acceso personal" en el repositorio y configúrelo en GITHUB_TOKEN especificado en el archivo de workflow (flujo de trabajo).
 
-This will add the action to the repository.
+Esto agregará la acción al repositorio.
 
-#### Environment variables
+#### Variables de entorno
 
-* `GITHUB_TOKEN` : (required) access token
-* `USERNAME` : (required) target user name (or specify with an argument).
-* `MAX_REPOS` : (optional) max repositories, default 100 - since ver. 0.2.0
-* `SETTING_JSON` : (optional) settings json file path. See `sample-settings/*.json` and `src/type.ts` in `yoshi389111/github-profile-3d-contrib` repository for details. - since ver. 0.6.0
+* `GITHUB_TOKEN` : (requerido) token de acceso
+* `USERNAME` : (requerido) nombre de usuario de destino (o especificar con un argumento).
+* `MAX_REPOS` : (opcional) repositorios máximos, predeterminado 100 - desde ver. 0.2.0
+* `SETTING_JSON` : (opcional) configuración de la ruta del archivo json. Ver `sample-settings/*.json` y `src/type.ts` en `yoshi389111/github-profile-3d-contrib` repositorio para más detalles. - desde ver. 0.6.0
 
-### step 3. Manually launch the action
+### paso 3. Inicie manualmente la acción
 
-Launch the added action.
+Inicie la acción añadida.
 
 * `Actions` -> `GitHub-Profile-3D-Contrib` -> `Run workflow`
 
-The profile image is generated with the following paths.
+La imagen de perfil se genera con las siguientes rutas:
 
 * `profile-3d-contrib/profile-green-animate.svg`
 * `profile-3d-contrib/profile-green.svg`
@@ -88,70 +88,70 @@ The profile image is generated with the following paths.
 * `profile-3d-contrib/profile-night-rainbow.svg`
 * `profile-3d-contrib/profile-gitblock.svg`
 
-Alternatively, if `SETTING_JSON` is specified, the following image will be generated.
+Alternativamente, si `SETTING_JSON` se especifica, se generará la siguiente imagen.
 
 * `profile-3d-contrib/profile-customize.svg`
 
-example: green version
+ejemplo: green version
 
 ![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-green-animate.svg)
 
-example: season version (Northern Hemisphere.)
+ejemplo: season version (Northern Hemisphere.)
 
 ![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-season-animate.svg)
 
-example: season version (Southern Hemisphere.)
+ejemplo: season version (Southern Hemisphere.)
 
 ![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-south-season-animate.svg)
 
-example: night view version
+ejemplo: night view version
 
 ![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-night-view.svg)
 
-example: night green version
+ejemplo: night green version
 
 ![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-night-green.svg)
 
-example: night reinbow version
+ejemplo: night reinbow version
 
 ![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-night-rainbow.svg)
 
-example: git block version
+ejemplo: git block version
 
 ![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-gitblock.svg)
 
-### step 4. Add image to README.md
+### paso 4. Agregar imagen a README.md
 
-Add the path of the generated image to the readme file.
+Agregue la ruta de la imagen generada al archivo README.
 
-e.g.
+ej.
 
 ```md
 ![](./profile-3d-contrib/profile-green-animate.svg)
 ```
 
-## How to use (local)
+## Cómo usar (local)
 
-Set the `GITHUB_TOKEN` environment variable to the value of "personal access token".
+Configura la variable de entorno `GITHUB_TOKEN` con el valor del "token de acceso personal".
 
 ```shell-session
 export GITHUB_TOKEN=XXXXXXXXXXXXXXXXXXXXX
 ```
 
-Run it with your GitHub user specified.
+Ejecútelo con su usuario de GitHub especificado.
 
 ```shell-session
 node_modules/.bin/ts-node src/index.ts USER_NAME
 ```
 
-or
+o
 
 ```shell-session
 npm run build
 node . USER_NAME
 ```
 
-## Licence
+## Licencia
 
 MIT License
 
