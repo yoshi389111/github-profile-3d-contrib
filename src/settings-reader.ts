@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
 import * as type from './type';
 
-export const readSettingJson = (filePath: string): type.Settings => {
+export const readSettingJson = (filePath: string): type.SettingFile => {
     const content = readFileSync(filePath, {
         encoding: 'utf8',
         flag: 'r',

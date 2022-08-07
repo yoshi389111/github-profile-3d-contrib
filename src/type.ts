@@ -114,3 +114,5 @@ export type Settings =
     | SeasonColorSettings
     | RainbowColorSettings
     | BitmapPatternSettings;
+
+export type SettingFile = Settings | Settings[];

@@ -31,9 +31,17 @@ export const main = async (): Promise<void> => {
         const userInfo = aggregate.aggregateUserInfo(response);
 
         if (process.env.SETTING_JSON) {
-            const settings = r.readSettingJson(process.env.SETTING_JSON);
-            const fileName = settings.fileName || 'profile-customize.svg';
-            f.writeFile(fileName, create.createSvg(userInfo, settings, false));
+            const settingFile = r.readSettingJson(process.env.SETTING_JSON);
+            const settingInfos =
+                'length' in settingFile ? settingFile : [settingFile];
+            for (const settingInfo of settingInfos) {
+                const fileName =
+                    settingInfo.fileName || 'profile-customize.svg';
+                f.writeFile(
+                    fileName,
+                    create.createSvg(userInfo, settingInfo, false)
+                );
+            }
         } else {
             const settings = userInfo.isHalloween
                 ? template.HalloweenSettings
