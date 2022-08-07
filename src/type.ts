@@ -31,25 +31,25 @@ export type ContributionLevel =
     | 'THIRD_QUARTILE'
     | 'FOURTH_QUARTILE';
 
-export interface NormalColorSettings {
-    type: 'normal';
+interface BaseSettings {
     backgroundColor: string;
     foregroundColor: string;
     strongColor: string;
     weakColor: string;
     radarColor: string;
+
+    fileName?: string;
+}
+
+export interface NormalColorSettings extends BaseSettings {
+    type: 'normal';
     growingAnimation?: boolean;
 
     contribColors: [string, string, string, string, string];
 }
 
-export interface SeasonColorSettings {
+export interface SeasonColorSettings extends BaseSettings {
     type: 'season';
-    backgroundColor: string;
-    foregroundColor: string;
-    strongColor: string;
-    weakColor: string;
-    radarColor: string;
     growingAnimation?: boolean;
 
     /** first season (Mar. - Jun.) */
@@ -62,13 +62,8 @@ export interface SeasonColorSettings {
     contribColors4: [string, string, string, string, string];
 }
 
-export interface RainbowColorSettings {
+export interface RainbowColorSettings extends BaseSettings {
     type: 'rainbow';
-    backgroundColor: string;
-    foregroundColor: string;
-    strongColor: string;
-    weakColor: string;
-    radarColor: string;
     growingAnimation?: boolean;
 
     saturation: string;
@@ -101,13 +96,8 @@ export interface ContribPattern {
     right: SidePanelPattern;
 }
 
-export interface BitmapPatternSettings {
+export interface BitmapPatternSettings extends BaseSettings {
     type: 'bitmap';
-    backgroundColor: string;
-    foregroundColor: string;
-    strongColor: string;
-    weakColor: string;
-    radarColor: string;
     growingAnimation?: boolean;
 
     contribPatterns: [
