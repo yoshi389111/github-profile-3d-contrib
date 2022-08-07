@@ -32,10 +32,8 @@ export const main = async (): Promise<void> => {
 
         if (process.env.SETTING_JSON) {
             const settings = r.readSettingJson(process.env.SETTING_JSON);
-            f.writeFile(
-                'profile-customize.svg',
-                create.createSvg(userInfo, settings, false)
-            );
+            const fileName = settings.fileName || 'profile-customize.svg';
+            f.writeFile(fileName, create.createSvg(userInfo, settings, false));
         } else {
             const settings = userInfo.isHalloween
                 ? template.HalloweenSettings
