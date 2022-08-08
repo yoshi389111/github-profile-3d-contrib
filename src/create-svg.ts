@@ -94,6 +94,9 @@ export const createSvg = (
         .text(util.inertThousandSeparator(userInfo.totalContributions))
         .attr('fill', settings.strongColor);
 
+    const contribLabel = settings.l10n
+        ? settings.l10n.contrib
+        : 'contributions';
     group
         .append('text')
         .style('font-size', '24px')
@@ -101,7 +104,7 @@ export const createSvg = (
         .attr('y', positionYContrib)
         .attr('text-anchor', 'start')
         .attr('text-anchor', 'start')
-        .text('contributions')
+        .text(contribLabel)
         .attr('fill', settings.foregroundColor);
 
     const positionXStar = (width * 5) / 10;
