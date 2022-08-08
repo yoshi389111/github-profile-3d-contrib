@@ -39,6 +39,15 @@ interface BaseSettings {
     radarColor: string;
 
     fileName?: string;
+
+    l10n?: {
+        commit: string;
+        repo: string;
+        review: string;
+        pullreq: string;
+        issue: string;
+        contrib: string;
+    };
 }
 
 export interface NormalColorSettings extends BaseSettings {

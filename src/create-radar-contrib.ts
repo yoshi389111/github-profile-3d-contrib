@@ -28,25 +28,31 @@ export const createRadarContrib = (
     const cx = width / 2;
     const cy = (height / 2) * 1.1;
 
+    const commitLabel = settings.l10n ? settings.l10n.commit : 'Commit';
+    const issueLabel = settings.l10n ? settings.l10n.issue : 'Issue';
+    const pullReqLabel = settings.l10n ? settings.l10n.pullreq : 'PullReq';
+    const reviewLabel = settings.l10n ? settings.l10n.review : 'Review';
+    const RepoLabel = settings.l10n ? settings.l10n.repo : 'Repo';
+
     const data = [
         {
-            name: 'Commit',
+            name: commitLabel,
             value: userInfo.totalCommitContributions,
         },
         {
-            name: 'Issue',
+            name: issueLabel,
             value: userInfo.totalIssueContributions,
         },
         {
-            name: 'PullReq',
+            name: pullReqLabel,
             value: userInfo.totalPullRequestContributions,
         },
         {
-            name: 'Review',
+            name: reviewLabel,
             value: userInfo.totalPullRequestReviewContributions,
         },
         {
-            name: 'Repo',
+            name: RepoLabel,
             value: userInfo.totalRepositoryContributions,
         },
     ];
