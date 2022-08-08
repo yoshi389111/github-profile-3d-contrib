@@ -1,0 +1,16 @@
+[
+  {
+    "type": "pie_lang_only",
+    "fileName": "pie_lang_only.svg",
+    "backgroundColor": "#ffffff",
+    "foregroundColor": "#00000f"
+  },
+  {
+    "type": "radar_contrib_only",
+    "fileName": "radar_contrib_only.svg",
+    "backgroundColor": "#ffffff",
+    "foregroundColor": "#00000f",
+    "weakColor": "gray",
+    "radarColor": "#47a042"
+  }
+]

@@ -21,7 +21,7 @@ export const createRadarContrib = (
     y: number,
     width: number,
     height: number,
-    settings: type.Settings,
+    settings: type.RadarContribSettings,
     isAnimate: boolean
 ): void => {
     const radius = (height / 2) * 0.8;

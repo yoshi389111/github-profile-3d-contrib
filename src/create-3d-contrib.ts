@@ -183,7 +183,7 @@ const addPatternForBitmap = (
                 : bitmapValue;
         for (let x = 0; x < width; x++) {
             if ((bitmap & (1 << (width - x - 1))) !== 0) {
-                path.rect(x, y, 1, 1)
+                path.rect(x, y, 1, 1);
             }
         }
     }
@@ -191,7 +191,7 @@ const addPatternForBitmap = (
         .append('path')
         .attr('stroke', 'none')
         .attr('fill', foregroundColor)
-        .attr('d', path.toString())
+        .attr('d', path.toString());
 };
 
 export const addDefines = (
@@ -255,7 +255,7 @@ export const create3DContrib = (
     y: number,
     width: number,
     height: number,
-    settings: type.Settings,
+    settings: type.FullSettings,
     isForcedAnimation = false
 ): void => {
     if (userInfo.contributionCalendar.length === 0) {

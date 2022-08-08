@@ -31,7 +31,31 @@ export type ContributionLevel =
     | 'THIRD_QUARTILE'
     | 'FOURTH_QUARTILE';
 
-interface BaseSettings {
+export interface RadarContribSettings {
+    backgroundColor: string;
+    foregroundColor: string;
+    weakColor: string;
+    radarColor: string;
+
+    fileName?: string;
+
+    l10n?: {
+        commit: string;
+        repo: string;
+        review: string;
+        pullreq: string;
+        issue: string;
+    };
+}
+
+export interface PieLangSettings {
+    backgroundColor: string;
+    foregroundColor: string;
+
+    fileName?: string;
+}
+
+export interface BaseSettings extends RadarContribSettings, PieLangSettings {
     backgroundColor: string;
     foregroundColor: string;
     strongColor: string;
@@ -118,10 +142,23 @@ export interface BitmapPatternSettings extends BaseSettings {
     ];
 }
 
-export type Settings =
+export interface PieLangOnlySettings extends PieLangSettings {
+    type: 'pie_lang_only';
+}
+
+export interface RadarContribOnlySettings extends RadarContribSettings {
+    type: 'radar_contrib_only';
+}
+
+export type FullSettings =
     | NormalColorSettings
     | SeasonColorSettings
     | RainbowColorSettings
     | BitmapPatternSettings;
+
+export type Settings =
+    | FullSettings
+    | PieLangOnlySettings
+    | RadarContribOnlySettings;
 
 export type SettingFile = Settings | Settings[];
