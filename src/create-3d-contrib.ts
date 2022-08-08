@@ -175,6 +175,7 @@ const addPatternForBitmap = (
         .attr('width', width)
         .attr('height', height)
         .attr('fill', backgroundColor);
+    const path = d3.path();
     for (const [y, bitmapValue] of panelPattern.bitmap.entries()) {
         const bitmap =
             typeof bitmapValue === 'string'
@@ -182,16 +183,15 @@ const addPatternForBitmap = (
                 : bitmapValue;
         for (let x = 0; x < width; x++) {
             if ((bitmap & (1 << (width - x - 1))) !== 0) {
-                pattern
-                    .append('rect')
-                    .attr('x', x)
-                    .attr('y', y)
-                    .attr('width', 1)
-                    .attr('height', 1)
-                    .attr('fill', foregroundColor);
+                path.rect(x, y, 1, 1)
             }
         }
     }
+    pattern
+        .append('path')
+        .attr('stroke', 'none')
+        .attr('fill', foregroundColor)
+        .attr('d', path.toString())
 };
 
 export const addDefines = (
