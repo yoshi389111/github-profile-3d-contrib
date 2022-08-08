@@ -11,7 +11,7 @@ export const createPieLanguage = (
     y: number,
     width: number,
     height: number,
-    settings: type.Settings,
+    settings: type.PieLangSettings,
     isAnimate: boolean
 ): void => {
     if (userInfo.totalContributions === 0) {
