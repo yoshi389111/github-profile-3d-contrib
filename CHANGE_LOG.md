@@ -1,5 +1,15 @@
 # Change Log
 
+## 2022-08-10, 0.7.0 release
+
+* Added Spanish README.
+* Enabled to specify the output destination file name when using settings json
+* Multiple custom definitions can be specified in the settings json.
+* Made it possible to change the label with a custom definition.
+* Added pie_lang_only and radar_contrib_only modes.
+* fix: performance bitmap mode.
+* fix: growing animation of settings json
+
 ## 2022-02-12, 0.6.0 release
 
 * Added git block version.
