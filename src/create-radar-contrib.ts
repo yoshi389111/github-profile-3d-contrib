@@ -22,11 +22,13 @@ export const createRadarContrib = (
     width: number,
     height: number,
     settings: type.RadarContribSettings,
-    isAnimate: boolean
+    isForcedAnimation: boolean
 ): void => {
     const radius = (height / 2) * 0.8;
     const cx = width / 2;
     const cy = (height / 2) * 1.1;
+
+    const isAnimate = settings.growingAnimation || isForcedAnimation;
 
     const commitLabel = settings.l10n ? settings.l10n.commit : 'Commit';
     const issueLabel = settings.l10n ? settings.l10n.issue : 'Issue';

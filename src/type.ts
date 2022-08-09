@@ -37,6 +37,8 @@ export interface RadarContribSettings {
     weakColor: string;
     radarColor: string;
 
+    growingAnimation?: boolean;
+
     fileName?: string;
 
     l10n?: {
@@ -52,6 +54,8 @@ export interface PieLangSettings {
     backgroundColor: string;
     foregroundColor: string;
 
+    growingAnimation?: boolean;
+
     fileName?: string;
 }
 
@@ -61,6 +65,8 @@ export interface BaseSettings extends RadarContribSettings, PieLangSettings {
     strongColor: string;
     weakColor: string;
     radarColor: string;
+
+    growingAnimation?: boolean;
 
     fileName?: string;
 
@@ -76,14 +82,12 @@ export interface BaseSettings extends RadarContribSettings, PieLangSettings {
 
 export interface NormalColorSettings extends BaseSettings {
     type: 'normal';
-    growingAnimation?: boolean;
 
     contribColors: [string, string, string, string, string];
 }
 
 export interface SeasonColorSettings extends BaseSettings {
     type: 'season';
-    growingAnimation?: boolean;
 
     /** first season (Mar. - Jun.) */
     contribColors1: [string, string, string, string, string];
@@ -97,7 +101,6 @@ export interface SeasonColorSettings extends BaseSettings {
 
 export interface RainbowColorSettings extends BaseSettings {
     type: 'rainbow';
-    growingAnimation?: boolean;
 
     saturation: string;
     contribLightness: [string, string, string, string, string];
