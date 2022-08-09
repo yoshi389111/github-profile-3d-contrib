@@ -12,7 +12,7 @@ export const createPieLanguage = (
     width: number,
     height: number,
     settings: type.PieLangSettings,
-    isAnimate: boolean
+    isForcedAnimation: boolean
 ): void => {
     if (userInfo.totalContributions === 0) {
         return;
@@ -31,6 +31,7 @@ export const createPieLanguage = (
         });
     }
 
+    const isAnimate = settings.growingAnimation || isForcedAnimation;
     const animeSteps = 5;
     const animateOpacity = (num: number) =>
         Array<string>(languages.length + animeSteps)
