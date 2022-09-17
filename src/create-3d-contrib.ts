@@ -280,6 +280,7 @@ export const create3DContrib = (
 
         const baseX = offsetX + (week - dayOfWeek) * dx;
         const baseY = offsetY + (week + dayOfWeek) * dy;
+        // ref. https://github.com/yoshi389111/github-profile-3d-contrib/issues/27
         const calHeight = Math.log10(cal.contributionCount / 20 + 1) * 144 + 3;
         const contribLevel = cal.contributionLevel;
 
