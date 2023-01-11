@@ -1,6 +1,6 @@
 {
   "name": "github-profile-3d-contrib",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Generate profile 3D Contributions",
   "main": "dist/index.js",
   "scripts": {

@@ -1,5 +1,10 @@
 # Change Log
 
+## 2023-01-11, 0.7.1 release
+
+* Changed node version from 12 to 16.
+* Changed actions/checkout version from v2 to v3.
+
 ## 2022-08-10, 0.7.0 release
 
 * Added Spanish README.
