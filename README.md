@@ -8,7 +8,7 @@
 
 This GitHub Action creates a GitHub contribution calendar on a 3D profile image.
 
-## How to use (GitHub Actions)
+## How to use (GitHub Actions) - Basic
 
 This action generate your github profile 3d contribute calendar and make a commit to your repo.
 You can also trigger action by yourself after add this action.
@@ -130,6 +130,10 @@ e.g.
 ![](./profile-3d-contrib/profile-green-animate.svg)
 ```
 
+## How to use (GitHub Actions) - Advanced examples
+
+#### [More info in EXAMPLES.md](./EXAMPLES.md)
+
 ## How to use (local)
 
 Set the `GITHUB_TOKEN` environment variable to the value of "personal access token".
@@ -150,6 +154,7 @@ or
 npm run build
 node . USER_NAME
 ```
+
 
 ## Licence
 
