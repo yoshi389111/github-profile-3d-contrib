@@ -26,8 +26,13 @@ export const main = async (): Promise<void> => {
             core.setFailed('MAX_REPOS is NaN');
             return;
         }
+        const year = process.env.YEAR ? Number(process.env.YEAR) : null;
+        if (Number.isNaN(year)) {
+            core.setFailed('YEAR is NaN');
+            return;
+        }
 
-        const response = await client.fetchData(token, userName, maxRepos);
+        const response = await client.fetchData(token, userName, maxRepos, year);
         const userInfo = aggregate.aggregateUserInfo(response);
 
         if (process.env.SETTING_JSON) {
