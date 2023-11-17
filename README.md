@@ -47,7 +47,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: yoshi389111/github-profile-3d-contrib@0.7.1
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
           USERNAME: ${{ github.repository_owner }}
       - name: Commit & Push
         run: |
@@ -64,7 +64,7 @@ This will add the action to the repository.
 
 #### Environment variables
 
-* `GITHUB_TOKEN` : (required) access token
+* `GH_TOKEN` : (required) access token
 * `USERNAME` : (required) target user name (or specify with an argument).
 * `MAX_REPOS` : (optional) max repositories, default 100 - since ver. 0.2.0
 * `SETTING_JSON` : (optional) settings json file path. See `sample-settings/*.json` and `src/type.ts` in `yoshi389111/github-profile-3d-contrib` repository for details. - since ver. 0.6.0
@@ -136,10 +136,10 @@ e.g.
 
 ## How to use (local)
 
-Set the `GITHUB_TOKEN` environment variable to the value of "personal access token".
+Set the `GH_TOKEN` environment variable to the value of "personal access token".
 
 ```shell-session
-export GITHUB_TOKEN=XXXXXXXXXXXXXXXXXXXXX
+export GH_TOKEN=XXXXXXXXXXXXXXXXXXXXX
 ```
 
 Run it with your GitHub user specified.
