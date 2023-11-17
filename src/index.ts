@@ -8,9 +8,9 @@ import * as client from './github-graphql';
 
 export const main = async (): Promise<void> => {
     try {
-        const token = process.env.GITHUB_TOKEN;
+        const token = process.env.GH_TOKEN;
         if (!token) {
-            core.setFailed('GITHUB_TOKEN is empty');
+            core.setFailed('GH_TOKEN is empty');
             return;
         }
         const userName =
