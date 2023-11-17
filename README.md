@@ -58,7 +58,7 @@ jobs:
           git push
 ```
 
-Note: If you also want to include the private repository, register the "personal access token" in the repository and set it to GITHUB_TOKEN specified in the workflow file.
+Note: If you also want to include the private repository, register the "personal access token" in the repository and set it to GH_TOKEN specified in the workflow file.
 
 This will add the action to the repository.
 
