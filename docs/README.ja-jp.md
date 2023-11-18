@@ -48,7 +48,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: yoshi389111/github-profile-3d-contrib@0.7.1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
           USERNAME: ${{ github.repository_owner }}
       - name: Commit & Push
         run: |
@@ -65,7 +65,7 @@ jobs:
 
 #### 環境変数
 
-* `GITHUB_TOKEN` : (必須) アクセストークン
+* `GH_TOKEN` : (必須) アクセストークン
 * `USERNAME` : (必須) 対象のユーザー名. （あるいは引数で指定する）
 * `MAX_REPOS` : (任意) 最大のリポジトリ数。デフォルトは100 - バージョン 0.2.0 で追加
 * `SETTING_JSON` : (任意) 設定JSONファイルパス。詳細は `yoshi389111/github-profile-3d-contrib` リポジトリの `sample-settings/*.json` や `src/type.ts` を参照してください - バージョン 0.6.0 で追加
@@ -132,10 +132,10 @@ example: git block バージョン
 
 ## 使い方 (ローカル)
 
-環境変数 `GITHUB_TOKEN` には「personal access token」を指定してください。
+環境変数 `GH_TOKEN` には「personal access token」を指定してください。
 
 ```shell-session
-export GITHUB_TOKEN=XXXXXXXXXXXXXXXXXXXXX
+export GH_TOKEN=XXXXXXXXXXXXXXXXXXXXX
 ```
 
 GitHubのユーザを指定して実行してください。

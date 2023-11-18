@@ -47,7 +47,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: yoshi389111/github-profile-3d-contrib@0.7.1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
           USERNAME: ${{ github.repository_owner }}
       - name: Commit & Push
         run: |
@@ -132,10 +132,10 @@ ej.
 
 ## Cómo usar (local)
 
-Configura la variable de entorno `GITHUB_TOKEN` con el valor del "token de acceso personal".
+Configura la variable de entorno `GH_TOKEN` con el valor del "token de acceso personal".
 
 ```shell-session
-export GITHUB_TOKEN=XXXXXXXXXXXXXXXXXXXXX
+export GH_TOKEN=XXXXXXXXXXXXXXXXXXXXX
 ```
 
 Ejecútelo con su usuario de GitHub especificado.
