@@ -53,7 +53,7 @@ export interface RadarContribSettings {
 export interface PieLangSettings {
     backgroundColor: string;
     foregroundColor: string;
-
+    maxLanguages: number;
     growingAnimation?: boolean;
 
     fileName?: string;

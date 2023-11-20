@@ -18,7 +18,8 @@ export const createPieLanguage = (
         return;
     }
 
-    const languages = userInfo.contributesLanguage.slice(0, 5);
+    const maxLanguages = settings.maxLanguages || 12;
+    const languages = userInfo.contributesLanguage.slice(0, maxLanguages);
     const sumContrib = languages
         .map((lang) => lang.contributions)
         .reduce((a, b) => a + b, 0);
