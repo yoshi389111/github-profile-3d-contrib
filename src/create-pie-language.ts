@@ -31,7 +31,7 @@ export const createPieLanguage = (
             contributions: otherContributions,
         });
     }
-
+    throw new Error('maxLanguages = ' + maxLanguages);
     const isAnimate = settings.growingAnimation || isForcedAnimation;
     const animeSteps = 5;
     const animateOpacity = (num: number) =>
@@ -43,7 +43,7 @@ export const createPieLanguage = (
     const radius = height / 2;
     const margin = radius / 10;
 
-    const row = 15;
+    const row = 8;
     const offset = (row - languages.length) / 2 + 0.5;
     const fontSize = height / row / 1.5;
 
