@@ -43,7 +43,7 @@ export const createPieLanguage = (
     const radius = height / 2;
     const margin = radius / 10;
 
-    const row = 8;
+    const row = 15;
     const offset = (row - languages.length) / 2 + 0.5;
     const fontSize = height / row / 1.5;
 
