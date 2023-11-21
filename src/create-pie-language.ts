@@ -26,20 +26,30 @@ export const createPieLanguage = (
         maxLanguages = defaultMaxLanguages;
         return;
     }
-    const languages = userInfo.contributesLanguage.slice(0, maxLanguages);
+    const ignoreLanguagesVal = process.env.IGNORE_LANGUAGES
+        ? process.env.IGNORE_LANGUAGES
+        : "";
+    const ignoreLanguages = ignoreLanguagesVal.split(",").map(lang => lang.trim().replace(/\s+/g, '').toLowerCase());
 
-    if (maxLanguages > languages.length) {
-        maxLanguages = languages.length;
+    const filteredLanguages = userInfo.contributesLanguage
+        .filter(lang => !ignoreLanguages.includes(lang.language.trim().replace(/\s+/g, '').toLowerCase()));
+
+    if (maxLanguages > filteredLanguages.length) {
+        maxLanguages = filteredLanguages.length;
     }
 
     if (maxLanguages < defaultMaxLanguages) {
         maxLanguages = defaultMaxLanguages;
     }
 
+    const languages = filteredLanguages.slice(0, maxLanguages);
+
     const sumContrib = languages
         .map((lang) => lang.contributions)
         .reduce((a, b) => a + b, 0);
-    const otherContributions = userInfo.totalCommitContributions - sumContrib;
+
+    const totalContributions = filteredLanguages.reduce((accumulator, currentObject) => accumulator + currentObject.contributions, 0);
+    const otherContributions = totalContributions - sumContrib;
     if (0 < otherContributions) {
         languages.push({
             language: OTHER_NAME,
