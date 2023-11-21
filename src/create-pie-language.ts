@@ -18,7 +18,24 @@ export const createPieLanguage = (
         return;
     }
 
-    const languages = userInfo.contributesLanguage.slice(0, 5);
+    const defaultMaxLanguages = 5;
+    let maxLanguages = process.env.MAX_LANGUAGES
+        ? Number(process.env.MAX_LANGUAGES)
+        : defaultMaxLanguages;
+    if (Number.isNaN(maxLanguages)) {
+        maxLanguages = defaultMaxLanguages;
+        return;
+    }
+    const languages = userInfo.contributesLanguage.slice(0, maxLanguages);
+
+    if (maxLanguages > languages.length) {
+        maxLanguages = languages.length;
+    }
+
+    if (maxLanguages < defaultMaxLanguages) {
+        maxLanguages = defaultMaxLanguages;
+    }
+
     const sumContrib = languages
         .map((lang) => lang.contributions)
         .reduce((a, b) => a + b, 0);
@@ -39,12 +56,12 @@ export const createPieLanguage = (
             .map((d, i) => (i < num ? 0 : Math.min((i - num) / animeSteps, 1)))
             .join(';');
 
-    const radius = height / 2;
+    const radius = height / 2 + (languages.length - defaultMaxLanguages) * 2;
     const margin = radius / 10;
 
-    const row = 8;
+    const row = languages.length + 3;
     const offset = (row - languages.length) / 2 + 0.5;
-    const fontSize = height / row / 1.5;
+    const fontSize = height / row / 1.2;
 
     const pie = d3
         .pie<type.LangInfo>()
