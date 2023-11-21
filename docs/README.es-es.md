@@ -50,12 +50,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           USERNAME: ${{ github.repository_owner }}
       - name: Commit & Push
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add -A .
-          git commit -m "generated"
-          git push
+          run: |
+              git config user.name github-actions
+              git config user.email github-actions@github.com
+              git add -A .
+              git diff --staged --exit-code || (git commit -m "generated" && git push)
 ```
 
 Nota: si también desea incluir el repositorio privado, registre el "token de acceso personal" en el repositorio y configúrelo en GITHUB_TOKEN especificado en el archivo de workflow (flujo de trabajo).
@@ -67,6 +66,8 @@ Esto agregará la acción al repositorio.
 * `GITHUB_TOKEN` : (requerido) token de acceso
 * `USERNAME` : (requerido) nombre de usuario de destino (o especificar con un argumento).
 * `MAX_REPOS` : (opcional) repositorios máximos, predeterminado 100 - desde ver. 0.2.0
+* `MAX_LANGUAGES` :
+* `IGNORE_LANGUAGES` :
 * `SETTING_JSON` : (opcional) configuración de la ruta del archivo json. Ver `sample-settings/*.json` y `src/type.ts` en `yoshi389111/github-profile-3d-contrib` repositorio para más detalles. - desde ver. 0.6.0
 
 ### paso 3. Inicie manualmente la acción
