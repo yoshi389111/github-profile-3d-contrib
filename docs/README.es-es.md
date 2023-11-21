@@ -66,6 +66,8 @@ Esto agregará la acción al repositorio.
 * `GITHUB_TOKEN` : (requerido) token de acceso
 * `USERNAME` : (requerido) nombre de usuario de destino (o especificar con un argumento).
 * `MAX_REPOS` : (opcional) repositorios máximos, predeterminado 100 - desde ver. 0.2.0
+* `MAX_LANGUAGES` :
+* `IGNORE_LANGUAGES` :
 * `SETTING_JSON` : (opcional) configuración de la ruta del archivo json. Ver `sample-settings/*.json` y `src/type.ts` en `yoshi389111/github-profile-3d-contrib` repositorio para más detalles. - desde ver. 0.6.0
 
 ### paso 3. Inicie manualmente la acción
