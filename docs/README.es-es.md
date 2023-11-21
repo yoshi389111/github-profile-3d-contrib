@@ -50,12 +50,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           USERNAME: ${{ github.repository_owner }}
       - name: Commit & Push
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add -A .
-          git commit -m "generated"
-          git push
+          run: |
+              git config user.name github-actions
+              git config user.email github-actions@github.com
+              git add -A .
+              git diff --staged --exit-code || (git commit -m "generated" && git push)
 ```
 
 Nota: si también desea incluir el repositorio privado, registre el "token de acceso personal" en el repositorio y configúrelo en GITHUB_TOKEN especificado en el archivo de workflow (flujo de trabajo).
