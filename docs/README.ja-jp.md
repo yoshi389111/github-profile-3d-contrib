@@ -51,12 +51,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           USERNAME: ${{ github.repository_owner }}
       - name: Commit & Push
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add -A .
-          git commit -m "generated"
-          git push
+          run: |
+              git config user.name github-actions
+              git config user.email github-actions@github.com
+              git add -A .
+              git diff --staged --exit-code || (git commit -m "generated" && git push)
 ```
 
 注：プライベートリポジトリも集計対象とする場合は、「personal access token」をリポジトリに登録し、ワークフローファイルで指定されている GITHUB_TOKEN に設定します。
