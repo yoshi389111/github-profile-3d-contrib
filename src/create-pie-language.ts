@@ -114,7 +114,7 @@ export const createPieLanguage = (
         .enter()
         .append('text')
         .attr('dominant-baseline', 'middle')
-        .text((d) => d.data.language)
+        .text((d) => (Math.round((d.data.contributions / totalContributions) * 10) / 10) + " - " + d.data.language)
         .attr('x', fontSize * 1.2)
         .attr('y', (d) => (d.index + offset) * (height / row))
         .attr('fill', settings.foregroundColor)
