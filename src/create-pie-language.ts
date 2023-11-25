@@ -107,26 +107,23 @@ export const createPieLanguage = (
             .attr('repeatCount', '1');
     }
 
-    // labels
-    const labels = groupLabel
-        .selectAll(null)
-        .data(pieData)
-        .enter()
-        .append('text')
-        .attr('dominant-baseline', 'middle')
-        .text((d) => (Math.round((d.data.contributions / totalContributions) * 10) / 10) + " - " + d.data.language)
-        .attr('x', fontSize * 1.2)
-        .attr('y', (d) => (d.index + offset) * (height / row))
-        .attr('fill', settings.foregroundColor)
-        .attr('font-size', `${fontSize}px`);
-    if (isAnimate) {
-        labels
-            .append('animate')
-            .attr('attributeName', 'fill-opacity')
-            .attr('values', (d, i) => animateOpacity(i))
-            .attr('dur', '3s')
-            .attr('repeatCount', '1');
-    }
+// labels with percentage
+const labels = groupLabel
+    .selectAll(null)
+    .data(pieData)
+    .enter()
+    .append('text')
+    .attr('dominant-baseline', 'middle')
+    .text((d) => {
+        // Calculate the percentage
+        const percentage = (d.data.contributions / totalContributions) * 100;
+        // Format to one decimal place and create the label text
+        return `${d.data.language}: ${percentage.toFixed(1)}%`;
+    })
+    .attr('x', fontSize * 1.2)
+    .attr('y', (d) => (d.index + offset) * (height / row))
+    .attr('fill', settings.foregroundColor)
+    .attr('font-size', `${fontSize}px`);
 
     const arc = d3
         .arc<d3.PieArcDatum<type.LangInfo>>()
