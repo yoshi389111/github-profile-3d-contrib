@@ -147,7 +147,7 @@ export const createPieLanguage = (
         .attr('stroke-width', '2px');
     paths
         .append('title')
-        .text((d) => `${d.data.language} ${d.data.contributions}`);
+        .text((d) => `${Math.round((d.data.contributions / totalContributions) * 10) / 10) + " - " + d.data.language} ${d.data.contributions}`);
     if (isAnimate) {
         paths
             .append('animate')
