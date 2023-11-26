@@ -50,12 +50,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           USERNAME: ${{ github.repository_owner }}
       - name: Commit & Push
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add -A .
-          git commit -m "generated"
-          git push
+          run: |
+              git config user.name github-actions
+              git config user.email github-actions@github.com
+              git add -A .
+              git diff --staged --exit-code || (git commit -m "generated" && git push)
 ```
 
 Note: If you also want to include the private repository, register the "personal access token" in the repository and set it to GITHUB_TOKEN specified in the workflow file.
@@ -67,6 +66,8 @@ This will add the action to the repository.
 * `GITHUB_TOKEN` : (required) access token
 * `USERNAME` : (required) target user name (or specify with an argument).
 * `MAX_REPOS` : (optional) max repositories, default 100 - since ver. 0.2.0
+* `MAX_LANGUAGES` : (optional) maximum number of languages to display on pie chart, default 5.
+* `IGNORE_LANGUAGES` : (optional) comma delimited list of languages to ignore.
 * `SETTING_JSON` : (optional) settings json file path. See `sample-settings/*.json` and `src/type.ts` in `yoshi389111/github-profile-3d-contrib` repository for details. - since ver. 0.6.0
 
 ### step 3. Manually launch the action

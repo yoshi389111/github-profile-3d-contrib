@@ -18,11 +18,38 @@ export const createPieLanguage = (
         return;
     }
 
-    const languages = userInfo.contributesLanguage.slice(0, 5);
+    const defaultMaxLanguages = 5;
+    let maxLanguages = process.env.MAX_LANGUAGES
+        ? Number(process.env.MAX_LANGUAGES)
+        : defaultMaxLanguages;
+    if (Number.isNaN(maxLanguages)) {
+        maxLanguages = defaultMaxLanguages;
+        return;
+    }
+    const ignoreLanguagesVal = process.env.IGNORE_LANGUAGES
+        ? process.env.IGNORE_LANGUAGES
+        : "";
+    const ignoreLanguages = ignoreLanguagesVal.split(",").map(lang => lang.trim().replace(/\s+/g, '').toLowerCase());
+
+    const filteredLanguages = userInfo.contributesLanguage
+        .filter(lang => !ignoreLanguages.includes(lang.language.trim().replace(/\s+/g, '').toLowerCase()));
+
+    if (maxLanguages > filteredLanguages.length) {
+        maxLanguages = filteredLanguages.length;
+    }
+
+    if (maxLanguages < defaultMaxLanguages) {
+        maxLanguages = defaultMaxLanguages;
+    }
+
+    const languages = filteredLanguages.slice(0, maxLanguages);
+
     const sumContrib = languages
         .map((lang) => lang.contributions)
         .reduce((a, b) => a + b, 0);
-    const otherContributions = userInfo.totalCommitContributions - sumContrib;
+
+    const totalContributions = filteredLanguages.reduce((accumulator, currentObject) => accumulator + currentObject.contributions, 0);
+    const otherContributions = totalContributions - sumContrib;
     if (0 < otherContributions) {
         languages.push({
             language: OTHER_NAME,
@@ -39,12 +66,12 @@ export const createPieLanguage = (
             .map((d, i) => (i < num ? 0 : Math.min((i - num) / animeSteps, 1)))
             .join(';');
 
-    const radius = height / 2;
+    const radius = height / 2 + (languages.length - defaultMaxLanguages) * 2;
     const margin = radius / 10;
 
-    const row = 8;
+    const row = languages.length + 3;
     const offset = (row - languages.length) / 2 + 0.5;
-    const fontSize = height / row / 1.5;
+    const fontSize = height / row / 1.2;
 
     const pie = d3
         .pie<type.LangInfo>()
@@ -80,26 +107,23 @@ export const createPieLanguage = (
             .attr('repeatCount', '1');
     }
 
-    // labels
-    const labels = groupLabel
-        .selectAll(null)
-        .data(pieData)
-        .enter()
-        .append('text')
-        .attr('dominant-baseline', 'middle')
-        .text((d) => d.data.language)
-        .attr('x', fontSize * 1.2)
-        .attr('y', (d) => (d.index + offset) * (height / row))
-        .attr('fill', settings.foregroundColor)
-        .attr('font-size', `${fontSize}px`);
-    if (isAnimate) {
-        labels
-            .append('animate')
-            .attr('attributeName', 'fill-opacity')
-            .attr('values', (d, i) => animateOpacity(i))
-            .attr('dur', '3s')
-            .attr('repeatCount', '1');
-    }
+// labels with percentage
+const labels = groupLabel
+    .selectAll(null)
+    .data(pieData)
+    .enter()
+    .append('text')
+    .attr('dominant-baseline', 'middle')
+    .text((d) => {
+        // Calculate the percentage
+        const percentage = (d.data.contributions / totalContributions) * 100;
+        // Format to one decimal place and create the label text
+        return `${d.data.language}: ${percentage.toFixed(1)}%`;
+    })
+    .attr('x', fontSize * 1.2)
+    .attr('y', (d) => (d.index + offset) * (height / row))
+    .attr('fill', settings.foregroundColor)
+    .attr('font-size', `${fontSize}px`);
 
     const arc = d3
         .arc<d3.PieArcDatum<type.LangInfo>>()
