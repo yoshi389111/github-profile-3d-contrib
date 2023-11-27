@@ -33,8 +33,7 @@ export const createPieLanguage = (
 
     const filteredLanguages = userInfo.contributesLanguage
         .filter(lang => !ignoreLanguages.includes(lang.language.trim().replace(/\s+/g, '').toLowerCase()));
-    throw new Error(JSON.stringify(userInfo.contributesLanguage) + JSON.stringify(filteredLanguages));
-    
+
     if (maxLanguages > filteredLanguages.length) {
         maxLanguages = filteredLanguages.length;
     }
@@ -108,23 +107,23 @@ export const createPieLanguage = (
             .attr('repeatCount', '1');
     }
 
-// labels with percentage
-const labels = groupLabel
-    .selectAll(null)
-    .data(pieData)
-    .enter()
-    .append('text')
-    .attr('dominant-baseline', 'middle')
-    .text((d) => {
-        // Calculate the percentage
-        const percentage = (d.data.contributions / totalContributions) * 100;
-        // Format to one decimal place and create the label text
-        return `${d.data.language}: ${percentage.toFixed(1)}%`;
-    })
-    .attr('x', fontSize * 1.2)
-    .attr('y', (d) => (d.index + offset) * (height / row))
-    .attr('fill', settings.foregroundColor)
-    .attr('font-size', `${fontSize}px`);
+    // labels with percentage
+    const labels = groupLabel
+        .selectAll(null)
+        .data(pieData)
+        .enter()
+        .append('text')
+        .attr('dominant-baseline', 'middle')
+        .text((d) => {
+            // Calculate the percentage
+            const percentage = (d.data.contributions / totalContributions) * 100;
+            // Format to one decimal place and create the label text
+            return `${d.data.language}: ${percentage.toFixed(1)}%`;
+        })
+        .attr('x', fontSize * 1.2)
+        .attr('y', (d) => (d.index + offset) * (height / row))
+        .attr('fill', settings.foregroundColor)
+        .attr('font-size', `${fontSize}px`);
 
     const arc = d3
         .arc<d3.PieArcDatum<type.LangInfo>>()
@@ -145,7 +144,7 @@ const labels = groupLabel
         .attr('stroke-width', '2px');
     paths
         .append('title')
-        .text((d) => `${Math.round((d.data.contributions / totalContributions) * 10) / 10) + " - " + d.data.language} ${d.data.contributions}`);
+        .text((d) => `${d.data.language} ${d.data.contributions}`);
     if (isAnimate) {
         paths
             .append('animate')
@@ -154,4 +153,6 @@ const labels = groupLabel
             .attr('dur', '3s')
             .attr('repeatCount', '1');
     }
+
+    throw new Error(JSON.stringify(userInfo.contributesLanguage) + "----------" + JSON.stringify(filteredLanguages));
 };
