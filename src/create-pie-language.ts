@@ -153,6 +153,4 @@ export const createPieLanguage = (
             .attr('dur', '3s')
             .attr('repeatCount', '1');
     }
-
-    throw new Error(JSON.stringify(userInfo.contributesLanguage) + "----------" + JSON.stringify(filteredLanguages));
 };
