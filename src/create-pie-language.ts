@@ -33,7 +33,8 @@ export const createPieLanguage = (
 
     const filteredLanguages = userInfo.contributesLanguage
         .filter(lang => !ignoreLanguages.includes(lang.language.trim().replace(/\s+/g, '').toLowerCase()));
-
+    throw new Error(JSON.stringify(userInfo.contributesLanguage) + JSON.stringify(filteredLanguages));
+    
     if (maxLanguages > filteredLanguages.length) {
         maxLanguages = filteredLanguages.length;
     }
