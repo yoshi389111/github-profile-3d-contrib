@@ -51,12 +51,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           USERNAME: ${{ github.repository_owner }}
       - name: Commit & Push
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add -A .
-          git commit -m "generated"
-          git push
+          run: |
+              git config user.name github-actions
+              git config user.email github-actions@github.com
+              git add -A .
+              git diff --staged --exit-code || (git commit -m "generated" && git push)
 ```
 
 注：プライベートリポジトリも集計対象とする場合は、「personal access token」をリポジトリに登録し、ワークフローファイルで指定されている GITHUB_TOKEN に設定します。
@@ -68,6 +67,8 @@ jobs:
 * `GITHUB_TOKEN` : (必須) アクセストークン
 * `USERNAME` : (必須) 対象のユーザー名. （あるいは引数で指定する）
 * `MAX_REPOS` : (任意) 最大のリポジトリ数。デフォルトは100 - バージョン 0.2.0 で追加
+* `MAX_LANGUAGES` :
+* `IGNORE_LANGUAGES` :
 * `SETTING_JSON` : (任意) 設定JSONファイルパス。詳細は `yoshi389111/github-profile-3d-contrib` リポジトリの `sample-settings/*.json` や `src/type.ts` を参照してください - バージョン 0.6.0 で追加
 
 ### 手順 3. アクションを手動起動する
