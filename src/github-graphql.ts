@@ -11,9 +11,17 @@ export type CommitContributionsByRepository = Array<{
     repository: {
         primaryLanguage: {
             name: string;
-            /** "#RRGGBB" */
             color: string | null;
         } | null;
+        languages?: {
+            edges: Array<{
+                node: {
+                    name: string;
+                    color: string | null;
+                };
+                size: number;
+            }>;
+        };
     };
 }>;
 
@@ -107,6 +115,15 @@ export const fetchFirst = async (
                                 primaryLanguage {
                                     name
                                     color
+                                }
+                                languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
+                                    edges {
+                                        node {
+                                            name
+                                            color
+                                        }
+                                        size
+                                    }
                                 }
                             }
                             contributions {
