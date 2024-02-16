@@ -52,9 +52,9 @@ export const NightViewSettings: type.NormalColorSettings = {
     type: 'normal',
     backgroundColor: '#00000f',
     foregroundColor: '#eeeeff',
-    strongColor: 'rgb(255,200,55)',
+    strongColor: 'rgb(25,60,130)',
     weakColor: '#aaaaaa',
-    radarColor: 'rgb(255,200,55)',
+    radarColor: 'rgb(25,165,240)',
     contribColors: [
         'rgb(25,60,130)',
         'rgb(25,90,210)',
