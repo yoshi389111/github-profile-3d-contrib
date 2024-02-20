@@ -52,9 +52,9 @@ export const NightViewSettings: type.NormalColorSettings = {
     type: 'normal',
     backgroundColor: '#00000f',
     foregroundColor: '#eeeeff',
-    strongColor: 'rgb(255,200,55)',
+    strongColor: 'rgb(25,60,130)',
     weakColor: '#aaaaaa',
-    radarColor: 'rgb(255,200,55)',
+    radarColor: 'rgb(25,165,240)',
     contribColors: [
         'rgb(25,60,130)',
         'rgb(25,90,210)',
@@ -86,6 +86,23 @@ export const NightRainbowSettings: type.RainbowColorSettings = {
     duration: '10s',
     hueRatio: -7,
 };
+
+// export const JunkangSettings: type.NormalColorSettings = {
+//     type: 'normal',
+//     backgroundColor: '#00000f',
+//     foregroundColor: '#eeeeff',
+//     strongColor: 'rgb(25,60,130)',
+//     weakColor: '#aaaaaa',
+//     radarColor: 'rgb(25,165,240)',
+//     contribColors: [
+//         'rgb(25,60,130)',
+//         'rgb(25,90,210)',
+//         'rgb(25,120,220)',
+//         'rgb(25,150,230)',
+//         'rgb(25,165,240)',
+//     ],
+// };
+
 
 export const GitBlockSettings: type.BitmapPatternSettings = {
     type: 'bitmap',
