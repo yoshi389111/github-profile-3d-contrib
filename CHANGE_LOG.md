@@ -1,8 +1,13 @@
 # Change Log
 
+## 2024-11-05, 0.8.0 release
+
+* change node version from  16 to 20
+* changed action/checkout v3 to v4 
+
 ## 2023-01-11, 0.7.1 release
 
-* Changed node version from 12 to 16.
+* Changed node version from 14 to 16.
 * Changed actions/checkout version from v2 to v3.
 
 ## 2022-08-10, 0.7.0 release

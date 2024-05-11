@@ -1,6 +1,6 @@
 {
   "name": "github-profile-3d-contrib",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "description": "Generate profile 3D Contributions",
   "main": "dist/index.js",
   "scripts": {
@@ -58,8 +58,8 @@
     "typescript": "^4.2.4"
   },
   "dependencies": {
-    "@actions/core": "^1.2.7",
-    "@actions/github": "^4.0.0",
+    "@actions/core": "^1.10.1",
+    "@actions/github": "^6.0.0",
     "@types/d3": "^6.3.0",
     "@types/jsdom": "^16.2.10",
     "axios": "^0.21.1",
