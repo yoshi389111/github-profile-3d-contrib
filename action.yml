@@ -3,7 +3,7 @@ description: Generate profile 3D Contributions
 author: yoshi389111
 
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
 
 branding:
