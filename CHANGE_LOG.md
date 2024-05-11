@@ -4,6 +4,7 @@
 
 * change node version from  16 to 20
 * changed action/checkout v3 to v4 
+* updated @actions/core and actions/github
 
 ## 2023-01-11, 0.7.1 release
 
