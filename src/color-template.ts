@@ -437,9 +437,9 @@ export const GitBlockNightSettings: type.BitmapPatternSettings = {
     type: 'bitmap',
     backgroundColor: '#00000f',
     foregroundColor: '#eeeeff',
-    strongColor: '#111133',
-    weakColor: 'gray',
-    radarColor: '#47a042',
+    strongColor: 'rgb(255,200,55)',
+    weakColor: '#aaaaaa',
+    radarColor: 'rgb(255,200,55)',
     contribPatterns: [
         {
             top: {
