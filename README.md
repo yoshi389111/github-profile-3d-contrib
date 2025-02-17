@@ -28,6 +28,10 @@ If you have suggestions or prefer alternative colors, feel free to open an issue
 Example:
 ![image](https://github.com/user-attachments/assets/77911701-10b7-4743-a2e4-e2e2fd8372fa)
 
+Source code changes: https://github.com/melogabriel/melogabriel/blob/b8388b1d306f9038b43c2f7c62ceeffae92b0964/conf/github-profile-3d-contrib.json
+
+
+
 
 
 
