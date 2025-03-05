@@ -44,8 +44,8 @@ jobs:
     runs-on: ubuntu-latest
     name: generate-github-profile-3d-contrib
     steps:
-      - uses: actions/checkout@v3
-      - uses: yoshi389111/github-profile-3d-contrib@0.7.1
+      - uses: actions/checkout@v4
+      - uses: yoshi389111/github-profile-3d-contrib@0.7.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           USERNAME: ${{ github.repository_owner }}
@@ -54,8 +54,9 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add -A .
-          git commit -m "generated"
-          git push
+          if git commit -m "generated"; then
+            git push
+          fi
 ```
 
 Nota: si también desea incluir el repositorio privado, registre el "token de acceso personal" en el repositorio y configúrelo en GITHUB_TOKEN especificado en el archivo de workflow (flujo de trabajo).
