@@ -1,5 +1,11 @@
 # Change Log
 
+## 2025-03-05, 0.7.2 release
+
+* Changed node version from 16 to 20.
+* Changed actions/checkout version from v3 to v4.
+* Update dependent libraries(see package.json).
+
 ## 2023-01-11, 0.7.1 release
 
 * Changed node version from 12 to 16.
