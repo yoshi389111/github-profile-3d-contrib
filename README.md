@@ -1,3 +1,5 @@
+[![GitHub-Profile-3D-Contrib](https://github.com/melogabriel/melogabriel/actions/workflows/profile-3d.yml/badge.svg)](https://github.com/melogabriel/melogabriel/actions/workflows/profile-3d.yml)
+
 # 🔧 Update: Improved Text Visibility & Transparent Background
 
 ## 📝 Changes
