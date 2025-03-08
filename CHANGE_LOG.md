@@ -1,5 +1,9 @@
 # Change Log
 
+## xxxx-xx-xx, 0.8.0 release
+
+* Added environment variable `GITHUB_ENDPOINT`.
+
 ## 2025-03-05, 0.7.2 release
 
 * Changed node version from 16 to 20.
