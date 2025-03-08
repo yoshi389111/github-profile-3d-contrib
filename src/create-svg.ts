@@ -54,7 +54,8 @@ export const createSvg = (
         .attr('y', 0)
         .attr('width', svgWidth)
         .attr('height', svgHeight)
-        .attr('fill', settings.backgroundColor);
+        .attr('fill', settings.backgroundColor)
+        .attr('fill-opacity', settings.backgroundOpacity);
 
     if (settings.type === 'pie_lang_only') {
         // pie chart only

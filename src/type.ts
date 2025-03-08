@@ -33,6 +33,7 @@ export type ContributionLevel =
 
 export interface RadarContribSettings {
     backgroundColor: string;
+    backgroundOpacity: number;
     foregroundColor: string;
     weakColor: string;
     radarColor: string;
@@ -52,6 +53,7 @@ export interface RadarContribSettings {
 
 export interface PieLangSettings {
     backgroundColor: string;
+    backgroundOpacity: number;
     foregroundColor: string;
 
     growingAnimation?: boolean;
@@ -62,6 +64,7 @@ export interface PieLangSettings {
 export interface BaseSettings extends RadarContribSettings, PieLangSettings {
     backgroundColor: string;
     foregroundColor: string;
+    backgroundOpacity: number;
     strongColor: string;
     weakColor: string;
     radarColor: string;
