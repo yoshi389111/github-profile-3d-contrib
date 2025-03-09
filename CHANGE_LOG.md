@@ -3,6 +3,7 @@
 ## xxxx-xx-xx, 0.8.0 release
 
 * Added environment variable `GITHUB_ENDPOINT`.
+* Added environment variable `YEAR`.
 
 ## 2025-03-05, 0.7.2 release
 
