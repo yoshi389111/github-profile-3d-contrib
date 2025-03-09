@@ -1,6 +1,6 @@
 # Change Log
 
-## xxxx-xx-xx, 0.8.0 release
+## 2025-03-09, 0.8.0 release
 
 * Added environment variable `GITHUB_ENDPOINT`.
 * Added environment variable `YEAR`.
