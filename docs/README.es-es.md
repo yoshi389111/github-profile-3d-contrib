@@ -70,6 +70,7 @@ Esto agregará la acción al repositorio.
 * `MAX_REPOS` : (opcional) repositorios máximos, predeterminado 100 - desde ver. 0.2.0
 * `SETTING_JSON` : (opcional) configuración de la ruta del archivo json. Ver `sample-settings/*.json` y `src/type.ts` en `yoshi389111/github-profile-3d-contrib` repositorio para más detalles. - desde ver. 0.6.0
 * `GITHUB_ENDPOINT` : (opcional) endpoint de Github GraphQL. por ejemplo, `https://github.mycompany.com/api/graphql` - desde ver. 0.8.0
+* `YEAR` : (opcional) Si desea generar un calendario pasado, especifique el año. - desde ver. 0.8.0
 
 ### paso 3. Inicie manualmente la acción
 
