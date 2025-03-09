@@ -69,6 +69,7 @@ This will add the action to the repository.
 * `USERNAME` : (required) target user name (or specify with an argument).
 * `MAX_REPOS` : (optional) max repositories, default 100 - since ver. 0.2.0
 * `SETTING_JSON` : (optional) settings json file path. See `sample-settings/*.json` and `src/type.ts` in `yoshi389111/github-profile-3d-contrib` repository for details. - since ver. 0.6.0
+* `GITHUB_ENDPOINT` : (optional) Github GraphQL endpoint. e.g. `https://github.mycompany.com/api/graphql` - since ver. 0.8.0
 
 ### step 3. Manually launch the action
 

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as type from './type';
 
-export const URL = 'https://api.github.com/graphql';
+export const URL = process.env.GITHUB_ENDPOINT || 'https://api.github.com/graphql';
 const maxReposOneQuery = 100;
 
 export type CommitContributionsByRepository = Array<{
