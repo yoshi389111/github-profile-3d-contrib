@@ -141,7 +141,7 @@ export interface BitmapPatternSettings extends BaseSettings {
         ContribPattern,
         ContribPattern,
         ContribPattern,
-        ContribPattern
+        ContribPattern,
     ];
 }
 

@@ -13,7 +13,7 @@ const diffDate = (beforeDate: number, afterDate: number): number =>
 const createGradation = (
     dayOfMonth: number,
     color1: string,
-    color2: string
+    color2: string,
 ): string => {
     let ratio;
     if (dayOfMonth <= 7) {
@@ -34,7 +34,7 @@ const createGradation = (
 const decideSeasonColor = (
     contributionLevel: number,
     settings: type.SeasonColorSettings,
-    date: Date
+    date: Date,
 ): string => {
     const sunday = new Date(date.getTime());
     sunday.setDate(sunday.getDate() - sunday.getDay());
@@ -48,7 +48,7 @@ const decideSeasonColor = (
             return createGradation(
                 dayOfMonth,
                 settings.contribColors2[contributionLevel],
-                settings.contribColors3[contributionLevel]
+                settings.contribColors3[contributionLevel],
             );
         case 10:
         case 11:
@@ -60,7 +60,7 @@ const decideSeasonColor = (
             return createGradation(
                 dayOfMonth,
                 settings.contribColors3[contributionLevel],
-                settings.contribColors4[contributionLevel]
+                settings.contribColors4[contributionLevel],
             );
         case 1:
         case 2:
@@ -72,7 +72,7 @@ const decideSeasonColor = (
             return createGradation(
                 dayOfMonth,
                 settings.contribColors4[contributionLevel],
-                settings.contribColors1[contributionLevel]
+                settings.contribColors1[contributionLevel],
             );
         case 4:
         case 5:
@@ -84,7 +84,7 @@ const decideSeasonColor = (
             return createGradation(
                 dayOfMonth,
                 settings.contribColors1[contributionLevel],
-                settings.contribColors2[contributionLevel]
+                settings.contribColors2[contributionLevel],
             );
         case 7:
         case 8:
@@ -98,7 +98,7 @@ const addNormalColor = (
     path: d3.Selection<SVGRectElement, unknown, null, unknown>,
     contributionLevel: number,
     settings: type.NormalColorSettings,
-    darker: number
+    darker: number,
 ): void => {
     const color = settings.contribColors[contributionLevel];
     path.attr('fill', d3.rgb(color).darker(darker).toString());
@@ -109,7 +109,7 @@ const addSeasonColor = (
     contributionLevel: number,
     settings: type.SeasonColorSettings,
     darker: number,
-    date: Date
+    date: Date,
 ): void => {
     const color = decideSeasonColor(contributionLevel, settings, date);
     path.attr('fill', d3.rgb(color).darker(darker).toString());
@@ -120,7 +120,7 @@ const addRainbowColor = (
     contributionLevel: number,
     settings: type.RainbowColorSettings,
     darker: number,
-    week: number
+    week: number,
 ): void => {
     const offsetHue = week * settings.hueRatio;
     const saturation = settings.saturation;
@@ -143,7 +143,7 @@ type PanelType = 'top' | 'left' | 'right';
 const addBitmapPattern = (
     path: d3.Selection<SVGRectElement, unknown, null, unknown>,
     contributionLevel: number,
-    panel: PanelType
+    panel: PanelType,
 ): void => {
     path.attr('fill', `url(#pattern_${contributionLevel}_${panel})`);
 };
@@ -156,7 +156,7 @@ const addPatternForBitmap = (
     contributionLevel: number,
     panel: PanelType,
     backgroundColor: string,
-    foregroundColor: string
+    foregroundColor: string,
 ): void => {
     const width = Math.max(1, panelPattern.width);
     const height = Math.max(1, panelPattern.bitmap.length);
@@ -196,7 +196,7 @@ const addPatternForBitmap = (
 
 export const addDefines = (
     svg: d3.Selection<SVGSVGElement, unknown, null, unknown>,
-    settings: type.Settings
+    settings: type.Settings,
 ): void => {
     if (settings.type === 'bitmap') {
         const defs = svg.append('defs');
@@ -208,7 +208,7 @@ export const addDefines = (
                 contribLevel,
                 'top',
                 info.top.backgroundColor,
-                info.top.foregroundColor
+                info.top.foregroundColor,
             );
 
             addPatternForBitmap(
@@ -225,7 +225,7 @@ export const addDefines = (
                     d3
                         .rgb(info.top.foregroundColor)
                         .darker(DARKER_LEFT)
-                        .toString()
+                        .toString(),
             );
 
             addPatternForBitmap(
@@ -242,7 +242,7 @@ export const addDefines = (
                     d3
                         .rgb(info.top.foregroundColor)
                         .darker(DARKER_RIGHT)
-                        .toString()
+                        .toString(),
             );
         }
     }
@@ -256,7 +256,7 @@ export const create3DContrib = (
     width: number,
     height: number,
     settings: type.FullSettings,
-    isForcedAnimation = false
+    isForcedAnimation = false,
 ): void => {
     if (userInfo.contributionCalendar.length === 0) {
         return;
@@ -291,8 +291,8 @@ export const create3DContrib = (
             .attr(
                 'transform',
                 `translate(${util.toFixed(baseX)} ${util.toFixed(
-                    baseY - calHeight
-                )})`
+                    baseY - calHeight,
+                )})`,
             );
         if (isAnimate && contribLevel !== 0) {
             bar.append('animateTransform')
@@ -301,10 +301,10 @@ export const create3DContrib = (
                 .attr(
                     'values',
                     `${util.toFixed(baseX)} ${util.toFixed(
-                        baseY - 3
+                        baseY - 3,
                     )};${util.toFixed(baseX)} ${util.toFixed(
-                        baseY - calHeight
-                    )}`
+                        baseY - calHeight,
+                    )}`,
                 )
                 .attr('dur', '3s')
                 .attr('repeatCount', '1');
@@ -324,10 +324,10 @@ export const create3DContrib = (
             .attr(
                 'transform',
                 `skewY(${-ANGLE}) skewX(${util.toFixed(
-                    atan(dxx / 2 / dyy)
+                    atan(dxx / 2 / dyy),
                 )}) scale(${util.toFixed(dxx / widthTop)} ${util.toFixed(
-                    (2 * dyy) / widthTop
-                )})`
+                    (2 * dyy) / widthTop,
+                )})`,
             );
 
         if (settings.type === 'normal') {
@@ -338,7 +338,7 @@ export const create3DContrib = (
                 contribLevel,
                 settings,
                 DARKER_TOP,
-                cal.date
+                cal.date,
             );
         } else if (settings.type === 'rainbow') {
             addRainbowColor(topPanel, contribLevel, settings, DARKER_TOP, week);
@@ -362,8 +362,8 @@ export const create3DContrib = (
             .attr(
                 'transform',
                 `skewY(${ANGLE}) scale(${util.toFixed(
-                    dxx / widthLeft
-                )} ${util.toFixed(scaleLeft)})`
+                    dxx / widthLeft,
+                )} ${util.toFixed(scaleLeft)})`,
             );
 
         if (settings.type === 'normal') {
@@ -374,7 +374,7 @@ export const create3DContrib = (
                 contribLevel,
                 settings,
                 DARKER_LEFT,
-                cal.date
+                cal.date,
             );
         } else if (settings.type === 'rainbow') {
             addRainbowColor(
@@ -382,7 +382,7 @@ export const create3DContrib = (
                 contribLevel,
                 settings,
                 DARKER_LEFT,
-                week
+                week,
             );
         } else if (settings.type === 'bitmap') {
             addBitmapPattern(leftPanel, contribLevel, 'left');
@@ -393,7 +393,7 @@ export const create3DContrib = (
                 .attr('attributeName', 'height')
                 .attr(
                     'values',
-                    `${util.toFixed(3 / scaleLeft)};${util.toFixed(heightLeft)}`
+                    `${util.toFixed(3 / scaleLeft)};${util.toFixed(heightLeft)}`,
                 )
                 .attr('dur', '3s')
                 .attr('repeatCount', '1');
@@ -403,7 +403,7 @@ export const create3DContrib = (
             settings.type === 'bitmap'
                 ? Math.max(
                       1,
-                      settings.contribPatterns[contribLevel].right.width
+                      settings.contribPatterns[contribLevel].right.width,
                   )
                 : dxx;
         const scaleRight = Math.sqrt(dxx ** 2 + dyy ** 2) / widthRight;
@@ -418,10 +418,10 @@ export const create3DContrib = (
             .attr(
                 'transform',
                 `translate(${util.toFixed(dxx)} ${util.toFixed(
-                    dyy
+                    dyy,
                 )}) skewY(${-ANGLE}) scale(${util.toFixed(
-                    dxx / widthRight
-                )} ${util.toFixed(scaleRight)})`
+                    dxx / widthRight,
+                )} ${util.toFixed(scaleRight)})`,
             );
 
         if (settings.type === 'normal') {
@@ -432,7 +432,7 @@ export const create3DContrib = (
                 contribLevel,
                 settings,
                 DARKER_RIGHT,
-                cal.date
+                cal.date,
             );
         } else if (settings.type === 'rainbow') {
             addRainbowColor(
@@ -440,7 +440,7 @@ export const create3DContrib = (
                 contribLevel,
                 settings,
                 DARKER_RIGHT,
-                week
+                week,
             );
         } else if (settings.type === 'bitmap') {
             addBitmapPattern(rightPanel, contribLevel, 'right');
@@ -452,8 +452,8 @@ export const create3DContrib = (
                 .attr(
                     'values',
                     `${util.toFixed(3 / scaleRight)};${util.toFixed(
-                        heightRight
-                    )}`
+                        heightRight,
+                    )}`,
                 )
                 .attr('dur', '3s')
                 .attr('repeatCount', '1');

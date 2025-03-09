@@ -1,0 +1,12 @@
+{
+  "type": "season",
+  "backgroundColor": "#ffffff",
+  "foregroundColor": "#00000f",
+  "strongColor": "#111133",
+  "weakColor": "gray",
+  "radarColor": "#47a042",
+  "contribColors1": ["#efefef", "#ffed4a", "#ffc402", "#fe9400", "#fa6100"],
+  "contribColors2": ["#efefef", "#999999", "#cccccc", "#dddddd", "#eeeeee"],
+  "contribColors3": ["#efefef", "#ffe7ff", "#edaeda", "#e492ca", "#ba7aad"],
+  "contribColors4": ["#efefef", "#d8e887", "#8cc569", "#47a042", "#1d6a23"]
+}

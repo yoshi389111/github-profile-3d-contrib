@@ -1,7 +1,8 @@
 import axios from 'axios';
 import * as type from './type';
 
-export const URL = process.env.GITHUB_ENDPOINT || 'https://api.github.com/graphql';
+export const URL =
+    process.env.GITHUB_ENDPOINT || 'https://api.github.com/graphql';
 const maxReposOneQuery = 100;
 
 export type CommitContributionsByRepository = Array<{
@@ -60,7 +61,7 @@ export type ResponseType = {
         {
             message: string;
             // snip
-        }
+        },
     ];
 };
 
@@ -75,7 +76,7 @@ export type ResponseNextType = {
         {
             message: string;
             // snip
-        }
+        },
     ];
 };
 
@@ -147,7 +148,7 @@ export const fetchFirst = async (
 export const fetchNext = async (
     token: string,
     userName: string,
-    cursor: string
+    cursor: string,
 ): Promise<ResponseNextType> => {
     const headers = {
         Authorization: `bearer ${token}`,
