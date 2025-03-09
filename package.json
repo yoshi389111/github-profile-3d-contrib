@@ -1,6 +1,6 @@
 {
   "name": "github-profile-3d-contrib",
-  "version": "0.7.2",
+  "version": "0.8.0",
   "description": "Generate profile 3D Contributions",
   "main": "dist/index.js",
   "scripts": {
@@ -40,7 +40,9 @@
   "author": "yoshi389111",
   "license": "MIT",
   "devDependencies": {
+    "@types/d3": "^7.4.3",
     "@types/jest": "^29.5.14",
+    "@types/jsdom": "^21.1.7",
     "@types/node": "^22.13.9",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
@@ -60,8 +62,6 @@
   "dependencies": {
     "@actions/core": "^1.11.1",
     "@actions/github": "^6.0.0",
-    "@types/d3": "^7.4.3",
-    "@types/jsdom": "^21.1.7",
     "axios": "^1.8.1",
     "d3": "^7.9.0",
     "jsdom": "^26.0.0"
