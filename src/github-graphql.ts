@@ -82,7 +82,7 @@ export type ResponseNextType = {
 export const fetchFirst = async (
     token: string,
     userName: string,
-    year: number | null
+    year: number | null = null,
 ): Promise<ResponseType> => {
     const yearArgs = year
         ? `(from:"${year}-01-01T00:00:00.000Z", to:"${year}-12-31T23:59:59.000Z")`
@@ -184,7 +184,7 @@ export const fetchData = async (
     token: string,
     userName: string,
     maxRepos: number,
-    year: number | null
+    year: number | null = null,
 ): Promise<ResponseType> => {
     const res1 = await fetchFirst(token, userName, year);
     const result = res1.data;
