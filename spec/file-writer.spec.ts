@@ -1,8 +1,8 @@
 import { writeFile, OUTPUT_FOLDER } from "../src/file-writer";
-import { rmdirSync, readFileSync } from 'fs';
+import { rmSync, readFileSync } from 'fs';
 
 afterEach(() => {
-    rmdirSync(OUTPUT_FOLDER, { recursive: true });
+    rmSync(OUTPUT_FOLDER, { recursive: true, force: true });
 });
 
 describe('file-writer', () => {

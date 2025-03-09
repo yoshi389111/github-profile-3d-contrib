@@ -19,7 +19,7 @@ const radarX = width - radarWidth - 40;
 export const createSvg = (
     userInfo: type.UserInfo,
     settings: type.Settings,
-    isForcedAnimation: boolean
+    isForcedAnimation: boolean,
 ): string => {
     let svgWidth = width;
     let svgHeight = height;
@@ -32,7 +32,7 @@ export const createSvg = (
     }
 
     const fakeDom = new JSDOM(
-        '<!DOCTYPE html><html><body><div class="container"></div></body></html>'
+        '<!DOCTYPE html><html><body><div class="container"></div></body></html>',
     );
     const container = d3.select(fakeDom.window.document).select('.container');
     const svg = container
@@ -43,7 +43,7 @@ export const createSvg = (
         .attr('viewBox', `0 0 ${svgWidth} ${svgHeight}`);
 
     svg.append('style').html(
-        '* { font-family: "Ubuntu", "Helvetica", "Arial", sans-serif; }'
+        '* { font-family: "Ubuntu", "Helvetica", "Arial", sans-serif; }',
     );
 
     contrib.addDefines(svg, settings);
@@ -66,7 +66,7 @@ export const createSvg = (
             pieWidth,
             pieHeight,
             settings,
-            isForcedAnimation
+            isForcedAnimation,
         );
     } else if (settings.type === 'radar_contrib_only') {
         // radar chart only
@@ -78,7 +78,7 @@ export const createSvg = (
             radarWidth,
             radarHeight,
             settings,
-            isForcedAnimation
+            isForcedAnimation,
         );
     } else {
         // 3D-Contrib Calendar
@@ -90,7 +90,7 @@ export const createSvg = (
             width,
             height,
             settings,
-            isForcedAnimation
+            isForcedAnimation,
         );
 
         // radar chart
@@ -102,7 +102,7 @@ export const createSvg = (
             radarWidth,
             radarHeight,
             settings,
-            isForcedAnimation
+            isForcedAnimation,
         );
 
         // pie chart
@@ -114,7 +114,7 @@ export const createSvg = (
             pieWidth,
             pieHeight,
             settings,
-            isForcedAnimation
+            isForcedAnimation,
         );
 
         const group = svg.append('g');
@@ -155,13 +155,13 @@ export const createSvg = (
                 'transform',
                 `translate(${positionXStar - 32}, ${
                     positionYStar - 28
-                }), scale(2)`
+                }), scale(2)`,
             )
             .append('path')
             .attr('fill-rule', 'evenodd')
             .attr(
                 'd',
-                'M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25zm0 2.445L6.615 5.5a.75.75 0 01-.564.41l-3.097.45 2.24 2.184a.75.75 0 01.216.664l-.528 3.084 2.769-1.456a.75.75 0 01.698 0l2.77 1.456-.53-3.084a.75.75 0 01.216-.664l2.24-2.183-3.096-.45a.75.75 0 01-.564-.41L8 2.694v.001z'
+                'M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25zm0 2.445L6.615 5.5a.75.75 0 01-.564.41l-3.097.45 2.24 2.184a.75.75 0 01.216.664l-.528 3.084 2.769-1.456a.75.75 0 01.698 0l2.77 1.456-.53-3.084a.75.75 0 01.216-.664l2.24-2.183-3.096-.45a.75.75 0 01-.564-.41L8 2.694v.001z',
             )
             .attr('fill', settings.foregroundColor);
 
@@ -187,13 +187,13 @@ export const createSvg = (
                 'transform',
                 `translate(${positionXFork - 32}, ${
                     positionYFork - 28
-                }), scale(2)`
+                }), scale(2)`,
             )
             .append('path')
             .attr('fill-rule', 'evenodd')
             .attr(
                 'd',
-                'M5 3.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.122a2.25 2.25 0 10-1.5 0v.878A2.25 2.25 0 005.75 8.5h1.5v2.128a2.251 2.251 0 101.5 0V8.5h1.5a2.25 2.25 0 002.25-2.25v-.878a2.25 2.25 0 10-1.5 0v.878a.75.75 0 01-.75.75h-4.5A.75.75 0 015 6.25v-.878zm3.75 7.378a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm3-8.75a.75.75 0 100-1.5.75.75 0 000 1.5z'
+                'M5 3.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.122a2.25 2.25 0 10-1.5 0v.878A2.25 2.25 0 005.75 8.5h1.5v2.128a2.251 2.251 0 101.5 0V8.5h1.5a2.25 2.25 0 002.25-2.25v-.878a2.25 2.25 0 10-1.5 0v.878a.75.75 0 01-.75.75h-4.5A.75.75 0 015 6.25v-.878zm3.75 7.378a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm3-8.75a.75.75 0 100-1.5.75.75 0 000 1.5z',
             )
             .attr('fill', settings.foregroundColor);
 
@@ -216,7 +216,7 @@ export const createSvg = (
                 userInfo.contributionCalendar.length - 1
             ].date;
         const period = `${util.toIsoDate(startDate)} / ${util.toIsoDate(
-            endDate
+            endDate,
         )}`;
 
         group

@@ -1,0 +1,15 @@
+{
+  "type": "normal",
+  "backgroundColor": "#00000f",
+  "foregroundColor": "#eeeeff",
+  "strongColor": "rgb(255,200,55)",
+  "weakColor": "#aaaaaa",
+  "radarColor": "rgb(255,200,55)",
+  "contribColors": [
+    "rgb(25,60,130)",
+    "rgb(25,90,210)",
+    "rgb(25,120,220)",
+    "rgb(25,150,230)",
+    "rgb(25,165,240)"
+  ]
+}

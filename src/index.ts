@@ -32,7 +32,12 @@ export const main = async (): Promise<void> => {
             return;
         }
 
-        const response = await client.fetchData(token, userName, maxRepos, year);
+        const response = await client.fetchData(
+            token,
+            userName,
+            maxRepos,
+            year,
+        );
         const userInfo = aggregate.aggregateUserInfo(response);
 
         if (process.env.SETTING_JSON) {
@@ -44,7 +49,7 @@ export const main = async (): Promise<void> => {
                     settingInfo.fileName || 'profile-customize.svg';
                 f.writeFile(
                     fileName,
-                    create.createSvg(userInfo, settingInfo, false)
+                    create.createSvg(userInfo, settingInfo, false),
                 );
             }
         } else {
@@ -54,51 +59,51 @@ export const main = async (): Promise<void> => {
 
             f.writeFile(
                 'profile-green-animate.svg',
-                create.createSvg(userInfo, settings, true)
+                create.createSvg(userInfo, settings, true),
             );
             f.writeFile(
                 'profile-green.svg',
-                create.createSvg(userInfo, settings, false)
+                create.createSvg(userInfo, settings, false),
             );
 
             // Northern hemisphere
             f.writeFile(
                 'profile-season-animate.svg',
-                create.createSvg(userInfo, template.NorthSeasonSettings, true)
+                create.createSvg(userInfo, template.NorthSeasonSettings, true),
             );
             f.writeFile(
                 'profile-season.svg',
-                create.createSvg(userInfo, template.NorthSeasonSettings, false)
+                create.createSvg(userInfo, template.NorthSeasonSettings, false),
             );
 
             // Southern hemisphere
             f.writeFile(
                 'profile-south-season-animate.svg',
-                create.createSvg(userInfo, template.SouthSeasonSettings, true)
+                create.createSvg(userInfo, template.SouthSeasonSettings, true),
             );
             f.writeFile(
                 'profile-south-season.svg',
-                create.createSvg(userInfo, template.SouthSeasonSettings, false)
+                create.createSvg(userInfo, template.SouthSeasonSettings, false),
             );
 
             f.writeFile(
                 'profile-night-view.svg',
-                create.createSvg(userInfo, template.NightViewSettings, true)
+                create.createSvg(userInfo, template.NightViewSettings, true),
             );
 
             f.writeFile(
                 'profile-night-green.svg',
-                create.createSvg(userInfo, template.NightGreenSettings, true)
+                create.createSvg(userInfo, template.NightGreenSettings, true),
             );
 
             f.writeFile(
                 'profile-night-rainbow.svg',
-                create.createSvg(userInfo, template.NightRainbowSettings, true)
+                create.createSvg(userInfo, template.NightRainbowSettings, true),
             );
 
             f.writeFile(
                 'profile-gitblock.svg',
-                create.createSvg(userInfo, template.GitBlockSettings, true)
+                create.createSvg(userInfo, template.GitBlockSettings, true),
             );
         }
     } catch (error) {

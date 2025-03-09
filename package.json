@@ -25,12 +25,12 @@
       "ts"
     ],
     "transform": {
-      "^.+\\.(ts|js)$": "ts-jest"
-    },
-    "globals": {
-      "ts-jest": {
-        "tsConfigFile": "tsconfig.json"
-      }
+      "^.+\\.(ts|js)$": [
+        "ts-jest",
+        {
+          "tsconfig": "tsconfig.json"
+        }
+      ]
     },
     "testMatch": [
       "**/spec/*.(spec|test).(ts|js)"

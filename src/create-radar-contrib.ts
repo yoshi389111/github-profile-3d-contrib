@@ -22,7 +22,7 @@ export const createRadarContrib = (
     width: number,
     height: number,
     settings: type.RadarContribSettings,
-    isForcedAnimation: boolean
+    isForcedAnimation: boolean,
 ): void => {
     const radius = (height / 2) * 0.8;
     const cx = width / 2;
@@ -61,18 +61,18 @@ export const createRadarContrib = (
     const total = data.length;
     const posX = (level: number, num: number) =>
         util.toFixed(
-            radius * (level / levels) * Math.sin((num / total) * radians)
+            radius * (level / levels) * Math.sin((num / total) * radians),
         );
     const posY = (level: number, num: number) =>
         util.toFixed(
-            radius * (level / levels) * -Math.cos((num / total) * radians)
+            radius * (level / levels) * -Math.cos((num / total) * radians),
         );
 
     const group = svg
         .append('g')
         .attr(
             'transform',
-            `translate(${util.toFixed(x + cx)}, ${util.toFixed(y + cy)})`
+            `translate(${util.toFixed(x + cx)}, ${util.toFixed(y + cy)})`,
         );
 
     for (let j = 0; j < levels; j++) {

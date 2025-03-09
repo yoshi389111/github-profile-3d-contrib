@@ -29,7 +29,7 @@ const compare = (num1: number, num2: number): number => {
 };
 
 export const aggregateUserInfo = (
-    response: client.ResponseType
+    response: client.ResponseType,
 ): type.UserInfo => {
     if (!response.data) {
         if (response.errors && response.errors.length) {
@@ -45,7 +45,7 @@ export const aggregateUserInfo = (
         .map((week) => ({
             contributionCount: week.contributionCount,
             contributionLevel: toNumberContributionLevel(
-                week.contributionLevel
+                week.contributionLevel,
             ),
             date: new Date(week.date),
         }));
@@ -69,7 +69,7 @@ export const aggregateUserInfo = (
             }
         });
     const languages: Array<type.LangInfo> = Object.values(
-        contributesLanguage
+        contributesLanguage,
     ).sort((obj1, obj2) => -compare(obj1.contributions, obj2.contributions));
 
     const totalForkCount = user.repositories.nodes
