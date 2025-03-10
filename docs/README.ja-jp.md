@@ -73,6 +73,46 @@ jobs:
 * `GITHUB_ENDPOINT` : (任意) Github GraphQL エンドポイント。 例： `https://github.mycompany.com/api/graphql` - バージョン 0.8.0 で追加
 * `YEAR` : (任意) 過去のカレンダーを出力する場合、年を指定 - バージョン 0.8.0 で追加
 
+#### `GITHUB_TOKEN` について
+
+サンプルで `GITHUB_TOKEN` 環境変数に設定している `secrets.GITHUB_TOKEN` は、github が自動で作成する特別なアクセストークンです。
+
+- GitHub Docs: [自動トークン認証](https://docs.github.com/ja/actions/security-for-github-actions/security-guides/automatic-token-authentication)
+
+パブリックリポジトリのみを対象にコントリビューションカレンダーを生成したい場合には、この値を登録してください。
+手動でシークレットを作る必要はありません。
+
+また、プライベートリポジトリでの活動状況をコントリビューションカレンダーに含めたい場合には、ユーザーの設定項目にある「Public profile」の「Profile settings」で「Include private contributions on my profile」にチェックを付けてください。
+
+さらに、プライベートリポジトリでの言語情報も集計の対象にしたい場合などでは、適切な権限を持ったアクセストークンを作成してください。
+そのアクセストークンを、シークレットとして任意の名前で登録してください（例えば、`MY_PERSONAL_ACCESS_TOKEN`）。
+ただし、ユーザ作成のシークレットは、`GITHUB_` から始めることはできないので、注意してください。
+
+- GitHub Docs: [About secrets](https://docs.github.com/ja/actions/security-for-github-actions/security-guides/about-secrets)
+
+そのシークレットを `GITHUB_TOKEN` 環境変数に指定してください。
+
+```diff
+          env:
+-           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++           GITHUB_TOKEN: ${{ secrets.MY_PERSONAL_ACCESS_TOKEN }}
+            USERNAME: ${{ github.repository_owner }}
+```
+
+#### スケジュール時間について
+
+サンプルでは UTC の 18 時に起動するようにしています。
+これは作者のローカルタイムである JST での深夜に動作させるためです。
+
+実際に使用する場合には任意の時間に変更してもらって問題ありません。
+ただし指定は UTC でする必要があるので、注意してください。
+
+```yaml
+on:
+  schedule: # 03:00 JST == 18:00 UTC
+    - cron: "0 18 * * *"
+```
+
 ### 手順 3. アクションを手動起動する
 
 追加したアクションを起動してください。

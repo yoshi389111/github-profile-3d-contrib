@@ -72,6 +72,45 @@ Esto agregará la acción al repositorio.
 * `GITHUB_ENDPOINT` : (opcional) endpoint de Github GraphQL. por ejemplo, `https://github.mycompany.com/api/graphql` - desde ver. 0.8.0
 * `YEAR` : (opcional) Si desea generar un calendario pasado, especifique el año. - desde ver. 0.8.0
 
+#### Acerca de `GITHUB_TOKEN`
+
+El conjunto `secrets.GITHUB_TOKEN` en la variable de entorno `GITHUB_TOKEN` en el ejemplo es un token de acceso especial creado automáticamente por GitHub.
+
+- GitHub Docs: [Automatic token authentication](https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication)
+
+Si desea generar un calendario de contribuciones solo para repositorios públicos, registre este valor.
+No es necesario crear un secreto manualmente.
+
+Además, si desea incluir la actividad en sus repositorios privados en su calendario de contribuciones, marque "Include private contributions on my profile" en la sección "Profile settings" de "Public profile" en su configuración de usuario.
+
+Además, si desea agregar información de idioma de repositorios privados, cree un token de acceso con los permisos adecuados.
+Registre ese token de acceso como un secreto con el nombre que desee (por ejemplo, `MY_PERSONAL_ACCESS_TOKEN`).
+Sin embargo, tenga en cuenta que los secretos creados por el usuario no pueden comenzar con `GITHUB_`.
+
+- GitHub Docs: [About secrets](https://docs.github.com/en/actions/security-for-github-actions/security-guides/about-secrets)
+
+Especifique ese secreto en la variable de entorno `GITHUB_TOKEN`.
+
+```diff
+          env:
+-           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++           GITHUB_TOKEN: ${{ secrets.MY_PERSONAL_ACCESS_TOKEN }}
+            USERNAME: ${{ github.repository_owner }}
+```
+
+#### Sobre el momento de programar
+
+En el ejemplo, está configurado para comenzar a las 18:00 UTC. Esto se debe a que se ejecutará a medianoche JST, que es la hora local del autor.
+
+```yaml
+on:
+  schedule: # 03:00 JST == 18:00 UTC
+    - cron: "0 18 * * *"
+```
+
+Siéntete libre de cambiarlo a cualquier hora que desees cuando lo uses.
+Sin embargo, ten en cuenta que debe especificarse en UTC.
+
 ### paso 3. Inicie manualmente la acción
 
 Inicie la acción añadida.
