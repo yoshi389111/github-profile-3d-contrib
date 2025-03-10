@@ -72,6 +72,46 @@ This will add the action to the repository.
 * `GITHUB_ENDPOINT` : (optional) Github GraphQL endpoint. e.g. `https://github.mycompany.com/api/graphql` - since ver. 0.8.0
 * `YEAR` : (optional) For past calendars, specify the year. - since ver. 0.8.0
 
+#### About `GITHUB_TOKEN`
+
+The `secrets.GITHUB_TOKEN` set in the `GITHUB_TOKEN` environment variable in the sample is a special access token automatically created by GitHub.
+
+- GitHub Docs: [Automatic token authentication](https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication)
+
+If you want to generate a contribution calendar for public repositories only, register this value.
+There is no need to create a secret manually.
+
+Also, if you want to include activity in your private repositories in your contribution calendar, check "Include private contributions on my profile" in the "Profile settings" section of "Public profile" in your user settings.
+
+Furthermore, if you want to aggregate language information from private repositories, create an access token with the appropriate permissions.
+Register that access token as a secret with any name you like (For example, `MY_PERSONAL_ACCESS_TOKEN`).
+However, please note that user-created secrets cannot start with `GITHUB_`.
+
+- GitHub Docs: [About secrets](https://docs.github.com/en/actions/security-for-github-actions/security-guides/about-secrets)
+
+Specify that secret in the `GITHUB_TOKEN` environment variable.
+
+```diff
+          env:
+-           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
++           GITHUB_TOKEN: ${{ secrets.MY_PERSONAL_ACCESS_TOKEN }}
+            USERNAME: ${{ github.repository_owner }}
+```
+
+#### About the time to schedule
+
+In the sample, it is set to start at 18:00 UTC.
+This is because it will run at midnight JST, which is the author's local time.
+
+```yaml
+on:
+  schedule: # 03:00 JST == 18:00 UTC
+    - cron: "0 18 * * *"
+```
+
+Feel free to change it to any time you like when actually using it.
+However, please note that it must be specified in UTC.
+
 ### step 3. Manually launch the action
 
 Launch the added action.
