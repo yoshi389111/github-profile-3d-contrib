@@ -1,3 +1,45 @@
+[![GitHub-Profile-3D-Contrib](https://github.com/melogabriel/melogabriel/actions/workflows/profile-3d.yml/badge.svg)](https://github.com/melogabriel/melogabriel/actions/workflows/profile-3d.yml)
+
+# 🔧 Update: Improved Text Visibility & Transparent Background
+
+## 📝 Changes
+
+- Adjusted the foregroundColor values to enhance text visibility on both light and dark backgrounds.
+- Set the backgroundColor to transparent to ensure better adaptability across different layouts.
+- The new text color choice (#333333 or #666666) provides optimal readability in various display conditions.
+
+## 🎨 Color & Background Adjustments
+
+Text Colors:
+
+- Before: Lighter gray (#aaaaaa, hsl(125, 52%, 10%), etc.)
+- After: Medium-dark colors like #666666 or #333333 for improved contrast.
+
+Background:
+
+- Before: Light-colored background (#f8f8f8, hsl(48, 100%, 50%), etc.).
+- After: Fully transparent ("none") to ensure seamless integration on any background.
+
+## ✅ Why This Matters
+
+- Ensures the .svg remains readable on both light and dark themes.
+- Prevents text from blending into the background, especially with transparency.
+- Allows for better customization when used in different UI contexts.
+
+If you have suggestions or prefer alternative colors, feel free to open an issue or PR! 🚀
+
+See an example of use on my Github profile: https://github.com/melogabriel/melogabriel
+
+Example:
+![image](https://github.com/user-attachments/assets/77911701-10b7-4743-a2e4-e2e2fd8372fa)
+
+Source code changes: https://github.com/melogabriel/melogabriel/blob/b8388b1d306f9038b43c2f7c62ceeffae92b0964/conf/github-profile-3d-contrib.json
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 # GitHub Profile 3D Contrib.
 
 ![svg](https://raw.githubusercontent.com/yoshi389111/github-profile-3d-contrib/main/docs/demo/profile-gitblock.svg)
