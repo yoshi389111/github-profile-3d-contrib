@@ -1,0 +1,16 @@
+name: Update latest branch on release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  update-latest-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update latest branch
+        run: |
+          git fetch origin
+          git branch -f latest ${{ github.event.release.tag_name }}
+          git push origin latest --force
