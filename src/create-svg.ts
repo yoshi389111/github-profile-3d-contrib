@@ -3,6 +3,7 @@ import { JSDOM } from 'jsdom';
 import * as contrib from './create-3d-contrib';
 import * as pie from './create-pie-language';
 import * as radar from './create-radar-contrib';
+import * as colors from './create-css-colors';
 import * as util from './utils';
 import * as type from './type';
 
@@ -43,7 +44,10 @@ export const createSvg = (
         .attr('viewBox', `0 0 ${svgWidth} ${svgHeight}`);
 
     svg.append('style').html(
-        '* { font-family: "Ubuntu", "Helvetica", "Arial", sans-serif; }',
+        [
+            '* { font-family: "Ubuntu", "Helvetica", "Arial", sans-serif; }',
+            colors.createCssColors(settings),
+        ].join('\n'),
     );
 
     contrib.addDefines(svg, settings);
@@ -54,7 +58,7 @@ export const createSvg = (
         .attr('y', 0)
         .attr('width', svgWidth)
         .attr('height', svgHeight)
-        .attr('fill', settings.backgroundColor);
+        .attr('class', 'fill-bg');
 
     if (settings.type === 'pie_lang_only') {
         // pie chart only
@@ -130,7 +134,7 @@ export const createSvg = (
             .attr('y', positionYContrib)
             .attr('text-anchor', 'end')
             .text(util.inertThousandSeparator(userInfo.totalContributions))
-            .attr('fill', settings.strongColor);
+            .attr('class', 'fill-strong');
 
         const contribLabel = settings.l10n
             ? settings.l10n.contrib
@@ -143,7 +147,7 @@ export const createSvg = (
             .attr('text-anchor', 'start')
             .attr('text-anchor', 'start')
             .text(contribLabel)
-            .attr('fill', settings.foregroundColor);
+            .attr('class', 'fill-fg');
 
         const positionXStar = (width * 5) / 10;
         const positionYStar = positionYContrib;
@@ -163,7 +167,7 @@ export const createSvg = (
                 'd',
                 'M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25zm0 2.445L6.615 5.5a.75.75 0 01-.564.41l-3.097.45 2.24 2.184a.75.75 0 01.216.664l-.528 3.084 2.769-1.456a.75.75 0 01.698 0l2.77 1.456-.53-3.084a.75.75 0 01.216-.664l2.24-2.183-3.096-.45a.75.75 0 01-.564-.41L8 2.694v.001z',
             )
-            .attr('fill', settings.foregroundColor);
+            .attr('class', 'fill-fg');
 
         group
             .append('text')
@@ -173,7 +177,7 @@ export const createSvg = (
             .attr('y', positionYStar)
             .attr('text-anchor', 'start')
             .text(util.toScale(userInfo.totalStargazerCount))
-            .attr('fill', settings.foregroundColor)
+            .attr('class', 'fill-fg')
             .append('title')
             .text(userInfo.totalStargazerCount);
 
@@ -195,7 +199,7 @@ export const createSvg = (
                 'd',
                 'M5 3.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.122a2.25 2.25 0 10-1.5 0v.878A2.25 2.25 0 005.75 8.5h1.5v2.128a2.251 2.251 0 101.5 0V8.5h1.5a2.25 2.25 0 002.25-2.25v-.878a2.25 2.25 0 10-1.5 0v.878a.75.75 0 01-.75.75h-4.5A.75.75 0 015 6.25v-.878zm3.75 7.378a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm3-8.75a.75.75 0 100-1.5.75.75 0 000 1.5z',
             )
-            .attr('fill', settings.foregroundColor);
+            .attr('class', 'fill-fg');
 
         group
             .append('text')
@@ -205,7 +209,7 @@ export const createSvg = (
             .attr('y', positionYFork)
             .attr('text-anchor', 'start')
             .text(util.toScale(userInfo.totalForkCount))
-            .attr('fill', settings.foregroundColor)
+            .attr('class', 'fill-fg')
             .append('title')
             .text(userInfo.totalForkCount);
 
@@ -227,7 +231,7 @@ export const createSvg = (
             .attr('dominant-baseline', 'hanging')
             .attr('text-anchor', 'end')
             .text(period)
-            .attr('fill', settings.weakColor);
+            .attr('class', 'fill-weak');
     }
     return container.html();
 };

@@ -84,6 +84,8 @@ export interface NormalColorSettings extends BaseSettings {
     type: 'normal';
 
     contribColors: [string, string, string, string, string];
+
+    darkMode?: NormalColorSettings;
 }
 
 export interface SeasonColorSettings extends BaseSettings {
@@ -97,6 +99,8 @@ export interface SeasonColorSettings extends BaseSettings {
     contribColors3: [string, string, string, string, string];
     /** Fourth season (Dec. - Mar.) */
     contribColors4: [string, string, string, string, string];
+
+    darkMode?: SeasonColorSettings;
 }
 
 export interface RainbowColorSettings extends BaseSettings {
@@ -106,6 +110,8 @@ export interface RainbowColorSettings extends BaseSettings {
     contribLightness: [string, string, string, string, string];
     duration: string; // ex. '10s'
     hueRatio: number; // hue per weeks
+
+    darkMode?: RainbowColorSettings;
 }
 
 export interface PanelPattern {
@@ -143,6 +149,8 @@ export interface BitmapPatternSettings extends BaseSettings {
         ContribPattern,
         ContribPattern,
     ];
+
+    darkMode?: BitmapPatternSettings;
 }
 
 export interface PieLangOnlySettings extends PieLangSettings {

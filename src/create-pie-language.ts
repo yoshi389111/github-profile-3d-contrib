@@ -69,7 +69,7 @@ export const createPieLanguage = (
         .attr('width', fontSize)
         .attr('height', fontSize)
         .attr('fill', (d) => d.data.color)
-        .attr('stroke', settings.backgroundColor)
+        .attr('class', 'stroke-bg')
         .attr('stroke-width', '1px');
     if (isAnimate) {
         markers
@@ -90,7 +90,7 @@ export const createPieLanguage = (
         .text((d) => d.data.language)
         .attr('x', fontSize * 1.2)
         .attr('y', (d) => (d.index + offset) * (height / row))
-        .attr('fill', settings.foregroundColor)
+        .attr('class', 'fill-fg')
         .attr('font-size', `${fontSize}px`);
     if (isAnimate) {
         labels
@@ -115,8 +115,8 @@ export const createPieLanguage = (
         .enter()
         .append('path')
         .attr('d', arc)
-        .style('fill', (d) => d.data.color)
-        .attr('stroke', settings.backgroundColor)
+        .style('fill', (d) => d.data.color) // style -> attr ?
+        .attr('class', 'stroke-bg')
         .attr('stroke-width', '2px');
     paths
         .append('title')

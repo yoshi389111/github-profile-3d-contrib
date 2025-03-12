@@ -1,5 +1,9 @@
 # Change Log
 
+## 2025-03-13, 0.9.0 release
+
+* You can now specify `darkMode` definitions in custom JSON files that can be specified in `SETTINGS_JSON`. This allows you to generate svg that supports both light mode and dark mode. The light mode type and dark mode type must match. See `sample-settings/green.dual.json` for details.
+
 ## 2025-03-09, 0.8.0 release
 
 * Added environment variable `GITHUB_ENDPOINT`.

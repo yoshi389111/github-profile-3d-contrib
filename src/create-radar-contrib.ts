@@ -34,7 +34,7 @@ export const createRadarContrib = (
     const issueLabel = settings.l10n ? settings.l10n.issue : 'Issue';
     const pullReqLabel = settings.l10n ? settings.l10n.pullreq : 'PullReq';
     const reviewLabel = settings.l10n ? settings.l10n.review : 'Review';
-    const RepoLabel = settings.l10n ? settings.l10n.repo : 'Repo';
+    const repoLabel = settings.l10n ? settings.l10n.repo : 'Repo';
 
     const data = [
         {
@@ -54,7 +54,7 @@ export const createRadarContrib = (
             value: userInfo.totalPullRequestReviewContributions,
         },
         {
-            name: RepoLabel,
+            name: repoLabel,
             value: userInfo.totalRepositoryContributions,
         },
     ];
@@ -85,7 +85,7 @@ export const createRadarContrib = (
             .attr('y1', (d, i) => posY(j + 1, i))
             .attr('x2', (d, i) => posX(j + 1, i + 1))
             .attr('y2', (d, i) => posY(j + 1, i + 1))
-            .style('stroke', settings.weakColor)
+            .attr('class', 'stroke-weak')
             .style('stroke-dasharray', '4 4')
             .style('stroke-width', '1px');
     }
@@ -101,7 +101,7 @@ export const createRadarContrib = (
         .attr('dominant-baseline', 'auto')
         .attr('x', util.toFixed(radius / 50))
         .attr('y', (d, i) => util.toFixed(-radius * ((i + 1) / levels)))
-        .attr('fill', settings.weakColor);
+        .attr('class', 'fill-weak');
 
     const axis = group
         .selectAll(null)
@@ -115,7 +115,7 @@ export const createRadarContrib = (
         .attr('y1', (d, i) => posY(1, i))
         .attr('x2', (d, i) => posX(levels, i))
         .attr('y2', (d, i) => posY(levels, i))
-        .style('stroke', settings.weakColor)
+        .attr('class', 'stroke-weak')
         .style('stroke-dasharray', '4 4')
         .style('stroke-width', '1px');
 
@@ -126,7 +126,7 @@ export const createRadarContrib = (
         .attr('dominant-baseline', 'middle')
         .attr('x', (d, i) => posX(1.25 * levels, i))
         .attr('y', (d, i) => posY(1.17 * levels, i))
-        .attr('fill', settings.foregroundColor)
+        .attr('class', 'fill-fg')
         .append('title')
         .text((d) => d.value);
 
@@ -137,11 +137,8 @@ export const createRadarContrib = (
 
     const radar = group
         .append('polygon')
-        .style('stroke-width', '4px')
-        .style('stroke', settings.radarColor)
-        .attr('points', points)
-        .style('fill', settings.radarColor)
-        .style('fill-opacity', 0.5);
+        .attr('class', 'radar')
+        .attr('points', points);
     if (isAnimate) {
         const level0 = toLevel(0);
         const points0 = data
