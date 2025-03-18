@@ -155,10 +155,15 @@ export interface BitmapPatternSettings extends BaseSettings {
 
 export interface PieLangOnlySettings extends PieLangSettings {
     type: 'pie_lang_only';
+
+    darkMode?: PieLangOnlySettings;
+
 }
 
 export interface RadarContribOnlySettings extends RadarContribSettings {
     type: 'radar_contrib_only';
+
+    darkMode?: RadarContribOnlySettings;
 }
 
 export type FullSettings =
