@@ -11,12 +11,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Generate 3D Contribution Graph
+      - name: Install Dependencies
+        run: sudo apt update && sudo apt install wget
+
+      - name: Download and Set Up 3D Contribution Generator
         run: |
-          curl -L https://github.com/yoshi389111/github-profile-3d-contrib/releases/latest/download/github-profile-3d-contrib-linux \
-          -o github-profile-3d-contrib
+          wget https://github.com/yoshi389111/github-profile-3d-contrib/releases/latest/download/github-profile-3d-contrib-linux -O github-profile-3d-contrib
           chmod +x github-profile-3d-contrib
-          ./github-profile-3d-contrib --user tharun977 --format svg --output ./profile-3d-contrib/
+          mv github-profile-3d-contrib /usr/local/bin/
+
+      - name: Generate 3D Contribution Graph
+        run: github-profile-3d-contrib --user tharun977 --format svg --output ./profile-3d-contrib/
 
       - name: Commit and Push Changes
         run: |
