@@ -1,0 +1,35 @@
+name: Generate 3D GitHub Contributions
+
+on:
+  workflow_dispatch:  # Allows manual execution
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install Dependencies
+        run: sudo apt update && sudo apt install wget -y
+
+      - name: Download and Set Up 3D Contribution Generator
+        run: |
+          wget https://github.com/yoshi389111/github-profile-3d-contrib/releases/latest/download/github-profile-3d-contrib-linux -O github-profile-3d-contrib
+          chmod +x github-profile-3d-contrib
+          mv github-profile-3d-contrib /usr/local/bin/
+
+      - name: Create Output Directory
+        run: mkdir -p profile-3d-contrib
+
+      - name: Generate 3D Contribution Graph
+        run: github-profile-3d-contrib --user tharun977 --format svg --output ./profile-3d-contrib/
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add profile-3d-contrib/profile-night-view.svg
+          git commit -m "Update 3D Contribution Graph" || exit 0
+          git push
