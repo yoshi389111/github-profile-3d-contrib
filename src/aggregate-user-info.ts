@@ -40,6 +40,12 @@ export const aggregateUserInfo = (
     }
 
     const user = response.data.user;
+    if (!user) {
+        if (response.errors && response.errors.length) {
+            throw new Error(response.errors[0].message);
+        }
+        throw new Error('GraphQL response data.user is null');
+    }
     const calendar = user.contributionsCollection.contributionCalendar.weeks
         .flatMap((week) => week.contributionDays)
         .map((week) => ({

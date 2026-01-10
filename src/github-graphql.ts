@@ -77,7 +77,7 @@ export type ResponseType = {
                 totalRepositoryContributions: number;
             };
             repositories: Repositories;
-        };
+        } | null;
     };
     errors?: [
         {
@@ -92,7 +92,7 @@ export type ResponseNextType = {
     data?: {
         user: {
             repositories: Repositories;
-        };
+        } | null;
     };
     errors?: [
         {
@@ -210,12 +210,14 @@ export const fetchData = async (
     const res1 = await fetchFirst(token, userName, calendarRange);
     const result = res1.data;
 
-    if (result && result.user.repositories.nodes.length === maxReposOneQuery) {
+    // GraphQL may return `{ data: { user: null }, errors: [...] }` (rate limit, auth issues, etc).
+    // Never assume `user` exists here; let the caller handle errors gracefully.
+    if (result && result.user && result.user.repositories.nodes.length === maxReposOneQuery) {
         const repos1 = result.user.repositories;
         let cursor = repos1.edges[repos1.edges.length - 1].cursor;
         while (repos1.nodes.length < maxRepos) {
             const res2 = await fetchNext(token, userName, cursor);
-            if (res2.data) {
+            if (res2.data && res2.data.user) {
                 const repos2 = res2.data.user.repositories;
                 repos1.nodes.push(...repos2.nodes);
                 if (repos2.nodes.length !== maxReposOneQuery) {
