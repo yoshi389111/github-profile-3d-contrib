@@ -1284,6 +1284,38 @@ const main = async () => {
             };
         }
         const response = await client.fetchData(token, userName, maxRepos, calendarRange);
+        const isRateLimitError = (msg) => {
+            if (!msg)
+                return false;
+            return /rate limit|rateLimit|exceeded/i.test(msg);
+        };
+        if (!response || !response.data) {
+            if (response && response.errors && response.errors.length) {
+                const msg = response.errors[0].message || '';
+                if (isRateLimitError(msg)) {
+                    core.info('GitHub GraphQL rate limit exceeded: ' + msg);
+                    // exit gracefully so workflows don't crash.
+                    return;
+                }
+                core.setFailed(response.errors[0].message);
+            }
+            else {
+                console.error('Empty GraphQL response:', JSON.stringify(response, null, 2));
+                core.setFailed('Empty GraphQL response');
+            }
+            return;
+        }
+        if (!response.data.user) {
+            // If the API responded with errors, treat rate-limit specially.
+            const errMsg = response.errors && response.errors.length ? response.errors[0].message : undefined;
+            if (isRateLimitError(errMsg)) {
+                core.info('GitHub GraphQL rate limit exceeded: ' + errMsg);
+                return;
+            }
+            console.error('GraphQL response missing `user` field:', JSON.stringify(response, null, 2));
+            core.setFailed('GraphQL response missing `user` — check USERNAME and token');
+            return;
+        }
         const userInfo = aggregate.aggregateUserInfo(response);
         if (process.env.SETTING_JSON) {
             const settingFile = r.readSettingJson(process.env.SETTING_JSON);
