@@ -1236,6 +1236,7 @@ const parseDateFromEnv = (value, label) => {
     }
     return date;
 };
+const DAY_MS = 24 * 60 * 60 * 1000;
 const main = async () => {
     try {
         const token = process.env.GITHUB_TOKEN;
@@ -1264,8 +1265,8 @@ const main = async () => {
         const calendarEndEnv = process.env.CALENDAR_END_DATE;
         let calendarRange;
         if (calendarStartEnv) {
-            const startDate = parseDateFromEnv(calendarStartEnv, 'CALENDAR_START_DATE');
-            if (!startDate) {
+            const userStartDate = parseDateFromEnv(calendarStartEnv, 'CALENDAR_START_DATE');
+            if (!userStartDate) {
                 return;
             }
             const endDate = calendarEndEnv
@@ -1274,12 +1275,22 @@ const main = async () => {
             if (!endDate) {
                 return;
             }
-            if (startDate > endDate) {
+            if (userStartDate > endDate) {
                 core.setFailed('CALENDAR_START_DATE must be on or before CALENDAR_END_DATE');
                 return;
             }
+            // GitHub GraphQL rejects contribution ranges spanning > 1 year.
+            // Keep the graph up to date by ending at `endDate` (defaults to now), and shifting the start forward when needed.
+            // Also avoid showing "pre-history" null days by never starting earlier than the user-provided start.
+            const rollingStartDate = new Date(endDate.getTime() - 364 * DAY_MS);
+            const effectiveStartDate = userStartDate > rollingStartDate
+                ? userStartDate
+                : rollingStartDate;
+            if (effectiveStartDate.getTime() !== userStartDate.getTime()) {
+                core.info(`CALENDAR_START_DATE adjusted to ${effectiveStartDate.toISOString()} to satisfy GitHub's 1-year limit`);
+            }
             calendarRange = {
-                from: startDate.toISOString(),
+                from: effectiveStartDate.toISOString(),
                 to: endDate.toISOString(),
             };
         }

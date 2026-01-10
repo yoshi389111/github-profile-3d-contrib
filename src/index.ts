@@ -15,6 +15,8 @@ const parseDateFromEnv = (value: string, label: string): Date | null => {
     return date;
 };
 
+const DAY_MS = 24 * 60 * 60 * 1000;
+
 export const main = async (): Promise<void> => {
     try {
         const token = process.env.GITHUB_TOKEN;
@@ -46,11 +48,11 @@ export const main = async (): Promise<void> => {
         let calendarRange: client.CalendarRangeArgs | undefined;
 
         if (calendarStartEnv) {
-            const startDate = parseDateFromEnv(
+            const userStartDate = parseDateFromEnv(
                 calendarStartEnv,
                 'CALENDAR_START_DATE',
             );
-            if (!startDate) {
+            if (!userStartDate) {
                 return;
             }
             const endDate = calendarEndEnv
@@ -62,14 +64,29 @@ export const main = async (): Promise<void> => {
             if (!endDate) {
                 return;
             }
-            if (startDate > endDate) {
+            if (userStartDate > endDate) {
                 core.setFailed(
                     'CALENDAR_START_DATE must be on or before CALENDAR_END_DATE',
                 );
                 return;
             }
+
+            // GitHub GraphQL rejects contribution ranges spanning > 1 year.
+            // Keep the graph up to date by ending at `endDate` (defaults to now), and shifting the start forward when needed.
+            // Also avoid showing "pre-history" null days by never starting earlier than the user-provided start.
+            const rollingStartDate = new Date(endDate.getTime() - 364 * DAY_MS);
+            const effectiveStartDate =
+                userStartDate > rollingStartDate
+                    ? userStartDate
+                    : rollingStartDate;
+            if (effectiveStartDate.getTime() !== userStartDate.getTime()) {
+                core.info(
+                    `CALENDAR_START_DATE adjusted to ${effectiveStartDate.toISOString()} to satisfy GitHub's 1-year limit`,
+                );
+            }
+
             calendarRange = {
-                from: startDate.toISOString(),
+                from: effectiveStartDate.toISOString(),
                 to: endDate.toISOString(),
             };
         } else if (year !== null) {
