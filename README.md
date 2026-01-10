@@ -102,7 +102,13 @@ In the sample, only `GITHUB_TOKEN` and `USERNAME` are specified as environment v
 - `CALENDAR_START_DATE` : (optional) ISO-formatted date (for example `2024-01-01`). When set, the contribution calendar starts from this date instead of the `YEAR` range.
 - `CALENDAR_END_DATE` : (optional) ISO-formatted date. Defaults to the current date when omitted. Only to be used when `CALENDAR_START_DATE` is used.
 
-`CALENDAR_START_DATE` overrides `YEAR` so that you can track contributions from the custom start date through today or through `CALENDAR_END_DATE` if you provide one. When you do not need a custom range, leave those variables unset and the workflow continues to fetch a single year as before.
+`CALENDAR_START_DATE` overrides `YEAR` so that you can track contributions for a custom range.
+
+> [!IMPORTANT]
+> GitHub GraphQL rejects `contributionsCollection(from, to)` ranges that span more than 1 year.
+> If `CALENDAR_START_DATE` + `CALENDAR_END_DATE` (or “today” when `CALENDAR_END_DATE` is omitted) would exceed 1 year, this action automatically **shifts the start date forward** to keep a rolling ~365-day window ending at `CALENDAR_END_DATE`/today.
+
+When you do not need a custom range, leave those variables unset and the workflow continues to fetch a single year as before.
 
 If you want to store the generated SVGs somewhere other than the repository root, set `OUTPUT_PATH`. The folder will be created automatically, so you can push straight into `assets/profile-3d-contrib` without moving files.
 
