@@ -44,6 +44,12 @@ const aggregateUserInfo = (response) => {
         }
     }
     const user = response.data.user;
+    if (!user) {
+        if (response.errors && response.errors.length) {
+            throw new Error(response.errors[0].message);
+        }
+        throw new Error('GraphQL response data.user is null');
+    }
     const calendar = user.contributionsCollection.contributionCalendar.weeks
         .flatMap((week) => week.contributionDays)
         .map((week) => ({
@@ -1023,10 +1029,13 @@ exports.createSvg = createSvg;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.writeFile = exports.OUTPUT_FOLDER = void 0;
 const fs_1 = __nccwpck_require__(79896);
-exports.OUTPUT_FOLDER = './profile-3d-contrib';
+const DEFAULT_OUTPUT_FOLDER = './profile-3d-contrib';
+exports.OUTPUT_FOLDER = DEFAULT_OUTPUT_FOLDER;
+const getOutputFolder = () => process.env.OUTPUT_PATH || DEFAULT_OUTPUT_FOLDER;
 const writeFile = (fileName, content) => {
-    (0, fs_1.mkdirSync)(exports.OUTPUT_FOLDER, { recursive: true });
-    (0, fs_1.writeFileSync)(`${exports.OUTPUT_FOLDER}/${fileName}`, content);
+    const folder = getOutputFolder();
+    (0, fs_1.mkdirSync)(folder, { recursive: true });
+    (0, fs_1.writeFileSync)(`${folder}/${fileName}`, content);
 };
 exports.writeFile = writeFile;
 //# sourceMappingURL=file-writer.js.map
@@ -1046,10 +1055,24 @@ exports.fetchData = exports.fetchNext = exports.fetchFirst = exports.URL = void 
 const axios_1 = __importDefault(__nccwpck_require__(87269));
 exports.URL = process.env.GITHUB_ENDPOINT || 'https://api.github.com/graphql';
 const maxReposOneQuery = 100;
-const fetchFirst = async (token, userName, year = null) => {
-    const yearArgs = year
-        ? `(from:"${year}-01-01T00:00:00.000Z", to:"${year}-12-31T23:59:59.000Z")`
-        : '';
+const buildCalendarArgs = (range) => {
+    if (!range) {
+        return '';
+    }
+    const args = [];
+    if (range.from) {
+        args.push(`from:"${range.from}"`);
+    }
+    if (range.to) {
+        args.push(`to:"${range.to}"`);
+    }
+    if (args.length === 0) {
+        return '';
+    }
+    return `(${args.join(', ')})`;
+};
+const fetchFirst = async (token, userName, calendarRange) => {
+    const calendarArgs = buildCalendarArgs(calendarRange);
     const headers = {
         Authorization: `bearer ${token}`,
     };
@@ -1057,7 +1080,7 @@ const fetchFirst = async (token, userName, year = null) => {
         query: `
             query($login: String!) {
                 user(login: $login) {
-                    contributionsCollection${yearArgs} {
+                    contributionsCollection${calendarArgs} {
                         contributionCalendar {
                             isHalloween
                             totalContributions
@@ -1138,15 +1161,17 @@ const fetchNext = async (token, userName, cursor) => {
 };
 exports.fetchNext = fetchNext;
 /** Fetch data from GitHub GraphQL */
-const fetchData = async (token, userName, maxRepos, year = null) => {
-    const res1 = await (0, exports.fetchFirst)(token, userName, year);
+const fetchData = async (token, userName, maxRepos, calendarRange) => {
+    const res1 = await (0, exports.fetchFirst)(token, userName, calendarRange);
     const result = res1.data;
-    if (result && result.user.repositories.nodes.length === maxReposOneQuery) {
+    // GraphQL may return `{ data: { user: null }, errors: [...] }` (rate limit, auth issues, etc).
+    // Never assume `user` exists here; let the caller handle errors gracefully.
+    if (result && result.user && result.user.repositories.nodes.length === maxReposOneQuery) {
         const repos1 = result.user.repositories;
         let cursor = repos1.edges[repos1.edges.length - 1].cursor;
         while (repos1.nodes.length < maxRepos) {
             const res2 = await (0, exports.fetchNext)(token, userName, cursor);
-            if (res2.data) {
+            if (res2.data && res2.data.user) {
                 const repos2 = res2.data.user.repositories;
                 repos1.nodes.push(...repos2.nodes);
                 if (repos2.nodes.length !== maxReposOneQuery) {
@@ -1202,6 +1227,15 @@ const create = __importStar(__nccwpck_require__(63336));
 const f = __importStar(__nccwpck_require__(46045));
 const r = __importStar(__nccwpck_require__(11820));
 const client = __importStar(__nccwpck_require__(54652));
+const parseDateFromEnv = (value, label) => {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) {
+        core.setFailed(`${label} is invalid`);
+        return null;
+    }
+    return date;
+};
+const DAY_MS = 24 * 60 * 60 * 1000;
 const main = async () => {
     try {
         const token = process.env.GITHUB_TOKEN;
@@ -1230,7 +1264,80 @@ const main = async () => {
             process.exitCode = 1;
             return;
         }
-        const response = await client.fetchData(token, userName, maxRepos, year);
+        const calendarStartEnv = process.env.CALENDAR_START_DATE;
+        const calendarEndEnv = process.env.CALENDAR_END_DATE;
+        let calendarRange;
+        if (calendarStartEnv) {
+            const userStartDate = parseDateFromEnv(calendarStartEnv, 'CALENDAR_START_DATE');
+            if (!userStartDate) {
+                return;
+            }
+            const endDate = calendarEndEnv
+                ? parseDateFromEnv(calendarEndEnv, 'CALENDAR_END_DATE')
+                : new Date();
+            if (!endDate) {
+                return;
+            }
+            if (userStartDate > endDate) {
+                core.setFailed('CALENDAR_START_DATE must be on or before CALENDAR_END_DATE');
+                return;
+            }
+            // GitHub GraphQL rejects contribution ranges spanning > 1 year.
+            // Keep the graph up to date by ending at `endDate` (defaults to now), and shifting the start forward when needed.
+            // Also avoid showing "pre-history" null days by never starting earlier than the user-provided start.
+            const rollingStartDate = new Date(endDate.getTime() - 364 * DAY_MS);
+            const effectiveStartDate = userStartDate > rollingStartDate
+                ? userStartDate
+                : rollingStartDate;
+            if (effectiveStartDate.getTime() !== userStartDate.getTime()) {
+                core.info(`CALENDAR_START_DATE adjusted to ${effectiveStartDate.toISOString()} to satisfy GitHub's 1-year limit`);
+            }
+            calendarRange = {
+                from: effectiveStartDate.toISOString(),
+                to: endDate.toISOString(),
+            };
+        }
+        else if (year !== null) {
+            const startOfYear = new Date(Date.UTC(year, 0, 1, 0, 0, 0));
+            const endOfYear = new Date(Date.UTC(year, 11, 31, 23, 59, 59));
+            calendarRange = {
+                from: startOfYear.toISOString(),
+                to: endOfYear.toISOString(),
+            };
+        }
+        const response = await client.fetchData(token, userName, maxRepos, calendarRange);
+        const isRateLimitError = (msg) => {
+            if (!msg)
+                return false;
+            return /rate limit|rateLimit|exceeded/i.test(msg);
+        };
+        if (!response || !response.data) {
+            if (response && response.errors && response.errors.length) {
+                const msg = response.errors[0].message || '';
+                if (isRateLimitError(msg)) {
+                    core.info('GitHub GraphQL rate limit exceeded: ' + msg);
+                    // exit gracefully so workflows don't crash.
+                    return;
+                }
+                core.setFailed(response.errors[0].message);
+            }
+            else {
+                console.error('Empty GraphQL response:', JSON.stringify(response, null, 2));
+                core.setFailed('Empty GraphQL response');
+            }
+            return;
+        }
+        if (!response.data.user) {
+            // If the API responded with errors, treat rate-limit specially.
+            const errMsg = response.errors && response.errors.length ? response.errors[0].message : undefined;
+            if (isRateLimitError(errMsg)) {
+                core.info('GitHub GraphQL rate limit exceeded: ' + errMsg);
+                return;
+            }
+            console.error('GraphQL response missing `user` field:', JSON.stringify(response, null, 2));
+            core.setFailed('GraphQL response missing `user` — check USERNAME and token');
+            return;
+        }
         const userInfo = aggregate.aggregateUserInfo(response);
         if (process.env.SETTING_JSON) {
             const settingFile = r.readSettingJson(process.env.SETTING_JSON);

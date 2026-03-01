@@ -5,6 +5,28 @@ export const URL =
     process.env.GITHUB_ENDPOINT || 'https://api.github.com/graphql';
 const maxReposOneQuery = 100;
 
+export interface CalendarRangeArgs {
+    from?: string;
+    to?: string;
+}
+
+const buildCalendarArgs = (range?: CalendarRangeArgs): string => {
+    if (!range) {
+        return '';
+    }
+    const args: string[] = [];
+    if (range.from) {
+        args.push(`from:"${range.from}"`);
+    }
+    if (range.to) {
+        args.push(`to:"${range.to}"`);
+    }
+    if (args.length === 0) {
+        return '';
+    }
+    return `(${args.join(', ')})`;
+};
+
 export type CommitContributionsByRepository = Array<{
     contributions: {
         totalCount: number;
@@ -55,7 +77,7 @@ export type ResponseType = {
                 totalRepositoryContributions: number;
             };
             repositories: Repositories;
-        };
+        } | null;
     };
     errors?: [
         {
@@ -70,7 +92,7 @@ export type ResponseNextType = {
     data?: {
         user: {
             repositories: Repositories;
-        };
+        } | null;
     };
     errors?: [
         {
@@ -83,11 +105,9 @@ export type ResponseNextType = {
 export const fetchFirst = async (
     token: string,
     userName: string,
-    year: number | null = null,
+    calendarRange?: CalendarRangeArgs,
 ): Promise<ResponseType> => {
-    const yearArgs = year
-        ? `(from:"${year}-01-01T00:00:00.000Z", to:"${year}-12-31T23:59:59.000Z")`
-        : '';
+    const calendarArgs = buildCalendarArgs(calendarRange);
     const headers = {
         Authorization: `bearer ${token}`,
     };
@@ -95,7 +115,7 @@ export const fetchFirst = async (
         query: `
             query($login: String!) {
                 user(login: $login) {
-                    contributionsCollection${yearArgs} {
+                    contributionsCollection${calendarArgs} {
                         contributionCalendar {
                             isHalloween
                             totalContributions
@@ -185,17 +205,19 @@ export const fetchData = async (
     token: string,
     userName: string,
     maxRepos: number,
-    year: number | null = null,
+    calendarRange?: CalendarRangeArgs,
 ): Promise<ResponseType> => {
-    const res1 = await fetchFirst(token, userName, year);
+    const res1 = await fetchFirst(token, userName, calendarRange);
     const result = res1.data;
 
-    if (result && result.user.repositories.nodes.length === maxReposOneQuery) {
+    // GraphQL may return `{ data: { user: null }, errors: [...] }` (rate limit, auth issues, etc).
+    // Never assume `user` exists here; let the caller handle errors gracefully.
+    if (result && result.user && result.user.repositories.nodes.length === maxReposOneQuery) {
         const repos1 = result.user.repositories;
         let cursor = repos1.edges[repos1.edges.length - 1].cursor;
         while (repos1.nodes.length < maxRepos) {
             const res2 = await fetchNext(token, userName, cursor);
-            if (res2.data) {
+            if (res2.data && res2.data.user) {
                 const repos2 = res2.data.user.repositories;
                 repos1.nodes.push(...repos2.nodes);
                 if (repos2.nodes.length !== maxReposOneQuery) {

@@ -98,6 +98,30 @@ In the sample, only `GITHUB_TOKEN` and `USERNAME` are specified as environment v
 - `SETTING_JSON` : (optional) settings json file path. See `sample-settings/*.json` and `src/type.ts` in `yoshi389111/github-profile-3d-contrib` repository for details. - since ver. 0.6.0
 - `GITHUB_ENDPOINT` : (optional) Github GraphQL endpoint. For example, if you want to create a contribution calendar based on your company's GitHub Enterprise activity instead of GitHub.com, set this environment variable. e.g. `https://github.mycompany.com/api/graphql` - since ver. 0.8.0
 - `YEAR` : (optional) For past calendars, specify the year. This is intended to be specified when running the tool from the command line. - since ver. 0.8.0
+- `OUTPUT_PATH` : (optional) override the destination folder for generated assets; defaults to `./profile-3d-contrib`. Use this when wanting to write directly in a custom directory.
+- `CALENDAR_START_DATE` : (optional) ISO-formatted date (for example `2024-01-01`). When set, the contribution calendar starts from this date instead of the `YEAR` range.
+- `CALENDAR_END_DATE` : (optional) ISO-formatted date. Defaults to the current date when omitted. Only to be used when `CALENDAR_START_DATE` is used.
+
+`CALENDAR_START_DATE` overrides `YEAR` so that you can track contributions for a custom range.
+
+> [!IMPORTANT]
+> GitHub GraphQL rejects `contributionsCollection(from, to)` ranges that span more than 1 year.
+> If `CALENDAR_START_DATE` + `CALENDAR_END_DATE` (or “today” when `CALENDAR_END_DATE` is omitted) would exceed 1 year, this action automatically **shifts the start date forward** to keep a rolling ~365-day window ending at `CALENDAR_END_DATE`/today.
+
+When you do not need a custom range, leave those variables unset and the workflow continues to fetch a single year as before.
+
+If you want to store the generated SVGs somewhere other than the repository root, set `OUTPUT_PATH`. The folder will be created automatically, so you can push straight into `assets/profile-3d-contrib` without moving files.
+
+```yaml
+      - uses: yoshi389111/github-profile-3d-contrib@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          USERNAME: ${{ github.repository_owner }}
+        #   Additional Optional commands
+        #   OUTPUT_PATH: profile-3d-contrib/
+        #   CALENDAR_START_DATE: 2024-02-01
+        #   CALENDAR_END_DATE: 2025-01-31
+```
 
 #### About `GITHUB_TOKEN`
 

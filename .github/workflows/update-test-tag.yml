@@ -1,0 +1,53 @@
+name: Update Test Tag
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build action (updates dist/index.js)
+        run: npm run build
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit dist changes (if any)
+        run: |
+          git add dist/
+          if git diff --cached --quiet; then
+            echo "No dist changes to commit."
+          else
+            git commit -m "chore: rebuild dist"
+            git push origin HEAD:main
+          fi
+
+      - name: Create or update tag 'test' to HEAD
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Updating tag 'test' to HEAD ($GITHUB_SHA)"
+          git tag -f test HEAD
+          git push --force origin refs/tags/test
