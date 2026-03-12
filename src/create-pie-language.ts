@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import * as type from './type';
 
-const OTHER_NAME = 'other';
+const OTHER_NAME = 'Others';
 const OTHER_COLOR = '#444444';
 
 export const createPieLanguage = (
