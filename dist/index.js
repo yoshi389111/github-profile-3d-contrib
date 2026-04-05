@@ -459,10 +459,8 @@ const createColors = (settings) => {
         settings.type == 'bitmap') {
         cssColors.push(`.fill-strong { fill: ${settings.strongColor}; }`);
     }
-    if (settings.type != 'pie_lang_only') {
-        cssColors.push(`.fill-weak { fill: ${settings.weakColor}; }`, `.stroke-weak { stroke: ${settings.weakColor}; }`);
-        cssColors.push('.radar {', 'stroke-width: 4px;', `stroke: ${settings.radarColor};`, `fill: ${settings.radarColor};`, `fill-opacity: 0.5;`, '}');
-    }
+    cssColors.push(`.fill-weak { fill: ${settings.weakColor}; }`, `.stroke-weak { stroke: ${settings.weakColor}; }`);
+    cssColors.push('.radar {', 'stroke-width: 4px;', `stroke: ${settings.radarColor};`, `fill: ${settings.radarColor};`, `fill-opacity: 0.5;`, '}');
     if (settings.type == 'normal') {
         settings.contribColors.forEach((color, i) => {
             const topColor = d3.rgb(color).darker(DARKER_TOP).toString();
@@ -537,149 +535,6 @@ const createCssColors = (settings) => {
 };
 exports.createCssColors = createCssColors;
 //# sourceMappingURL=create-css-colors.js.map
-
-/***/ }),
-
-/***/ 40855:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.createPieLanguage = void 0;
-const d3 = __importStar(__nccwpck_require__(85871));
-const OTHER_NAME = 'other';
-const OTHER_COLOR = '#444444';
-const createPieLanguage = (svg, userInfo, x, y, width, height, settings, isForcedAnimation) => {
-    if (userInfo.totalContributions === 0) {
-        return;
-    }
-    const languages = userInfo.contributesLanguage.slice(0, 5);
-    const sumContrib = languages
-        .map((lang) => lang.contributions)
-        .reduce((a, b) => a + b, 0);
-    const otherContributions = userInfo.totalCommitContributions - sumContrib;
-    if (0 < otherContributions) {
-        languages.push({
-            language: OTHER_NAME,
-            color: OTHER_COLOR,
-            contributions: otherContributions,
-        });
-    }
-    const isAnimate = settings.growingAnimation || isForcedAnimation;
-    const animeSteps = 5;
-    const animateOpacity = (num) => Array(languages.length + animeSteps)
-        .fill('')
-        .map((d, i) => (i < num ? 0 : Math.min((i - num) / animeSteps, 1)))
-        .join(';');
-    const radius = height / 2;
-    const margin = radius / 10;
-    const row = 8;
-    const offset = (row - languages.length) / 2 + 0.5;
-    const fontSize = height / row / 1.5;
-    const pie = d3
-        .pie()
-        .value((d) => d.contributions)
-        .sortValues(null);
-    const pieData = pie(languages);
-    const group = svg.append('g').attr('transform', `translate(${x}, ${y})`);
-    const groupLabel = group
-        .append('g')
-        .attr('transform', `translate(${radius * 2.1}, ${0})`);
-    // markers for label
-    const markers = groupLabel
-        .selectAll(null)
-        .data(pieData)
-        .enter()
-        .append('rect')
-        .attr('x', 0)
-        .attr('y', (d) => (d.index + offset) * (height / row) - fontSize / 2)
-        .attr('width', fontSize)
-        .attr('height', fontSize)
-        .attr('fill', (d) => d.data.color)
-        .attr('class', 'stroke-bg')
-        .attr('stroke-width', '1px');
-    if (isAnimate) {
-        markers
-            .append('animate')
-            .attr('attributeName', 'fill-opacity')
-            .attr('values', (d, i) => animateOpacity(i))
-            .attr('dur', '3s')
-            .attr('repeatCount', '1');
-    }
-    // labels
-    const labels = groupLabel
-        .selectAll(null)
-        .data(pieData)
-        .enter()
-        .append('text')
-        .attr('dominant-baseline', 'middle')
-        .text((d) => d.data.language)
-        .attr('x', fontSize * 1.2)
-        .attr('y', (d) => (d.index + offset) * (height / row))
-        .attr('class', 'fill-fg')
-        .attr('font-size', `${fontSize}px`);
-    if (isAnimate) {
-        labels
-            .append('animate')
-            .attr('attributeName', 'fill-opacity')
-            .attr('values', (d, i) => animateOpacity(i))
-            .attr('dur', '3s')
-            .attr('repeatCount', '1');
-    }
-    const arc = d3
-        .arc()
-        .outerRadius(radius - margin)
-        .innerRadius(radius / 2);
-    // pie chart
-    const paths = group
-        .append('g')
-        .attr('transform', `translate(${radius}, ${radius})`)
-        .selectAll(null)
-        .data(pieData)
-        .enter()
-        .append('path')
-        .attr('d', arc)
-        .style('fill', (d) => d.data.color) // style -> attr ?
-        .attr('class', 'stroke-bg')
-        .attr('stroke-width', '2px');
-    paths
-        .append('title')
-        .text((d) => `${d.data.language} ${d.data.contributions}`);
-    if (isAnimate) {
-        paths
-            .append('animate')
-            .attr('attributeName', 'fill-opacity')
-            .attr('values', (d, i) => animateOpacity(i))
-            .attr('dur', '3s')
-            .attr('repeatCount', '1');
-    }
-};
-exports.createPieLanguage = createPieLanguage;
-//# sourceMappingURL=create-pie-language.js.map
 
 /***/ }),
 
@@ -871,25 +726,19 @@ exports.createSvg = void 0;
 const d3 = __importStar(__nccwpck_require__(85871));
 const jsdom_1 = __nccwpck_require__(81865);
 const contrib = __importStar(__nccwpck_require__(92699));
-const pie = __importStar(__nccwpck_require__(40855));
+// pie chart removed — not useful with mostly private repos
 const radar = __importStar(__nccwpck_require__(81874));
 const colors = __importStar(__nccwpck_require__(42906));
 const util = __importStar(__nccwpck_require__(71010));
 const width = 1280;
 const height = 850;
-const pieHeight = 200 * 1.3;
-const pieWidth = pieHeight * 2;
 const radarWidth = 400 * 1.3;
 const radarHeight = (radarWidth * 3) / 4;
 const radarX = width - radarWidth - 40;
 const createSvg = (userInfo, settings, isForcedAnimation) => {
     let svgWidth = width;
     let svgHeight = height;
-    if (settings.type === 'pie_lang_only') {
-        svgWidth = pieWidth;
-        svgHeight = pieHeight;
-    }
-    else if (settings.type === 'radar_contrib_only') {
+    if (settings.type === 'radar_contrib_only') {
         svgWidth = radarWidth;
         svgHeight = radarHeight;
     }
@@ -913,11 +762,7 @@ const createSvg = (userInfo, settings, isForcedAnimation) => {
         .attr('width', svgWidth)
         .attr('height', svgHeight)
         .attr('class', 'fill-bg');
-    if (settings.type === 'pie_lang_only') {
-        // pie chart only
-        pie.createPieLanguage(svg, userInfo, 0, 0, pieWidth, pieHeight, settings, isForcedAnimation);
-    }
-    else if (settings.type === 'radar_contrib_only') {
+    if (settings.type === 'radar_contrib_only') {
         // radar chart only
         radar.createRadarContrib(svg, userInfo, 0, 0, radarWidth, radarHeight, settings, isForcedAnimation);
     }
@@ -926,8 +771,6 @@ const createSvg = (userInfo, settings, isForcedAnimation) => {
         contrib.create3DContrib(svg, userInfo, 0, 0, width, height, settings, isForcedAnimation);
         // radar chart
         radar.createRadarContrib(svg, userInfo, radarX, 70, radarWidth, radarHeight, settings, isForcedAnimation);
-        // pie chart
-        pie.createPieLanguage(svg, userInfo, 40, height - pieHeight - 70, pieWidth, pieHeight, settings, isForcedAnimation);
         const group = svg.append('g');
         const positionXContrib = (width * 3) / 10;
         const positionYContrib = height - 20;
@@ -952,48 +795,6 @@ const createSvg = (userInfo, settings, isForcedAnimation) => {
             .attr('text-anchor', 'start')
             .text(contribLabel)
             .attr('class', 'fill-fg');
-        const positionXStar = (width * 5) / 10;
-        const positionYStar = positionYContrib;
-        // icon of star
-        group
-            .append('g')
-            .attr('transform', `translate(${positionXStar - 32}, ${positionYStar - 28}), scale(2)`)
-            .append('path')
-            .attr('fill-rule', 'evenodd')
-            .attr('d', 'M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25zm0 2.445L6.615 5.5a.75.75 0 01-.564.41l-3.097.45 2.24 2.184a.75.75 0 01.216.664l-.528 3.084 2.769-1.456a.75.75 0 01.698 0l2.77 1.456-.53-3.084a.75.75 0 01.216-.664l2.24-2.183-3.096-.45a.75.75 0 01-.564-.41L8 2.694v.001z')
-            .attr('class', 'fill-fg');
-        group
-            .append('text')
-            .style('font-size', '32px')
-            .style('font-weight', 'bold')
-            .attr('x', positionXStar + 10)
-            .attr('y', positionYStar)
-            .attr('text-anchor', 'start')
-            .text(util.toScale(userInfo.totalStargazerCount))
-            .attr('class', 'fill-fg')
-            .append('title')
-            .text(userInfo.totalStargazerCount);
-        const positionXFork = (width * 6) / 10;
-        const positionYFork = positionYContrib;
-        // icon of fork
-        group
-            .append('g')
-            .attr('transform', `translate(${positionXFork - 32}, ${positionYFork - 28}), scale(2)`)
-            .append('path')
-            .attr('fill-rule', 'evenodd')
-            .attr('d', 'M5 3.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.122a2.25 2.25 0 10-1.5 0v.878A2.25 2.25 0 005.75 8.5h1.5v2.128a2.251 2.251 0 101.5 0V8.5h1.5a2.25 2.25 0 002.25-2.25v-.878a2.25 2.25 0 10-1.5 0v.878a.75.75 0 01-.75.75h-4.5A.75.75 0 015 6.25v-.878zm3.75 7.378a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm3-8.75a.75.75 0 100-1.5.75.75 0 000 1.5z')
-            .attr('class', 'fill-fg');
-        group
-            .append('text')
-            .style('font-size', '32px')
-            .style('font-weight', 'bold')
-            .attr('x', positionXFork + 4)
-            .attr('y', positionYFork)
-            .attr('text-anchor', 'start')
-            .text(util.toScale(userInfo.totalForkCount))
-            .attr('class', 'fill-fg')
-            .append('title')
-            .text(userInfo.totalForkCount);
         // ISO 8601 format
         const startDate = userInfo.contributionCalendar[0].date;
         const endDate = userInfo.contributionCalendar[userInfo.contributionCalendar.length - 1].date;
