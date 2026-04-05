@@ -24,20 +24,18 @@ const createColors = (settings: type.Settings): string => {
         cssColors.push(`.fill-strong { fill: ${settings.strongColor}; }`);
     }
 
-    if (settings.type != 'pie_lang_only') {
-        cssColors.push(
-            `.fill-weak { fill: ${settings.weakColor}; }`,
-            `.stroke-weak { stroke: ${settings.weakColor}; }`,
-        );
-        cssColors.push(
-            '.radar {',
-            'stroke-width: 4px;',
-            `stroke: ${settings.radarColor};`,
-            `fill: ${settings.radarColor};`,
-            `fill-opacity: 0.5;`,
-            '}',
-        );
-    }
+    cssColors.push(
+        `.fill-weak { fill: ${settings.weakColor}; }`,
+        `.stroke-weak { stroke: ${settings.weakColor}; }`,
+    );
+    cssColors.push(
+        '.radar {',
+        'stroke-width: 4px;',
+        `stroke: ${settings.radarColor};`,
+        `fill: ${settings.radarColor};`,
+        `fill-opacity: 0.5;`,
+        '}',
+    );
 
     if (settings.type == 'normal') {
         settings.contribColors.forEach((color, i) => {

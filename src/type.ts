@@ -173,7 +173,6 @@ export type FullSettings =
 
 export type Settings =
     | FullSettings
-    | PieLangOnlySettings
     | RadarContribOnlySettings;
 
 export type SettingFile = Settings | Settings[];
