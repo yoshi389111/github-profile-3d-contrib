@@ -43,7 +43,7 @@ const aggregateUserInfo = (response) => {
             throw new Error('JSON\n' + JSON.stringify(response, null, 2));
         }
     }
-    const user = response.data.user;
+    const user = response.data.viewer;
     const calendar = user.contributionsCollection.contributionCalendar.weeks
         .flatMap((week) => week.contributionDays)
         .map((week) => ({
@@ -160,7 +160,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.create3DContrib = exports.addDefines = void 0;
+exports.create3DContrib = exports.addDefines = exports.getRainbowKeyframes = void 0;
 const d3 = __importStar(__nccwpck_require__(85871));
 const util = __importStar(__nccwpck_require__(71010));
 const ANGLE = 30;
@@ -221,21 +221,47 @@ const addSeasonColor = (path, contribLevel, panel, date) => {
     const pattern = decideSeasonPatternNo(date);
     path.attr('class', `cont-${panel}-p${pattern}-${contribLevel}`);
 };
-const addRainbowColor = (path, contribLevel, settings, darker, week) => {
-    const offsetHue = week * settings.hueRatio;
-    const saturation = settings.saturation;
-    const lightness = settings.contribLightness[contribLevel];
-    const values = [...Array(7)]
-        .map((_, i) => (i * 60 + offsetHue) % 360)
-        .map((hue) => `hsl(${hue},${saturation},${lightness})`)
-        .map((c) => d3.rgb(c).darker(darker).toString())
-        .join(';');
-    path.append('animate')
-        .attr('attributeName', 'fill')
-        .attr('values', values)
-        .attr('dur', settings.duration)
-        .attr('repeatCount', 'indefinite');
+const FACE_NAMES = {
+    [DARKER_TOP]: 'top',
+    [DARKER_LEFT]: 'left',
+    [DARKER_RIGHT]: 'right',
 };
+const addRainbowColor = (path, contribLevel, settings, darker, week) => {
+    const faceName = FACE_NAMES[darker];
+    const className = `rb-l${contribLevel}-${faceName}`;
+    const offsetHue = week * settings.hueRatio;
+    const normalizedHue = ((offsetHue % 360) + 360) % 360;
+    const durationSeconds = parseFloat(settings.duration);
+    const delaySeconds = -(normalizedHue / 360) * durationSeconds;
+    path.attr('class', className).attr('style', `animation-delay:${delaySeconds.toFixed(3)}s`);
+};
+const getRainbowKeyframes = (settings) => {
+    const hues = [0, 60, 120, 180, 240, 300, 360];
+    const darkerMap = [
+        ['top', DARKER_TOP],
+        ['left', DARKER_LEFT],
+        ['right', DARKER_RIGHT],
+    ];
+    const lines = [];
+    for (let level = 0; level < settings.contribLightness.length; level++) {
+        const lightness = settings.contribLightness[level];
+        for (const [faceName, darker] of darkerMap) {
+            const className = `rb-l${level}-${faceName}`;
+            lines.push(`.${className}{animation:${className} ${settings.duration} linear infinite;}`);
+            const stops = hues.map((hue, i) => {
+                const pct = ((i / (hues.length - 1)) * 100).toFixed(2);
+                const fill = d3
+                    .rgb(`hsl(${hue},${settings.saturation},${lightness})`)
+                    .darker(darker)
+                    .toString();
+                return `${pct}%{fill:${fill}}`;
+            });
+            lines.push(`@keyframes ${className}{${stops.join('')}}`);
+        }
+    }
+    return lines.join('');
+};
+exports.getRainbowKeyframes = getRainbowKeyframes;
 const addBitmapPattern = (path, contributionLevel, panel) => {
     path.attr('fill', `url(#pattern_${contributionLevel}_${panel})`);
 };
@@ -901,9 +927,13 @@ const createSvg = (userInfo, settings, isForcedAnimation) => {
         .attr('width', svgWidth)
         .attr('height', svgHeight)
         .attr('viewBox', `0 0 ${svgWidth} ${svgHeight}`);
+    const rainbowCss = settings.type === 'rainbow'
+        ? contrib.getRainbowKeyframes(settings)
+        : '';
     svg.append('style').html([
         '* { font-family: "Ubuntu", "Helvetica", "Arial", sans-serif; }',
         colors.createCssColors(settings),
+        rainbowCss,
     ].join('\n'));
     contrib.addDefines(svg, settings);
     // background
@@ -1042,21 +1072,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.fetchData = exports.fetchNext = exports.fetchFirst = exports.URL = void 0;
+exports.fetchData = exports.fetchRepoLanguages = exports.fetchAllYearsLanguages = exports.fetchAllYearsData = exports.fetchCreatedYear = exports.fetchNext = exports.fetchFirst = exports.URL = void 0;
 const axios_1 = __importDefault(__nccwpck_require__(87269));
 exports.URL = process.env.GITHUB_ENDPOINT || 'https://api.github.com/graphql';
 const maxReposOneQuery = 100;
 const fetchFirst = async (token, userName, year = null) => {
-    const yearArgs = year
-        ? `(from:"${year}-01-01T00:00:00.000Z", to:"${year}-12-31T23:59:59.000Z")`
-        : '';
+    let yearArgs;
+    if (year !== null) {
+        yearArgs = `(from:"${year}-01-01T00:00:00.000Z", to:"${year}-12-31T23:59:59.000Z")`;
+    }
+    else {
+        // Default to a rolling 12-month window so all recent contributions
+        // are included regardless of calendar year boundaries.
+        const to = new Date();
+        const from = new Date(to);
+        from.setFullYear(from.getFullYear() - 1);
+        yearArgs = `(from:"${from.toISOString()}", to:"${to.toISOString()}")`;
+    }
     const headers = {
         Authorization: `bearer ${token}`,
     };
     const request = {
         query: `
-            query($login: String!) {
-                user(login: $login) {
+            query {
+                viewer {
                     contributionsCollection${yearArgs} {
                         contributionCalendar {
                             isHalloween
@@ -1098,7 +1137,7 @@ const fetchFirst = async (token, userName, year = null) => {
                 }
             }
         `.replace(/\s+/g, ' '),
-        variables: { login: userName },
+        variables: {},
     };
     const response = await axios_1.default.post(exports.URL, request, {
         headers: headers,
@@ -1112,8 +1151,8 @@ const fetchNext = async (token, userName, cursor) => {
     };
     const request = {
         query: `
-            query($login: String!, $cursor: String!) {
-                user(login: $login) {
+            query($cursor: String!) {
+                viewer {
                     repositories(after: $cursor, first: ${maxReposOneQuery}, ownerAffiliations: OWNER) {
                         edges {
                             cursor
@@ -1127,7 +1166,6 @@ const fetchNext = async (token, userName, cursor) => {
             }
         `.replace(/\s+/g, ' '),
         variables: {
-            login: userName,
             cursor: cursor,
         },
     };
@@ -1137,17 +1175,163 @@ const fetchNext = async (token, userName, cursor) => {
     return response.data;
 };
 exports.fetchNext = fetchNext;
+/** Fetch the year the authenticated user created their account */
+const fetchCreatedYear = async (token) => {
+    var _a;
+    const headers = { Authorization: `bearer ${token}` };
+    const request = {
+        query: `query { viewer { createdAt } }`,
+    };
+    const response = await axios_1.default.post(exports.URL, request, { headers });
+    const createdAt = (_a = response.data.data) === null || _a === void 0 ? void 0 : _a.viewer.createdAt;
+    if (!createdAt)
+        throw new Error('Could not fetch account creation date');
+    return new Date(createdAt).getFullYear();
+};
+exports.fetchCreatedYear = fetchCreatedYear;
+/** Merge multiple per-year responses into a single ResponseType */
+const mergeResponses = (responses) => {
+    const valid = responses.filter((r) => r.data);
+    if (valid.length === 0)
+        return responses[0];
+    // Deep-clone base so we mutate safely
+    const base = JSON.parse(JSON.stringify(valid[0].data.viewer));
+    for (let i = 1; i < valid.length; i++) {
+        const v = valid[i].data.viewer;
+        const cal = base.contributionsCollection.contributionCalendar;
+        const vcal = v.contributionsCollection.contributionCalendar;
+        cal.weeks.push(...vcal.weeks);
+        cal.totalContributions += vcal.totalContributions;
+        const c = base.contributionsCollection;
+        const vc = v.contributionsCollection;
+        c.totalCommitContributions += vc.totalCommitContributions;
+        c.totalIssueContributions += vc.totalIssueContributions;
+        c.totalPullRequestContributions += vc.totalPullRequestContributions;
+        c.totalPullRequestReviewContributions +=
+            vc.totalPullRequestReviewContributions;
+        c.totalRepositoryContributions += vc.totalRepositoryContributions;
+        // Append repo language entries — aggregated by language downstream
+        c.commitContributionsByRepository.push(...vc.commitContributionsByRepository);
+    }
+    return { data: { viewer: base } };
+};
+/**
+ * Fetch all contributions from account creation to today by querying
+ * one calendar year at a time and merging the results.
+ */
+const fetchAllYearsData = async (token, userName, maxRepos) => {
+    const startYear = await (0, exports.fetchCreatedYear)(token);
+    const currentYear = new Date().getFullYear();
+    const responses = [];
+    for (let year = startYear; year <= currentYear; year++) {
+        const res = await (0, exports.fetchFirst)(token, userName, year);
+        responses.push(res);
+    }
+    const merged = mergeResponses(responses);
+    // Replace repositories with paginated result from current period
+    const reposRes = await (0, exports.fetchData)(token, userName, maxRepos, null);
+    if (merged.data && reposRes.data) {
+        merged.data.viewer.repositories = reposRes.data.viewer.repositories;
+    }
+    return merged;
+};
+exports.fetchAllYearsData = fetchAllYearsData;
+/**
+ * Fetch language data and total contribution count across all years from
+ * account creation to today. The calendar weeks are intentionally excluded
+ * so this can be overlaid onto a single-year response without affecting
+ * the SVG size or rendering.
+ */
+const fetchAllYearsLanguages = async (token, userName) => {
+    const startYear = await (0, exports.fetchCreatedYear)(token);
+    const currentYear = new Date().getFullYear();
+    let totalContributions = 0;
+    for (let year = startYear; year <= currentYear; year++) {
+        const res = await (0, exports.fetchFirst)(token, userName, year);
+        if (res.data) {
+            totalContributions +=
+                res.data.viewer.contributionsCollection.contributionCalendar
+                    .totalContributions;
+        }
+    }
+    return { totalContributions };
+};
+exports.fetchAllYearsLanguages = fetchAllYearsLanguages;
+const repoLanguagesQuery = `
+    query($cursor: String) {
+        viewer {
+            repositories(
+                first: 100,
+                after: $cursor,
+                ownerAffiliations: [OWNER, COLLABORATOR, ORGANIZATION_MEMBER]
+            ) {
+                pageInfo {
+                    hasNextPage
+                    endCursor
+                }
+                nodes {
+                    languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
+                        edges {
+                            size
+                            node {
+                                name
+                                color
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+`.replace(/\s+/g, ' ');
+/**
+ * Fetch language byte counts across all repos the viewer owns, collaborates
+ * on, or is an org member of. Returns data shaped as CommitContributionsByRepository
+ * so the existing language aggregation pipeline in aggregate-user-info.ts can
+ * consume it without changes. Each language edge in each repo becomes one entry,
+ * with byte count as the contribution weight.
+ */
+const fetchRepoLanguages = async (token) => {
+    var _a;
+    const headers = { Authorization: `bearer ${token}` };
+    const results = [];
+    let cursor = null;
+    let hasNextPage = true;
+    while (hasNextPage) {
+        const response = await axios_1.default.post(exports.URL, { query: repoLanguagesQuery, variables: { cursor } }, { headers });
+        const repos = (_a = response.data.data) === null || _a === void 0 ? void 0 : _a.viewer.repositories;
+        if (!repos)
+            break;
+        for (const repo of repos.nodes) {
+            for (const langEdge of repo.languages.edges) {
+                results.push({
+                    contributions: { totalCount: langEdge.size },
+                    repository: {
+                        primaryLanguage: {
+                            name: langEdge.node.name,
+                            color: langEdge.node.color,
+                        },
+                    },
+                });
+            }
+        }
+        hasNextPage = repos.pageInfo.hasNextPage;
+        cursor = repos.pageInfo.endCursor;
+    }
+    return results;
+};
+exports.fetchRepoLanguages = fetchRepoLanguages;
 /** Fetch data from GitHub GraphQL */
 const fetchData = async (token, userName, maxRepos, year = null) => {
     const res1 = await (0, exports.fetchFirst)(token, userName, year);
     const result = res1.data;
-    if (result && result.user.repositories.nodes.length === maxReposOneQuery) {
-        const repos1 = result.user.repositories;
+    if (result && result.viewer.repositories.nodes.length === maxReposOneQuery) {
+        const repos1 = result.viewer.repositories;
         let cursor = repos1.edges[repos1.edges.length - 1].cursor;
         while (repos1.nodes.length < maxRepos) {
             const res2 = await (0, exports.fetchNext)(token, userName, cursor);
             if (res2.data) {
-                const repos2 = res2.data.user.repositories;
+                const repos2 = res2.data.viewer.repositories;
                 repos1.nodes.push(...repos2.nodes);
                 if (repos2.nodes.length !== maxReposOneQuery) {
                     break;
@@ -1230,7 +1414,19 @@ const main = async () => {
             process.exitCode = 1;
             return;
         }
-        const response = await client.fetchData(token, userName, maxRepos, year);
+        const allTime = process.env.ALL_TIME === 'true';
+        const allTimeLangs = process.env.ALL_TIME_LANGS === 'true';
+        const response = allTime
+            ? await client.fetchAllYearsData(token, userName, maxRepos)
+            : await client.fetchData(token, userName, maxRepos, year);
+        if (allTimeLangs && !allTime && response.data) {
+            const { totalContributions } = await client.fetchAllYearsLanguages(token, userName);
+            const languages = await client.fetchRepoLanguages(token);
+            response.data.viewer.contributionsCollection.commitContributionsByRepository =
+                languages;
+            response.data.viewer.contributionsCollection.contributionCalendar.totalContributions =
+                totalContributions;
+        }
         const userInfo = aggregate.aggregateUserInfo(response);
         if (process.env.SETTING_JSON) {
             const settingFile = r.readSettingJson(process.env.SETTING_JSON);
@@ -1255,6 +1451,7 @@ const main = async () => {
             f.writeFile('profile-night-view.svg', create.createSvg(userInfo, template.NightViewSettings, true));
             f.writeFile('profile-night-green.svg', create.createSvg(userInfo, template.NightGreenSettings, true));
             f.writeFile('profile-night-rainbow.svg', create.createSvg(userInfo, template.NightRainbowSettings, true));
+            f.writeFile('profile-night-rainbow-static.svg', create.createSvg(userInfo, template.NightRainbowSettings, false));
             f.writeFile('profile-gitblock.svg', create.createSvg(userInfo, template.GitBlockSettings, true));
         }
     }

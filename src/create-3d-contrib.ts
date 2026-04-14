@@ -81,6 +81,12 @@ const addSeasonColor = (
     path.attr('class', `cont-${panel}-p${pattern}-${contribLevel}`);
 };
 
+const FACE_NAMES: Record<number, string> = {
+    [DARKER_TOP]: 'top',
+    [DARKER_LEFT]: 'left',
+    [DARKER_RIGHT]: 'right',
+};
+
 const addRainbowColor = (
     path: d3.Selection<SVGRectElement, unknown, null, unknown>,
     contribLevel: number,
@@ -88,20 +94,49 @@ const addRainbowColor = (
     darker: number,
     week: number,
 ): void => {
+    const faceName = FACE_NAMES[darker];
+    const className = `rb-l${contribLevel}-${faceName}`;
     const offsetHue = week * settings.hueRatio;
-    const saturation = settings.saturation;
-    const lightness = settings.contribLightness[contribLevel];
-    const values = [...Array<undefined>(7)]
-        .map((_, i) => (i * 60 + offsetHue) % 360)
-        .map((hue) => `hsl(${hue},${saturation},${lightness})`)
-        .map((c) => d3.rgb(c).darker(darker).toString())
-        .join(';');
+    const normalizedHue = ((offsetHue % 360) + 360) % 360;
+    const durationSeconds = parseFloat(settings.duration);
+    const delaySeconds = -(normalizedHue / 360) * durationSeconds;
 
-    path.append('animate')
-        .attr('attributeName', 'fill')
-        .attr('values', values)
-        .attr('dur', settings.duration)
-        .attr('repeatCount', 'indefinite');
+    path.attr('class', className).attr(
+        'style',
+        `animation-delay:${delaySeconds.toFixed(3)}s`,
+    );
+};
+
+export const getRainbowKeyframes = (
+    settings: type.RainbowColorSettings,
+): string => {
+    const hues = [0, 60, 120, 180, 240, 300, 360];
+    const darkerMap: Array<[string, number]> = [
+        ['top', DARKER_TOP],
+        ['left', DARKER_LEFT],
+        ['right', DARKER_RIGHT],
+    ];
+    const lines: string[] = [];
+
+    for (let level = 0; level < settings.contribLightness.length; level++) {
+        const lightness = settings.contribLightness[level];
+        for (const [faceName, darker] of darkerMap) {
+            const className = `rb-l${level}-${faceName}`;
+            lines.push(
+                `.${className}{animation:${className} ${settings.duration} linear infinite;}`,
+            );
+            const stops = hues.map((hue, i) => {
+                const pct = ((i / (hues.length - 1)) * 100).toFixed(2);
+                const fill = d3
+                    .rgb(`hsl(${hue},${settings.saturation},${lightness})`)
+                    .darker(darker)
+                    .toString();
+                return `${pct}%{fill:${fill}}`;
+            });
+            lines.push(`@keyframes ${className}{${stops.join('')}}`);
+        }
+    }
+    return lines.join('');
 };
 
 const addBitmapPattern = (

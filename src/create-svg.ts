@@ -43,10 +43,18 @@ export const createSvg = (
         .attr('height', svgHeight)
         .attr('viewBox', `0 0 ${svgWidth} ${svgHeight}`);
 
+    const rainbowCss =
+        settings.type === 'rainbow'
+            ? contrib.getRainbowKeyframes(
+                  settings as type.RainbowColorSettings,
+              )
+            : '';
+
     svg.append('style').html(
         [
             '* { font-family: "Ubuntu", "Helvetica", "Arial", sans-serif; }',
             colors.createCssColors(settings),
+            rainbowCss,
         ].join('\n'),
     );
 
