@@ -21,6 +21,7 @@ export const createSvg = (
     userInfo: type.UserInfo,
     settings: type.Settings,
     isForcedAnimation: boolean,
+    heightScale = 20,
 ): string => {
     let svgWidth = width;
     let svgHeight = height;
@@ -95,6 +96,7 @@ export const createSvg = (
             height,
             settings,
             isForcedAnimation,
+            heightScale,
         );
 
         // radar chart

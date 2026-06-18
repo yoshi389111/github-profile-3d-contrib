@@ -35,5 +35,24 @@ describe('utils', () => {
         expect(util.toScale(1_000_000_000)).toEqual('1M+');
     });
 
+    it('calcBlockHeight', () => {
+        // zero contributions => base height regardless of scale
+        expect(util.calcBlockHeight(0)).toBeCloseTo(3);
+        expect(util.calcBlockHeight(0, 2)).toBeCloseTo(3);
+
+        // omitting heightScale matches the default of 20
+        expect(util.calcBlockHeight(50)).toEqual(util.calcBlockHeight(50, 20));
+
+        // a smaller scale yields taller blocks for the same count
+        expect(util.calcBlockHeight(50, 2)).toBeGreaterThan(
+            util.calcBlockHeight(50, 20),
+        );
+
+        // height increases monotonically with contribution count
+        expect(util.calcBlockHeight(100, 20)).toBeGreaterThan(
+            util.calcBlockHeight(10, 20),
+        );
+    });
+
 });
 

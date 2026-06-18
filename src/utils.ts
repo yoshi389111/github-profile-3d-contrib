@@ -27,3 +27,18 @@ export const toScale = (value: number): string => {
 
 /** Round to two decimal places. */
 export const toFixed = (value: number): number => +value.toFixed(2);
+
+/**
+ * Calculate the 3D block height for a day's contribution count.
+ *
+ * `heightScale` is the divisor in the logarithmic curve; a smaller value
+ * makes blocks taller, which is useful when daily contribution counts are
+ * low and the calendar otherwise looks flat. The default of 20 keeps the
+ * original appearance.
+ *
+ * ref. https://github.com/yoshi389111/github-profile-3d-contrib/issues/27
+ */
+export const calcBlockHeight = (
+    contributionCount: number,
+    heightScale = 20,
+): number => Math.log10(contributionCount / heightScale + 1) * 144 + 3;

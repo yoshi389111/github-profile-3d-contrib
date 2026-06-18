@@ -34,6 +34,14 @@ export const main = async (): Promise<void> => {
             process.exitCode = 1;
             return;
         }
+        const heightScale = process.env.HEIGHT_SCALE
+            ? Number(process.env.HEIGHT_SCALE)
+            : 20;
+        if (Number.isNaN(heightScale) || heightScale <= 0) {
+            console.error('HEIGHT_SCALE must be a positive number');
+            process.exitCode = 1;
+            return;
+        }
 
         const response = await client.fetchData(
             token,
@@ -52,7 +60,7 @@ export const main = async (): Promise<void> => {
                     settingInfo.fileName || 'profile-customize.svg';
                 f.writeFile(
                     fileName,
-                    create.createSvg(userInfo, settingInfo, false),
+                    create.createSvg(userInfo, settingInfo, false, heightScale),
                 );
             }
         } else {
@@ -62,51 +70,91 @@ export const main = async (): Promise<void> => {
 
             f.writeFile(
                 'profile-green-animate.svg',
-                create.createSvg(userInfo, settings, true),
+                create.createSvg(userInfo, settings, true, heightScale),
             );
             f.writeFile(
                 'profile-green.svg',
-                create.createSvg(userInfo, settings, false),
+                create.createSvg(userInfo, settings, false, heightScale),
             );
 
             // Northern hemisphere
             f.writeFile(
                 'profile-season-animate.svg',
-                create.createSvg(userInfo, template.NorthSeasonSettings, true),
+                create.createSvg(
+                    userInfo,
+                    template.NorthSeasonSettings,
+                    true,
+                    heightScale,
+                ),
             );
             f.writeFile(
                 'profile-season.svg',
-                create.createSvg(userInfo, template.NorthSeasonSettings, false),
+                create.createSvg(
+                    userInfo,
+                    template.NorthSeasonSettings,
+                    false,
+                    heightScale,
+                ),
             );
 
             // Southern hemisphere
             f.writeFile(
                 'profile-south-season-animate.svg',
-                create.createSvg(userInfo, template.SouthSeasonSettings, true),
+                create.createSvg(
+                    userInfo,
+                    template.SouthSeasonSettings,
+                    true,
+                    heightScale,
+                ),
             );
             f.writeFile(
                 'profile-south-season.svg',
-                create.createSvg(userInfo, template.SouthSeasonSettings, false),
+                create.createSvg(
+                    userInfo,
+                    template.SouthSeasonSettings,
+                    false,
+                    heightScale,
+                ),
             );
 
             f.writeFile(
                 'profile-night-view.svg',
-                create.createSvg(userInfo, template.NightViewSettings, true),
+                create.createSvg(
+                    userInfo,
+                    template.NightViewSettings,
+                    true,
+                    heightScale,
+                ),
             );
 
             f.writeFile(
                 'profile-night-green.svg',
-                create.createSvg(userInfo, template.NightGreenSettings, true),
+                create.createSvg(
+                    userInfo,
+                    template.NightGreenSettings,
+                    true,
+                    heightScale,
+                ),
             );
 
             f.writeFile(
                 'profile-night-rainbow.svg',
-                create.createSvg(userInfo, template.NightRainbowSettings, true),
+                create.createSvg(
+                    userInfo,
+                    template.NightRainbowSettings,
+                    true,
+                    heightScale,
+                ),
             );
 
             f.writeFile(
                 'profile-gitblock.svg',
-                create.createSvg(userInfo, template.GitBlockSettings, true),
+                create.createSvg(
+                    userInfo,
+                    template.GitBlockSettings,
+                    true,
+                    heightScale,
+                ),
             );
         }
     } catch (error) {
