@@ -1,7 +1,7 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 60599:
+/***/ 75178:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -35,7 +35,8 @@ const compare = (num1, num2) => {
     }
 };
 const aggregateUserInfo = (response) => {
-    if (!response.data) {
+    var _a;
+    if (!((_a = response.data) === null || _a === void 0 ? void 0 : _a.user)) {
         if (response.errors && response.errors.length) {
             throw new Error(response.errors[0].message);
         }
@@ -99,7 +100,7 @@ exports.aggregateUserInfo = aggregateUserInfo;
 
 /***/ }),
 
-/***/ 71107:
+/***/ 38340:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -109,29 +110,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GitBlockSettings = exports.NightRainbowSettings = exports.NightGreenSettings = exports.NightViewSettings = exports.SouthSeasonSettings = exports.NorthSeasonSettings = exports.HalloweenSettings = exports.NormalSettings = void 0;
-const NormalSettings_json_1 = __importDefault(__nccwpck_require__(13277));
+const NormalSettings_json_1 = __importDefault(__nccwpck_require__(93096));
 exports.NormalSettings = NormalSettings_json_1.default;
-const HalloweenSettings_json_1 = __importDefault(__nccwpck_require__(4771));
+const HalloweenSettings_json_1 = __importDefault(__nccwpck_require__(25304));
 exports.HalloweenSettings = HalloweenSettings_json_1.default;
 // Northern hemisphere
-const NorthSeasonSettings_json_1 = __importDefault(__nccwpck_require__(26734));
+const NorthSeasonSettings_json_1 = __importDefault(__nccwpck_require__(52669));
 exports.NorthSeasonSettings = NorthSeasonSettings_json_1.default;
 // Southern hemisphere
-const SouthSeasonSettings_json_1 = __importDefault(__nccwpck_require__(83548));
+const SouthSeasonSettings_json_1 = __importDefault(__nccwpck_require__(88435));
 exports.SouthSeasonSettings = SouthSeasonSettings_json_1.default;
-const NightViewSettings_json_1 = __importDefault(__nccwpck_require__(91707));
+const NightViewSettings_json_1 = __importDefault(__nccwpck_require__(81812));
 exports.NightViewSettings = NightViewSettings_json_1.default;
-const NightGreenSettings_json_1 = __importDefault(__nccwpck_require__(86775));
+const NightGreenSettings_json_1 = __importDefault(__nccwpck_require__(26378));
 exports.NightGreenSettings = NightGreenSettings_json_1.default;
-const NightRainbowSettings_json_1 = __importDefault(__nccwpck_require__(29598));
+const NightRainbowSettings_json_1 = __importDefault(__nccwpck_require__(50631));
 exports.NightRainbowSettings = NightRainbowSettings_json_1.default;
-const GitBlockSettings_json_1 = __importDefault(__nccwpck_require__(69595));
+const GitBlockSettings_json_1 = __importDefault(__nccwpck_require__(1106));
 exports.GitBlockSettings = GitBlockSettings_json_1.default;
 //# sourceMappingURL=color-template.js.map
 
 /***/ }),
 
-/***/ 92699:
+/***/ 20810:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -162,7 +163,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.create3DContrib = exports.addDefines = void 0;
 const d3 = __importStar(__nccwpck_require__(85871));
-const util = __importStar(__nccwpck_require__(71010));
+const util = __importStar(__nccwpck_require__(5359));
 const ANGLE = 30;
 const toEpochDays = (date) => Math.floor(date.getTime() / (24 * 60 * 60 * 1000));
 const addNormalColor = (path, contribLevel, panel) => {
@@ -406,7 +407,7 @@ exports.create3DContrib = create3DContrib;
 
 /***/ }),
 
-/***/ 42906:
+/***/ 6995:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -556,7 +557,7 @@ exports.createCssColors = createCssColors;
 
 /***/ }),
 
-/***/ 40855:
+/***/ 6286:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -699,7 +700,7 @@ exports.createPieLanguage = createPieLanguage;
 
 /***/ }),
 
-/***/ 81874:
+/***/ 39153:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -729,7 +730,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.createRadarContrib = void 0;
-const util = __importStar(__nccwpck_require__(71010));
+const util = __importStar(__nccwpck_require__(5359));
 const rangeLabels = ['1', '10', '100', '1K', '10K'];
 const levels = rangeLabels.length;
 const radians = 2 * Math.PI;
@@ -854,7 +855,7 @@ exports.createRadarContrib = createRadarContrib;
 
 /***/ }),
 
-/***/ 63336:
+/***/ 41339:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -886,11 +887,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.createSvg = void 0;
 const d3 = __importStar(__nccwpck_require__(85871));
 const jsdom_1 = __nccwpck_require__(81865);
-const contrib = __importStar(__nccwpck_require__(92699));
-const pie = __importStar(__nccwpck_require__(40855));
-const radar = __importStar(__nccwpck_require__(81874));
-const colors = __importStar(__nccwpck_require__(42906));
-const util = __importStar(__nccwpck_require__(71010));
+const contrib = __importStar(__nccwpck_require__(20810));
+const pie = __importStar(__nccwpck_require__(6286));
+const radar = __importStar(__nccwpck_require__(39153));
+const colors = __importStar(__nccwpck_require__(6995));
+const util = __importStar(__nccwpck_require__(5359));
 const width = 1280;
 const height = 850;
 const pieHeight = 200 * 1.3;
@@ -1031,7 +1032,7 @@ exports.createSvg = createSvg;
 
 /***/ }),
 
-/***/ 46045:
+/***/ 82464:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -1049,7 +1050,7 @@ exports.writeFile = writeFile;
 
 /***/ }),
 
-/***/ 54652:
+/***/ 21747:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -1153,16 +1154,143 @@ const fetchNext = async (token, userName, cursor) => {
     return response.data;
 };
 exports.fetchNext = fetchNext;
+const fetchContributions = async (token, userName, from, to) => {
+    const response = await axios_1.default.post(exports.URL, {
+        query: `
+                query($login: String!) {
+                    user(login: $login) {
+                        contributionsCollection(from: "${from.toISOString()}", to: "${to.toISOString()}") {
+                            contributionCalendar {
+                                isHalloween
+                                totalContributions
+                                weeks { contributionDays { contributionCount contributionLevel date } }
+                            }
+                            commitContributionsByRepository(maxRepositories: ${maxReposOneQuery}) {
+                                repository { primaryLanguage { name color } }
+                                contributions { totalCount }
+                            }
+                            totalCommitContributions
+                            totalIssueContributions
+                            totalPullRequestContributions
+                            totalPullRequestReviewContributions
+                            totalRepositoryContributions
+                        }
+                    }
+                }
+            `.replace(/\s+/g, ' '),
+        variables: { login: userName },
+    }, { headers: { Authorization: `bearer ${token}` } });
+    return response.data;
+};
+const fetchRepositories = async (token, userName) => {
+    const response = await axios_1.default.post(exports.URL, {
+        query: `
+                query($login: String!) {
+                    user(login: $login) {
+                        repositories(first: ${maxReposOneQuery}, ownerAffiliations: OWNER) {
+                            edges { cursor }
+                            nodes { forkCount stargazerCount }
+                        }
+                    }
+                }
+            `.replace(/\s+/g, ' '),
+        variables: { login: userName },
+    }, { headers: { Authorization: `bearer ${token}` } });
+    return response.data;
+};
+const splitDateRange = (year) => {
+    const end = year
+        ? new Date(`${year}-12-31T23:59:59.999Z`)
+        : new Date();
+    const start = year ? new Date(`${year}-01-01T00:00:00.000Z`) : new Date(end);
+    if (!year)
+        start.setUTCFullYear(start.getUTCFullYear() - 1);
+    const ranges = [];
+    let from = start;
+    while (from <= end) {
+        const quarterEnd = new Date(Date.UTC(from.getUTCFullYear(), from.getUTCMonth() + 3, 1) - 1);
+        const to = quarterEnd < end ? quarterEnd : end;
+        ranges.push([from, to]);
+        from = new Date(to.getTime() + 1);
+    }
+    return ranges;
+};
+const mergeContributions = (collections) => {
+    const days = new Map();
+    for (const collection of collections) {
+        for (const day of collection.contributionCalendar.weeks.flatMap((week) => week.contributionDays)) {
+            days.set(day.date, day);
+        }
+    }
+    const contributionDays = [...days.values()].sort((a, b) => a.date.localeCompare(b.date));
+    const quartile = Math.ceil(Math.max(...contributionDays.map((day) => day.contributionCount)) / 4);
+    for (const day of contributionDays) {
+        day.contributionLevel =
+            day.contributionCount === 0
+                ? 'NONE'
+                : day.contributionCount <= quartile
+                    ? 'FIRST_QUARTILE'
+                    : day.contributionCount <= quartile * 2
+                        ? 'SECOND_QUARTILE'
+                        : day.contributionCount <= quartile * 3
+                            ? 'THIRD_QUARTILE'
+                            : 'FOURTH_QUARTILE';
+    }
+    const sum = (field) => collections.reduce((total, collection) => total + Number(collection[field]), 0);
+    return {
+        commitContributionsByRepository: collections.flatMap((collection) => collection.commitContributionsByRepository),
+        contributionCalendar: {
+            isHalloween: collections.some((collection) => collection.contributionCalendar.isHalloween),
+            totalContributions: collections.reduce((total, collection) => total + collection.contributionCalendar.totalContributions, 0),
+            weeks: [
+                {
+                    contributionDays,
+                },
+            ],
+        },
+        totalCommitContributions: sum('totalCommitContributions'),
+        totalIssueContributions: sum('totalIssueContributions'),
+        totalPullRequestContributions: sum('totalPullRequestContributions'),
+        totalPullRequestReviewContributions: sum('totalPullRequestReviewContributions'),
+        totalRepositoryContributions: sum('totalRepositoryContributions'),
+    };
+};
+const fetchDataInChunks = async (token, userName, year) => {
+    var _a, _b;
+    const collections = [];
+    for (const [from, to] of splitDateRange(year)) {
+        const response = await fetchContributions(token, userName, from, to);
+        if (!((_a = response.data) === null || _a === void 0 ? void 0 : _a.user))
+            return { errors: response.errors };
+        collections.push(response.data.user.contributionsCollection);
+    }
+    const repositories = await fetchRepositories(token, userName);
+    if (!((_b = repositories.data) === null || _b === void 0 ? void 0 : _b.user))
+        return { errors: repositories.errors };
+    return {
+        data: {
+            user: {
+                contributionsCollection: mergeContributions(collections),
+                repositories: repositories.data.user.repositories,
+            },
+        },
+    };
+};
 /** Fetch data from GitHub GraphQL */
 const fetchData = async (token, userName, maxRepos, year = null) => {
-    const res1 = await (0, exports.fetchFirst)(token, userName, year);
+    var _a, _b;
+    let res1 = await (0, exports.fetchFirst)(token, userName, year);
+    if ((_a = res1.errors) === null || _a === void 0 ? void 0 : _a.some((error) => error.message.includes('Resource limits for this query exceeded'))) {
+        res1 = await fetchDataInChunks(token, userName, year);
+    }
     const result = res1.data;
-    if (result && result.user.repositories.nodes.length === maxReposOneQuery) {
+    if ((result === null || result === void 0 ? void 0 : result.user) &&
+        result.user.repositories.nodes.length === maxReposOneQuery) {
         const repos1 = result.user.repositories;
         let cursor = repos1.edges[repos1.edges.length - 1].cursor;
         while (repos1.nodes.length < maxRepos) {
             const res2 = await (0, exports.fetchNext)(token, userName, cursor);
-            if (res2.data) {
+            if ((_b = res2.data) === null || _b === void 0 ? void 0 : _b.user) {
                 const repos2 = res2.data.user.repositories;
                 repos1.nodes.push(...repos2.nodes);
                 if (repos2.nodes.length !== maxReposOneQuery) {
@@ -1182,7 +1310,7 @@ exports.fetchData = fetchData;
 
 /***/ }),
 
-/***/ 49687:
+/***/ 52286:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -1212,12 +1340,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.main = void 0;
-const aggregate = __importStar(__nccwpck_require__(60599));
-const template = __importStar(__nccwpck_require__(71107));
-const create = __importStar(__nccwpck_require__(63336));
-const f = __importStar(__nccwpck_require__(46045));
-const r = __importStar(__nccwpck_require__(11820));
-const client = __importStar(__nccwpck_require__(54652));
+const aggregate = __importStar(__nccwpck_require__(75178));
+const template = __importStar(__nccwpck_require__(38340));
+const create = __importStar(__nccwpck_require__(41339));
+const f = __importStar(__nccwpck_require__(82464));
+const r = __importStar(__nccwpck_require__(51649));
+const client = __importStar(__nccwpck_require__(21747));
 const main = async () => {
     try {
         const token = process.env.GITHUB_TOKEN;
@@ -1285,7 +1413,7 @@ void (0, exports.main)();
 
 /***/ }),
 
-/***/ 11820:
+/***/ 51649:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -1305,7 +1433,7 @@ exports.readSettingJson = readSettingJson;
 
 /***/ }),
 
-/***/ 71010:
+/***/ 5359:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -14153,6 +14281,18 @@ var hasOwn = __nccwpck_require__(54076);
 var populate = __nccwpck_require__(11835);
 
 /**
+ * Escape CR, LF, and `"` in a multipart `name`/`filename` parameter, so a field
+ * name or filename can not break out of its header line to inject headers or
+ * smuggle additional parts. Matches the WHATWG HTML multipart/form-data encoding.
+ *
+ * @param {string} str - the parameter value to escape
+ * @returns {string} the escaped value
+ */
+function escapeHeaderParam(str) {
+  return String(str).replace(/\r/g, '%0D').replace(/\n/g, '%0A').replace(/"/g, '%22');
+}
+
+/**
  * Create readable "multipart/form-data" streams.
  * Can be used to submit forms
  * and file uploads to other web applications.
@@ -14317,7 +14457,7 @@ FormData.prototype._multiPartHeader = function (field, value, options) {
   var contents = '';
   var headers = {
     // add custom disposition as third element or keep it two elements if not
-    'Content-Disposition': ['form-data', 'name="' + field + '"'].concat(contentDisposition || []),
+    'Content-Disposition': ['form-data', 'name="' + escapeHeaderParam(field) + '"'].concat(contentDisposition || []),
     // if no content type. allow it to be empty array
     'Content-Type': [].concat(contentType || [])
   };
@@ -14371,7 +14511,7 @@ FormData.prototype._getContentDisposition = function (value, options) { // eslin
   }
 
   if (filename) {
-    return 'filename="' + filename + '"';
+    return 'filename="' + escapeHeaderParam(filename) + '"';
   }
 };
 
@@ -190359,7 +190499,7 @@ function defaultConstrain(transform, extent, translateExtent) {
 
 /***/ }),
 
-/***/ 69595:
+/***/ 1106:
 /***/ ((module) => {
 
 "use strict";
@@ -190367,7 +190507,7 @@ module.exports = /*#__PURE__*/JSON.parse('{"type":"bitmap","backgroundColor":"#f
 
 /***/ }),
 
-/***/ 4771:
+/***/ 25304:
 /***/ ((module) => {
 
 "use strict";
@@ -190375,7 +190515,7 @@ module.exports = /*#__PURE__*/JSON.parse('{"type":"normal","backgroundColor":"#f
 
 /***/ }),
 
-/***/ 86775:
+/***/ 26378:
 /***/ ((module) => {
 
 "use strict";
@@ -190383,7 +190523,7 @@ module.exports = /*#__PURE__*/JSON.parse('{"type":"normal","backgroundColor":"#0
 
 /***/ }),
 
-/***/ 29598:
+/***/ 50631:
 /***/ ((module) => {
 
 "use strict";
@@ -190391,7 +190531,7 @@ module.exports = /*#__PURE__*/JSON.parse('{"type":"rainbow","backgroundColor":"#
 
 /***/ }),
 
-/***/ 91707:
+/***/ 81812:
 /***/ ((module) => {
 
 "use strict";
@@ -190399,7 +190539,7 @@ module.exports = /*#__PURE__*/JSON.parse('{"type":"normal","backgroundColor":"#0
 
 /***/ }),
 
-/***/ 13277:
+/***/ 93096:
 /***/ ((module) => {
 
 "use strict";
@@ -190407,7 +190547,7 @@ module.exports = /*#__PURE__*/JSON.parse('{"type":"normal","backgroundColor":"#f
 
 /***/ }),
 
-/***/ 26734:
+/***/ 52669:
 /***/ ((module) => {
 
 "use strict";
@@ -190415,7 +190555,7 @@ module.exports = /*#__PURE__*/JSON.parse('{"type":"season","backgroundColor":"#f
 
 /***/ }),
 
-/***/ 83548:
+/***/ 88435:
 /***/ ((module) => {
 
 "use strict";
@@ -190605,7 +190745,7 @@ module.exports = /*#__PURE__*/JSON.parse('["UTF-8","IBM866","ISO-8859-2","ISO-88
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(49687);
+/******/ 	var __webpack_exports__ = __nccwpck_require__(52286);
 /******/ 	module.exports = __webpack_exports__;
 /******/ 	
 /******/ })()
