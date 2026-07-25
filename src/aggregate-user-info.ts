@@ -31,7 +31,7 @@ const compare = (num1: number, num2: number): number => {
 export const aggregateUserInfo = (
     response: client.ResponseType,
 ): type.UserInfo => {
-    if (!response.data) {
+    if (!response.data?.user) {
         if (response.errors && response.errors.length) {
             throw new Error(response.errors[0].message);
         } else {
