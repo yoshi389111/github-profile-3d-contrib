@@ -35,11 +35,17 @@ export const main = async (): Promise<void> => {
             return;
         }
 
+        const includeOrgs = (process.env.INCLUDE_ORGS || '')
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean);
+
         const response = await client.fetchData(
             token,
             userName,
             maxRepos,
             year,
+            includeOrgs,
         );
         const userInfo = aggregate.aggregateUserInfo(response);
 
