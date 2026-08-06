@@ -18,18 +18,8 @@ export const createPieLanguage = (
         return;
     }
 
-    const languages = userInfo.contributesLanguage.slice(0, 5);
-    const sumContrib = languages
-        .map((lang) => lang.contributions)
-        .reduce((a, b) => a + b, 0);
-    const otherContributions = userInfo.totalCommitContributions - sumContrib;
-    if (0 < otherContributions) {
-        languages.push({
-            language: OTHER_NAME,
-            color: OTHER_COLOR,
-            contributions: otherContributions,
-        });
-    }
+    // Show all languages instead of limiting to 10 and grouping others
+    const languages = userInfo.contributesLanguage;
 
     const isAnimate = settings.growingAnimation || isForcedAnimation;
     const animeSteps = 5;
