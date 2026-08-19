@@ -78,6 +78,16 @@ export interface BaseSettings extends RadarContribSettings, PieLangSettings {
         issue: string;
         contrib: string;
     };
+
+    /** Hide language pie chart */
+    hidePieLang?: boolean;
+    hidePie?: boolean;
+    showPieLang?: boolean;
+
+    /** Hide set of contributions, stars, and forks */
+    hideStats?: boolean;
+    hideContribsStarsForks?: boolean;
+    showStats?: boolean;
 }
 
 export interface NormalColorSettings extends BaseSettings {

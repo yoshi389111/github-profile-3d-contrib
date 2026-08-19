@@ -1,0 +1,18 @@
+{
+    "type": "normal",
+    "fileName": "profile-custom-no-pie-no-stats.svg",
+    "backgroundColor": "#00000f",
+    "foregroundColor": "#eeeeff",
+    "strongColor": "#ffffff",
+    "weakColor": "#aaaaaa",
+    "radarColor": "#47a042",
+    "hidePieLang": true,
+    "hideStats": true,
+    "contribColors": [
+        "#efefef",
+        "#d8e887",
+        "#8cc569",
+        "#47a042",
+        "#1d6a23"
+    ]
+}
