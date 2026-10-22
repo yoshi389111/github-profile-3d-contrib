@@ -1155,6 +1155,7 @@ const fetchNext = async (token, userName, cursor) => {
 exports.fetchNext = fetchNext;
 /** Fetch data from GitHub GraphQL */
 const fetchData = async (token, userName, maxRepos, year = null) => {
+    var _a;
     const res1 = await (0, exports.fetchFirst)(token, userName, year);
     const result = res1.data;
     if (result && result.user.repositories.nodes.length === maxReposOneQuery) {
@@ -1162,6 +1163,9 @@ const fetchData = async (token, userName, maxRepos, year = null) => {
         let cursor = repos1.edges[repos1.edges.length - 1].cursor;
         while (repos1.nodes.length < maxRepos) {
             const res2 = await (0, exports.fetchNext)(token, userName, cursor);
+            if ((_a = res2.errors) === null || _a === void 0 ? void 0 : _a.length) {
+                return { errors: res2.errors };
+            }
             if (res2.data) {
                 const repos2 = res2.data.user.repositories;
                 repos1.nodes.push(...repos2.nodes);
