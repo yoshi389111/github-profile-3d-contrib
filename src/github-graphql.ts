@@ -180,12 +180,59 @@ export const fetchNext = async (
     return response.data;
 };
 
+export type OrgResponseType = {
+    data?: {
+        organization: {
+            repositories: Repositories;
+        } | null;
+    };
+    errors?: [
+        {
+            message: string;
+        },
+    ];
+};
+
+export const fetchOrgRepos = async (
+    token: string,
+    orgLogin: string,
+    cursor: string | null = null,
+): Promise<OrgResponseType> => {
+    const headers = {
+        Authorization: `bearer ${token}`,
+    };
+    const after = cursor ? `, after: "${cursor}"` : '';
+    const request = {
+        query: `
+            query($login: String!) {
+                organization(login: $login) {
+                    repositories(first: ${maxReposOneQuery}${after}, isFork: false, privacy: PUBLIC) {
+                        edges {
+                            cursor
+                        }
+                        nodes {
+                            forkCount
+                            stargazerCount
+                        }
+                    }
+                }
+            }
+        `.replace(/\s+/g, ' '),
+        variables: { login: orgLogin },
+    };
+    const response = await axios.post<OrgResponseType>(URL, request, {
+        headers: headers,
+    });
+    return response.data;
+};
+
 /** Fetch data from GitHub GraphQL */
 export const fetchData = async (
     token: string,
     userName: string,
     maxRepos: number,
     year: number | null = null,
+    includeOrgs: ReadonlyArray<string> = [],
 ): Promise<ResponseType> => {
     const res1 = await fetchFirst(token, userName, year);
     const result = res1.data;
@@ -207,5 +254,32 @@ export const fetchData = async (
             }
         }
     }
+
+    if (result && includeOrgs.length > 0) {
+        for (const org of includeOrgs) {
+            let cursor: string | null = null;
+            let done = false;
+            while (!done) {
+                const orgRes: OrgResponseType = await fetchOrgRepos(
+                    token,
+                    org,
+                    cursor,
+                );
+                const orgRepos = orgRes.data?.organization?.repositories;
+                if (!orgRepos || orgRepos.nodes.length === 0) {
+                    done = true;
+                } else {
+                    result.user.repositories.nodes.push(...orgRepos.nodes);
+                    if (orgRepos.nodes.length !== maxReposOneQuery) {
+                        done = true;
+                    } else {
+                        cursor =
+                            orgRepos.edges[orgRepos.edges.length - 1].cursor;
+                    }
+                }
+            }
+        }
+    }
+
     return res1;
 };
