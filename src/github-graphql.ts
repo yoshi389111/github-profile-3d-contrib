@@ -195,6 +195,9 @@ export const fetchData = async (
         let cursor = repos1.edges[repos1.edges.length - 1].cursor;
         while (repos1.nodes.length < maxRepos) {
             const res2 = await fetchNext(token, userName, cursor);
+            if (res2.errors?.length) {
+                return { errors: res2.errors };
+            }
             if (res2.data) {
                 const repos2 = res2.data.user.repositories;
                 repos1.nodes.push(...repos2.nodes);
